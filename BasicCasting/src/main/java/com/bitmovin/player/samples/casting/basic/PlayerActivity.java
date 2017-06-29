@@ -5,8 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.cast.CastManager;
-import com.bitmovin.player.config.PlayerConfiguration;
+import com.bitmovin.player.cast.BitmovinCastManager;
 import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 
@@ -18,7 +17,7 @@ public class PlayerActivity extends AppCompatActivity
     private BitmovinPlayerView bitmovinPlayerView;
     private BitmovinPlayer bitmovinPlayer;
 
-    private CastManager castManager;
+    private BitmovinCastManager castManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +32,7 @@ public class PlayerActivity extends AppCompatActivity
             finish();
         }
 
-        this.castManager = CastManager.getInstance();
+        this.castManager = BitmovinCastManager.getInstance();
         this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
         this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
 
