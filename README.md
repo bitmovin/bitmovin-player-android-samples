@@ -6,6 +6,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
 +   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
++   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
 
 ## Using The Sample Apps
 In each sample app you have to add you Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -21,6 +22,7 @@ In addition to that you have to log in to `https://app.bitmovin.com/` where you 
     com.bitmovin.player.samples.metadata.basic
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.custom.ui
+    com.bitmovin.player.samples.custom.ui.html
 
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
