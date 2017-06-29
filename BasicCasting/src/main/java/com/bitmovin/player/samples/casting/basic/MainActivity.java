@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bitmovin.player.cast.CastManager;
+import com.bitmovin.player.cast.BitmovinCastManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity
 {
     private ListView listView;
     private ListAdapter listAdapter;
-    private CastManager castManager;
+    private BitmovinCastManager castManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         });
 
         // Retrieving the instance of the CastManager
-        this.castManager = CastManager.getInstance();
+        this.castManager = BitmovinCastManager.getInstance();
     }
 
 
