@@ -16,7 +16,7 @@ In each sample app you have to add you Bitmovin Player license key inside the `a
                 android:name="BITMOVIN_PLAYER_LICENSE_KEY"
                 android:value="YOUR_LICENSE_KEY" />
 
-In addition to that you have to log in to `https://app.bitmovin.com/` where you have to add the following package names of the sample applications as allowed domains:
+In addition to that you have to log in to [https://dashboard.bitmovin.com](https://dashboard.bitmovin.com) where you have to add the following package names of the sample applications as allowed domains under `Player -> Licenses`:
 
     com.bitmovin.player.samples.playback.basic
     com.bitmovin.player.samples.drm.basic
@@ -63,7 +63,7 @@ When you want to develop an own Android application using the Bitmovin Player An
                 android:name="BITMOVIN_PLAYER_LICENSE_KEY"
                 android:value="YOUR_LICENSE_KEY" />
 
-    Your player license key can be found when logging in into `https://app.bitmovin.com/` and navigating to `Player -> Overview`. There you also have to add the package name of the Android application which is using the SDK as a domain. The package name is defined in the manifest file of the Android application.
+    Your player license key can be found when logging in into [https://dashboard.bitmovin.com](https://dashboard.bitmovin.com) and navigating to `Player -> Licenses`. There you also have to add the package name of the Android application which is using the SDK as a domain. The package name is defined in the manifest file of the Android application.
 
 ## Additional Resources
 
