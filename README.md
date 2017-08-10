@@ -7,6 +7,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
++   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download protected and unprotected content for offline playback.
 
 ## Using The Sample Apps
 In each sample app you have to add you Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -23,6 +24,7 @@ In addition to that you have to log in to `https://app.bitmovin.com/` where you 
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.custom.ui
     com.bitmovin.player.samples.custom.ui.html
+    com.bitmovin.player.samples.offline.playback
 
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
@@ -50,6 +52,10 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
         
         <uses-permission android:name="android.permission.INTERNET" />
+
+1.  If the Bitmovin Android SDK is used to download content for offline playback, also add the permission for checking the network state
+
+        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 1.  In the manifest file of your application also provide your Bitmovin Player license key by adding a `meta-data` tag inside the `application` tag. `YOUR_LICENSE_KEY` has to be replaced by your own license key:
 
