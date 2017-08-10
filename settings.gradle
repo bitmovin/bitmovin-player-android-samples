@@ -1,1 +1,1 @@
-include ':BasicPlayback', ':BasicDRMPlayback', ':BasicMetadataHandling', ':BasicCasting', ':CustomHtmlUi', ':CustomUi'
+include ':BasicPlayback', ':BasicDRMPlayback', ':BasicMetadataHandling', ':BasicCasting', ':CustomHtmlUi', ':CustomUi', ':OfflinePlayback'
