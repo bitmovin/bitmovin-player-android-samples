@@ -29,11 +29,13 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
 
-1.  Add a link to our release repository to your applications `build.gradle` file.
+1.  Add a link to our release repository to your applications `build.gradle` file. In addition to that, the google maven repository must be added.
     
         allprojects {
             repositories {
                 jcenter()
+                google()
+                
                 maven {
                     url 'http://bitmovin.bintray.com/maven'
                 }
@@ -42,13 +44,18 @@ When you want to develop an own Android application using the Bitmovin Player An
         
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        compile 'com.bitmovin.player:playercore:2.1.0'
+        compile 'com.bitmovin.player:playercore:2.2.0'
         
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
     
         compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
-        compile 'com.android.support:mediarouter-v7:25.3.1'
+        compile 'com.android.support:mediarouter-v7:25.4.0'
     
+1.  If advertising support should be enabled, also add the following dependencies to your project:
+
+         compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4'
+         compile 'com.google.android.gms:play-services-ads:9.8.0'
+
 1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
         
         <uses-permission android:name="android.permission.INTERNET" />
