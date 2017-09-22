@@ -4,6 +4,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicPlayback:** Shows how the Bitmovin Player can be setup for basic playback of DASH, HLS or progressive streams.
 +   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevice Modular protected content.
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
++   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.  
 +   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
@@ -21,6 +22,7 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.playback.basic
     com.bitmovin.player.samples.drm.basic
     com.bitmovin.player.samples.metadata.basic
+    com.bitmovin.player.samples.ads.basic
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.custom.ui
     com.bitmovin.player.samples.custom.ui.html
