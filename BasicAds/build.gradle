@@ -31,7 +31,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.bitmovin.player:playercore:2.3.1'
+    compile 'com.bitmovin.player:playercore:2.4.0'
 
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4' // only needed if ads are used
     compile 'com.google.android.gms:play-services-ads:9.8.0' // only needed if ads are used
