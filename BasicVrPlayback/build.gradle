@@ -5,7 +5,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "com.bitmovin.player.samples.custom.ui"
+        applicationId "com.bitmovin.player.samples.vr.basic"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
