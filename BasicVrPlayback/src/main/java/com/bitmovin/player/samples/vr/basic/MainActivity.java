@@ -24,6 +24,9 @@ public class MainActivity extends AppCompatActivity
         this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
         this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
 
+        // Enabling the gyroscopic controlling for the 360° video
+        this.bitmovinPlayer.enableGyroscope();
+
         this.initializePlayer();
     }
 
