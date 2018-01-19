@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.custom.ui"
@@ -31,5 +31,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
     testCompile 'junit:junit:4.12'
 
-    compile 'com.bitmovin.player:playercore:2.5.0'
+    compile 'com.bitmovin.player:playercore:2.5.1'
 }
