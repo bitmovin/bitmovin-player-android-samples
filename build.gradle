@@ -12,6 +12,10 @@ buildscript {
     }
 }
 
+ext {
+    bitmovinPlayerVersion = '2.5.1'
+}
+
 allprojects {
     repositories {
         jcenter()
