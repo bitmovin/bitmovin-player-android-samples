@@ -13,7 +13,7 @@ buildscript {
 }
 
 ext {
-    bitmovinPlayerVersion = '2.5.1'
+    bitmovinPlayerVersion = '2.6.0'
 }
 
 allprojects {
