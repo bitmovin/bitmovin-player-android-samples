@@ -25,13 +25,14 @@ public class PlayerActivity extends AppCompatActivity
     private BitmovinPlayerView bitmovinPlayerView;
     private BitmovinPlayer bitmovinPlayer;
 
-    private BitmovinCastManager castManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
+        // Update the context the BitmovinCastManager is using
+        // This should be done in every Activity's onCreate using the cast function
+        BitmovinCastManager.getInstance().updateContext(this);
 
         String sourceUrl = getIntent().getStringExtra(SOURCE_URL);
         String sourceTitle = getIntent().getStringExtra(SOURCE_TITLE);
@@ -40,7 +41,6 @@ public class PlayerActivity extends AppCompatActivity
             finish();
         }
 
-        this.castManager = BitmovinCastManager.getInstance();
         this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
         this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
 
@@ -52,17 +52,11 @@ public class PlayerActivity extends AppCompatActivity
     {
         super.onResume();
         this.bitmovinPlayerView.onResume();
-        //The cast manager must know about the ui state, in order to start the notification service
-        //Call incrementUiCounter on the cast manager in every onResume of your activities
-        this.castManager.incrementUiCounter();
     }
 
     @Override
     protected void onPause()
     {
-        //The cast manager must know about the ui state, in order to start the notification service
-        //Call decrementUiCounter on the cast manager in every onPause of your activities
-        this.castManager.decrementUiCounter();
         this.bitmovinPlayerView.onPause();
         super.onPause();
     }

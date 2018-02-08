@@ -12,14 +12,14 @@
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"/>
 
-     <!--   The MiniPlayer that shows up at the bottom of the activity if a cast is running             -->
-     <!--   Notice the app:auto_setup=true, which registers the miniplayer in the cast manager for you  -->
-    <com.google.android.libraries.cast.companionlibrary.widgets.MiniController
-            android:id="@+id/miniController"
+    <!--   The MiniPlayer that shows up at the bottom of the activity if a cast session is running             -->
+    <fragment
+            android:id="@+id/cast_mini_controller"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            app:castShowImageThumbnail="true"
             android:visibility="gone"
-            app:auto_setup="true"/>
+            class="com.google.android.gms.cast.framework.media.widget.MiniControllerFragment" />
 
 </RelativeLayout>

@@ -21,9 +21,9 @@ ext {
 
     // dependencies
     supportLibraryVersion = '25.4.0'
-    playServicesVersion = '9.8.0'
+    playServicesVersion = '11.8.0'
 
-    bitmovinPlayerVersion = '2.6.0'
+    bitmovinPlayerVersion = '2.7.0'
 }
 
 allprojects {

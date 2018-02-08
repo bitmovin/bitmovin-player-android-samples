@@ -48,17 +48,33 @@ When you want to develop an own Android application using the Bitmovin Player An
         
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        compile 'com.bitmovin.player:playercore:2.6.0'
+        compile 'com.bitmovin.player:playercore:2.7.0'
         
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
     
-        compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1'
+        compile 'com.google.android.gms:play-services-cast-framework:11.8.0'
         compile 'com.android.support:mediarouter-v7:25.4.0'
+        compile 'com.android.support:appcompat-v7:25.4.0'
+         
+    Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`. 
+    For more details see the  `BasicCasting` sample application.
+    
+         <activity
+                 android:name="com.bitmovin.player.cast.ExpandedControllerActivity"
+                 android:launchMode="singleTask"
+                 android:screenOrientation="portrait"
+                 ... >
+         </activity>
+    
+         <meta-data
+                 android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+                 android:value="com.bitmovin.player.cast.BitmovinCastOptionsProvider"
+                 />
     
 1.  If advertising support should be enabled, also add the following dependencies to your project:
 
          compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4'
-         compile 'com.google.android.gms:play-services-ads:9.8.0'
+         compile 'com.google.android.gms:play-services-ads:11.8.0'
 
 1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
         
