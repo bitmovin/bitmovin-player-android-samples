@@ -27,12 +27,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     testCompile 'junit:junit:4.12'
 
     compile "com.bitmovin.player:playercore:$bitmovinPlayerVersion"
 
     compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4' // only needed if ads are used
-    compile 'com.google.android.gms:play-services-ads:9.8.0' // only needed if ads are used
+    compile "com.google.android.gms:play-services-ads:$playServicesVersion" // only needed if ads are used
 }

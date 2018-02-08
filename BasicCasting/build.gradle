@@ -25,12 +25,11 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:25.4.0'
-    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha8'
+    compile "com.android.support:appcompat-v7:$supportLibraryVersion"
     testCompile 'junit:junit:4.12'
 
     compile "com.bitmovin.player:playercore:$bitmovinPlayerVersion"
 
     compile 'com.google.android.libraries.cast.companionlibrary:ccl:2.9.1' //only needed if Chromecast is used
-    compile 'com.android.support:mediarouter-v7:25.4.0' //only needed if Chromecast is used
+    compile "com.android.support:mediarouter-v7:$supportLibraryVersion" //only needed if Chromecast is used
 }
