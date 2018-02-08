@@ -19,7 +19,11 @@ public class SampleApplication extends Application
     {
         super.onCreate();
 
-        //The cast manager has to be initialized in the Application context, in order to work properly.
-        BitmovinCastManager.initialize(this);
+        // Initialize the BitmovinCastManager in the Application class
+        // To use a custom expanded cast controller Activity use:
+        // BitmovinCastManager.initialize(CustomCastControllerActivity.class);
+        // Or to use a custom cast application:
+        // BitmovinCastManager.initialize("APPID","MESSAGENAMESPACE");
+        BitmovinCastManager.initialize();
     }
 }

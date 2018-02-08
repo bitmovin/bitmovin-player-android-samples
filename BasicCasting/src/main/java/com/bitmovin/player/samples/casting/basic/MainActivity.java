@@ -16,6 +16,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -24,6 +26,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bitmovin.player.cast.BitmovinCastManager;
+import com.google.android.gms.cast.framework.CastButtonFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +35,15 @@ public class MainActivity extends AppCompatActivity
 {
     private ListView listView;
     private ListAdapter listAdapter;
-    private BitmovinCastManager castManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Update the context the BitmovinCastManager is using
+        // This should be done in every Activity's onCreate using the cast function
+        BitmovinCastManager.getInstance().updateContext(this);
 
         //Setup ListView, ListAdapter and the ListItems
         List<ListItem> exampleListItems = getExampleListItems();
@@ -53,30 +58,18 @@ public class MainActivity extends AppCompatActivity
                 onListItemClicked((ListItem) parent.getItemAtPosition(position));
             }
         });
-
-        // Retrieving the instance of the CastManager
-        this.castManager = BitmovinCastManager.getInstance();
-    }
-
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-        // The CastManager must know if the app is visible, in order to start the notification service.
-        // Call incrementUiCounter on the cast manager in every onResume of your activities
-        this.castManager.incrementUiCounter();
     }
 
     @Override
-    protected void onPause()
+    public boolean onCreateOptionsMenu(Menu menu)
     {
-        // The CastManager must know if the app is visible, in order to start the notification service.
-        // Call incrementUiCounter on the cast manager in every onResume of your activities
-        this.castManager.decrementUiCounter();
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_activity_main, menu);
 
-        super.onPause();
+        // Adding a Cast Button in the menu bar
+        CastButtonFactory.setUpMediaRouteButton(this, menu, R.id.media_route_menu_item);
+
+        return true;
     }
 
     private void onListItemClicked(ListItem item)
