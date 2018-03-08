@@ -32,6 +32,6 @@ dependencies {
 
     compile "com.bitmovin.player:playercore:$bitmovinPlayerVersion"
 
-    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.7.4' // only needed if ads are used
+    compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.8.2' // only needed if ads are used
     compile "com.google.android.gms:play-services-ads:$playServicesVersion" // only needed if ads are used
 }
