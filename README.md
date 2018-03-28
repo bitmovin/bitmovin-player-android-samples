@@ -92,6 +92,17 @@ When you want to develop an own Android application using the Bitmovin Player An
 
     Your player license key can be found when logging in into [https://dashboard.bitmovin.com](https://dashboard.bitmovin.com) and navigating to `Player -> Licenses`. There you also have to add the package name of the Android application which is using the SDK as a domain. The package name is defined in the manifest file of the Android application.
 
+## Proguard
+
+When using Proguard, we recommend to do no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`. 
+This can be achieved by adding following Progurad rules to your project.
+
+```proguard
+#### Bitmovin
+-keep class com.bitmovin.player.** { *; }
+-keep interface com.bitmovin.player.** { *; }
+```
+
 ## Additional Resources
 
 +   You can find the latest API documentation [here](https://bitmovin.com/android-sdk-documentation/)
