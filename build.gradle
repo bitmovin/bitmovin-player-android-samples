@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.1.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -21,10 +21,10 @@ ext {
     buildToolsVersion = '27.0.3'
 
     // dependencies
-    supportLibraryVersion = '25.4.0'
-    playServicesVersion = '11.8.0'
+    supportLibraryVersion = '27.1.1'
+    playServicesVersion = '12.0.1'
 
-    bitmovinPlayerVersion = '2.8.4'
+    bitmovinPlayerVersion = '2.9.0'
 }
 
 allprojects {
