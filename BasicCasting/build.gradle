@@ -33,4 +33,5 @@ dependencies {
     compile "com.google.android.gms:play-services-cast-framework:$playServicesVersion" //only needed if Chromecast is used
     compile "com.android.support:mediarouter-v7:$supportLibraryVersion"  //only needed if Chromecast is used
     compile "com.android.support:appcompat-v7:$supportLibraryVersion"  //only needed if Chromecast is used
+    compile "com.android.support:support-v4:$supportLibraryVersion"  //only needed if Chromecast is used
 }
