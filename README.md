@@ -12,7 +12,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
 
 ## Using The Sample Apps
-In each sample app you have to add you Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
+In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
     
     <meta-data
                 android:name="BITMOVIN_PLAYER_LICENSE_KEY"
@@ -48,7 +48,7 @@ When you want to develop an own Android application using the Bitmovin Player An
         
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        compile 'com.bitmovin.player:playercore:2.9.0'
+        compile 'com.bitmovin.player:playercore:2.9.1'
         
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
     
