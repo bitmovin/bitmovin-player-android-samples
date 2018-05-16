@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MediaButton">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:layout_width">@dimen/media_button_width</item>
+        <item name="android:layout_height">@dimen/media_button_height</item>
+    </style>
+
+</resources>
