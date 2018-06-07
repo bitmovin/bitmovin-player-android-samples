@@ -50,7 +50,7 @@ When you want to develop an own Android application using the Bitmovin Player An
         
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        compile 'com.bitmovin.player:playercore:2.10.0'
+        compile 'com.bitmovin.player:playercore:2.10.1'
         
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
     
@@ -76,7 +76,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     
 1.  If advertising support should be enabled, also add the following dependencies to your project:
 
-         compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.8.5'
+         compile 'com.google.ads.interactivemedia.v3:interactivemedia:3.8.7'
          compile 'com.google.android.gms:play-services-ads:12.0.1'
          compile 'com.android.support:support-v4:27.1.1'
 
