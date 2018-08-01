@@ -61,16 +61,16 @@ public class PlayerControls extends LinearLayout
     {
         super(context, attrs);
 
-        LayoutInflater.from(this.getContext()).inflate(com.bitmovin.player.samples.custom.ui.view.subtitle.R.layout.player_controls, this);
+        LayoutInflater.from(this.getContext()).inflate(R.layout.player_controls, this);
 
-        this.controlView = findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.controls);
-        this.playButton = (ImageButton) this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.playback_button);
-        this.subtitleButton = (ImageButton) this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.subtitle_button);
-        this.playDrawable = ContextCompat.getDrawable(context, com.bitmovin.player.samples.custom.ui.view.subtitle.R.drawable.ic_play_arrow_black_24dp);
-        this.pauseDrawable = ContextCompat.getDrawable(context, com.bitmovin.player.samples.custom.ui.view.subtitle.R.drawable.ic_pause_black_24dp);
-        this.seekBar = (SeekBar) this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.seekbar);
-        this.positionView = (TextView) this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.position);
-        this.durationView = (TextView) this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.duration);
+        this.controlView = findViewById(R.id.controls);
+        this.playButton = (ImageButton) this.findViewById(R.id.playback_button);
+        this.subtitleButton = (ImageButton) this.findViewById(R.id.subtitle_button);
+        this.playDrawable = ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp);
+        this.pauseDrawable = ContextCompat.getDrawable(context,R.drawable.ic_pause_black_24dp);
+        this.seekBar = (SeekBar) this.findViewById(R.id.seekbar);
+        this.positionView = (TextView) this.findViewById(R.id.position);
+        this.durationView = (TextView) this.findViewById(R.id.duration);
 
         this.seekBar.setOnSeekBarChangeListener(this.seekBarChangeListener);
         this.playButton.setOnClickListener(this.onClickListener);
