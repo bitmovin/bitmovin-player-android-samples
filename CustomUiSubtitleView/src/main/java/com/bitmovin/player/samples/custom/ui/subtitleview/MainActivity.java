@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(com.bitmovin.player.samples.custom.ui.view.subtitle.R.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
         // Create new StyleConfiguration
         StyleConfiguration styleConfiguration = new StyleConfiguration();
