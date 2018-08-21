@@ -35,6 +35,11 @@
             android:orientation="horizontal">
 
         <ImageButton
+                android:src="@drawable/ic_pause_black_24dp"
+                style="@style/ImageButton"
+                android:id="@+id/btnPauseResume" />
+
+        <ImageButton
                 android:src="@drawable/ic_archive_black_24dp"
                 style="@style/ImageButton"
                 android:id="@+id/btnDownload" />

@@ -233,6 +233,18 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         }
     }
 
+    @Override
+    public void onSuspended(SourceItem sourceItem)
+    {
+        Toast.makeText(this, "Suspended: " + sourceItem.getTitle(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResumed(SourceItem sourceItem)
+    {
+        Toast.makeText(this, "Resumed: " + sourceItem.getTitle(),Toast.LENGTH_SHORT).show();
+    }
+
     /*
      * Listener methods for the two buttons every ListItem has
      */
@@ -273,6 +285,18 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         // To delete everything of a specific OfflineContentManager, we call deleteAll
         listItem.getOfflineContentManager().deleteAll();
         Toast.makeText(this, "Deleting " + listItem.getSourceItem().getTitle(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void suspend(ListItem listItem)
+    {
+        listItem.getOfflineContentManager().suspend();
+    }
+
+    @Override
+    public void resume(ListItem listItem)
+    {
+        listItem.getOfflineContentManager().resume();
     }
 
     public void download(ListItem listItem)
