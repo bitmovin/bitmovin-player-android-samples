@@ -8,7 +8,6 @@
 
 package com.bitmovin.player.samples.offline.playback;
 
-import android.app.LauncherActivity;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -51,6 +50,7 @@ class ListAdapter extends ArrayAdapter<ListItem>
 
         TextView title = (TextView) view.findViewById(R.id.title);
         TextView state = (TextView) view.findViewById(R.id.state);
+        ImageButton pauseResume = (ImageButton) view.findViewById(R.id.btnPauseResume);
         ImageButton btnDelete = (ImageButton) view.findViewById(R.id.btnDelete);
         ImageButton btnDownload = (ImageButton) view.findViewById(R.id.btnDownload);
 
@@ -70,16 +70,39 @@ class ListAdapter extends ArrayAdapter<ListItem>
                 }
             });
 
-
             // If any option is downloading, we show a progress in the list
             if (isDownloading(offlineContentOptions))
             {
                 state.setText(String.format("Downloading - %.0f %%", listItem.getProgress()));
                 state.setVisibility(View.VISIBLE);
+                pauseResume.setImageResource(R.drawable.ic_pause_black_24dp);
+                pauseResume.setVisibility(View.VISIBLE);
+                pauseResume.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        listItemActionListener.suspend(listItem);
+                    }
+                });
+            }
+            else if (isSuspended(offlineContentOptions))
+            {
+                pauseResume.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                pauseResume.setVisibility(View.VISIBLE);
+                pauseResume.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        listItemActionListener.resume(listItem);
+                    }
+                });
             }
             else
             {
                 state.setVisibility(View.INVISIBLE);
+                pauseResume.setVisibility(View.INVISIBLE);
             }
             // If any option is downloaded, we show the delete button
             if (hasDownloaded(offlineContentOptions))
@@ -130,6 +153,25 @@ class ListAdapter extends ArrayAdapter<ListItem>
     }
 
     /**
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#SUSPENDED}
+     *
+     * @param offlineContentOptions
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#SUSPENDED}
+     */
+    private boolean isSuspended(OfflineContentOptions offlineContentOptions)
+    {
+        List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
+        for (OfflineOptionEntry entry : allOfflineOptionEntries)
+        {
+            if (entry.getState() == OfflineOptionEntryState.SUSPENDED)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#DOWNLOADED}
      *
      * @param offlineContentOptions
@@ -147,4 +189,4 @@ class ListAdapter extends ArrayAdapter<ListItem>
         }
         return false;
     }
-    }
+}
