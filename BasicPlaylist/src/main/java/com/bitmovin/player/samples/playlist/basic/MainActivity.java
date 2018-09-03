@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
         this.bitmovinPlayer.addEventListener(this.onPlaybackFinishedListener);
     }
 
-    // A simple calls defining a playlist item
+    // A simple class defining a playlist item
     private class PlaylistItem
     {
         private String title;
