@@ -2,6 +2,7 @@
 This repository contains sample apps using the Bitmovin Player Android SDK. The following sample apps are included:
 
 +   **BasicPlayback:** Shows how the Bitmovin Player can be setup for basic playback of DASH, HLS or progressive streams.
++   **BasicPlaylist:** Shows how to implement queueing / playlists.
 +   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevice Modular protected content.
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
 +   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.  
@@ -9,6 +10,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
 +   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
++   **BasicFullscreenHandling** Shows how a simple FullscreenHandler can be implemented and configured on the Bitmovin Player
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download protected and unprotected content for offline playback.
 +   **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
 
@@ -22,6 +24,7 @@ In each sample app you have to add your Bitmovin Player license key inside the `
 In addition to that you have to log in to [https://dashboard.bitmovin.com](https://dashboard.bitmovin.com) where you have to add the following package names of the sample applications as allowed domains under `Player -> Licenses`:
 
     com.bitmovin.player.samples.playback.basic
+    com.bitmovin.player.samples.playlist.basic
     com.bitmovin.player.samples.drm.basic
     com.bitmovin.player.samples.metadata.basic
     com.bitmovin.player.samples.ads.basic
@@ -29,6 +32,7 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.vr.basic
     com.bitmovin.player.samples.custom.ui
     com.bitmovin.player.samples.custom.ui.subtitleview
+    com.bitmovin.player.samples.fullscreen.basic
     com.bitmovin.player.samples.custom.ui.html
     com.bitmovin.player.samples.offline.playback
 
