@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         // Assign created SourceConfiguration to the PlayerConfiguration
         playerConfiguration.setSourceConfiguration(sourceConfiguration);
 
-        RelativeLayout playerContainer = this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.player_container);
+        RelativeLayout playerContainer = this.findViewById(R.id.player_container);
 
         // Creating a BitmovinPlayerView and get it's BitmovinPlayer instance.
         this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
         this.bitmovinSubtitleView.setPlayer(this.bitmovinPlayer);
 
         // Setup minimalistic controls for the player
-        PlayerControls playerControls = this.findViewById(com.bitmovin.player.samples.custom.ui.view.subtitle.R.id.player_controls);
+        PlayerControls playerControls = this.findViewById(R.id.player_controls);
         playerControls.setPlayer(this.bitmovinPlayer);
 
         // Add the BitmovinSubtitleView to the layout
