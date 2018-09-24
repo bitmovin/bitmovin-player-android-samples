@@ -14,6 +14,8 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download protected and unprotected content for offline playback.
 +   **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
 +   **BasicPlayerFragment** Shows how the `BitmovinPlayerFragment` can be used to setup playback.
++   **BasicPiPHandling** Shows how the `BitmovinPlayerView` can be configured to allow the Picture in Picture mode.
++   **BasicControlNotification** Shows how the `BitmovinPlayerNotificationManager` can be used to show playback control notifications.
 
 ## Using The Sample Apps
 In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -37,6 +39,8 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.custom.ui.html
     com.bitmovin.player.samples.offline.playback
     com.bitmovin.player.samples.playerfragment.basic
+    com.bitmovin.player.samples.pip.basic
+    com.bitmovin.player.samples.notification.basic
 
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:

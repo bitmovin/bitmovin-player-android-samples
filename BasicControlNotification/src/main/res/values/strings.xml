@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">BasicControlNotificaiton</string>
+    <string name="control_notification_channel">Player Controls</string>
+</resources>
