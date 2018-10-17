@@ -119,6 +119,11 @@ This can be achieved by adding following Progurad rules to your project.
 -keep interface com.bitmovin.player.** { *; }
 ```
 
+The Bitmovin Player Android SDK logs against a logging facade (SLF4J). In order to be able to compile successfully with proguard enabled, the following line must be added to the proguard file:
+```
+-dontwarn org.slf4j.**
+```
+
 ## Java Documentation
 
 Our release repository also holds a `.jar` containing the javadoc for the `playercore`. 
