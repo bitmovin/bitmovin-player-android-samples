@@ -51,8 +51,8 @@ When you want to develop an own Android application using the Bitmovin Player An
     
         allprojects {
             repositories {
-                jcenter()
                 google()
+                jcenter()
                 
                 maven {
                     url 'http://bitmovin.bintray.com/maven'
@@ -62,7 +62,7 @@ When you want to develop an own Android application using the Bitmovin Player An
         
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.15.0'
+        implementation 'com.bitmovin.player:playercore:2.16.0'
         
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
     
@@ -107,6 +107,13 @@ When you want to develop an own Android application using the Bitmovin Player An
                 android:value="YOUR_LICENSE_KEY" />
 
     Your player license key can be found when logging in into [https://dashboard.bitmovin.com](https://dashboard.bitmovin.com) and navigating to `Player -> Licenses`. There you also have to add the package name of the Android application which is using the SDK as a domain. The package name is defined in the manifest file of the Android application.
+
+1.  Starting with `2.16.0` our SDK is using Java 8, so your application must enable Java 8 support. This can be done by adding following code to your applications build gradle:
+
+        compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+            }
 
 ## Proguard
 
