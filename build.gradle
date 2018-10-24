@@ -30,8 +30,8 @@ ext {
 
 allprojects {
     repositories {
-        jcenter()
         google()
+        jcenter()
         maven {
             url  'http://bitmovin.bintray.com/maven'
         }
