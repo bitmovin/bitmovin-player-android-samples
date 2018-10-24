@@ -25,7 +25,7 @@ ext {
     playServicesAdsVersion = '15.0.1'
     playServicesCastVersion = '16.0.1'
 
-    bitmovinPlayerVersion = '2.15.0'
+    bitmovinPlayerVersion = '2.16.0'
 }
 
 allprojects {

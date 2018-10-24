@@ -1,9 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-        compileSdkVersion rootProject.compileSdkVersion
-        buildToolsVersion rootProject.buildToolsVersion
-    
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.custom.ui.view.subtitle"
         minSdkVersion rootProject.minSdkVersion
