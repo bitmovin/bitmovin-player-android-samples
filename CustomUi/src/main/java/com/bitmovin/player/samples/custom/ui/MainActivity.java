@@ -59,6 +59,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart()
+    {
+        this.playerUi.onStart();
+        super.onStart();
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -70,6 +77,13 @@ public class MainActivity extends AppCompatActivity
     {
         this.playerUi.onPause();
         super.onPause();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        this.playerUi.onStop();
+        super.onStop();
     }
 
     @Override

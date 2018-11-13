@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity
     protected void onStart()
     {
         super.onStart();
+        this.bitmovinPlayerView.onStart();
         // Bind and start the BackgroundPlaybackService
         Intent intent = new Intent(this, BackgroundPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
         unbindService(mConnection);
         this.bitmovinPlayer = null;
         this.bound = false;
+        this.bitmovinPlayerView.onStop();
     }
 
     @Override
