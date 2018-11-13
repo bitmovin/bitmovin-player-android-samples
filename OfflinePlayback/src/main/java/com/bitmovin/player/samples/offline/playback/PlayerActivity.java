@@ -56,6 +56,13 @@ public class PlayerActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart()
+    {
+        super.onStart();
+        this.bitmovinPlayerView.onStart();
+    }
+
+    @Override
     protected void onResume()
     {
         super.onResume();
@@ -67,6 +74,13 @@ public class PlayerActivity extends AppCompatActivity
     {
         this.bitmovinPlayerView.onPause();
         super.onPause();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        this.bitmovinPlayerView.onStop();
+        super.onStop();
     }
 
     @Override

@@ -197,6 +197,11 @@ public class PlayerUI extends RelativeLayout
         uiHideTimer.cancel();
     }
 
+    public void onStart()
+    {
+        this.bitmovinPlayerView.onStart();
+    }
+
     public void onResume()
     {
         this.bitmovinPlayerView.onResume();
@@ -205,6 +210,11 @@ public class PlayerUI extends RelativeLayout
     public void onPause()
     {
         this.bitmovinPlayerView.onPause();
+    }
+
+    public void onStop()
+    {
+        this.bitmovinPlayerView.onStop();
     }
 
     public void onDestroy()
