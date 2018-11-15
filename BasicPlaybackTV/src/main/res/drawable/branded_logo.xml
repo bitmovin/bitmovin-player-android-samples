@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+            android:opacity="opaque">
+<item>
+    <color android:color="@color/start_opaque"/>
+</item>
+<item android:gravity="center" android:width="330dp" android:height="210dp">
+    <bitmap
+            android:src="@drawable/logo_standard"
+            android:tileMode="disabled"
+            android:gravity="fill_horizontal|fill_vertical" />
+</item>
+</layer-list>

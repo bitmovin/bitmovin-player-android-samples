@@ -4,13 +4,9 @@ android {
     compileSdkVersion rootProject.compileSdkVersion
     buildToolsVersion rootProject.buildToolsVersion
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
-        applicationId "com.bitmovin.player.samples.pip.basic"
-        minSdkVersion rootProject.minSdkVersion
+        applicationId "com.bitmovin.player.samples.tv.playback.basic"
+        minSdkVersion 17 // leanback uses 17 as min so we can't go below that for this sample
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
@@ -21,9 +17,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
+    implementation "com.android.support:support-v4:$supportLibraryVersion"
+    implementation "com.android.support:leanback-v17:$supportLibraryVersion"
+
     implementation supportDependencies.appCompat
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 }

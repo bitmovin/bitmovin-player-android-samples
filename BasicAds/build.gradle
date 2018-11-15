@@ -14,9 +14,6 @@ android {
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     buildTypes {
         release {
@@ -27,15 +24,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
+    implementation supportDependencies.appCompat
+    implementation bitmovinPlayerDependencies.bitmovinPlayer
     implementation "com.android.support:support-v4:$supportLibraryVersion"
-    testImplementation 'junit:junit:4.12'
-
-    implementation "com.bitmovin.player:playercore:$bitmovinPlayerVersion"
 
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.8.7' // only needed if ads are used
     implementation "com.google.android.gms:play-services-ads:$playServicesAdsVersion" // only needed if ads are used

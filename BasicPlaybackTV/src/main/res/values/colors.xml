@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="start">#0dc3ff</color>
+    <color name="start_opaque">#900dc3ff</color>
+    <color name="middle">#0e7aff</color>
+    <color name="middle_opaque">#900e7aff</color>
+    <color name="end">#0dc3ff</color>
+    <color name="white">#ffffff</color>
+    <color name="gray_semi_trans">#aa000000</color>
+</resources>
