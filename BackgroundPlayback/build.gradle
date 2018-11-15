@@ -24,7 +24,6 @@ android {
 }
 
 dependencies {
-    implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
-
-    implementation "com.bitmovin.player:playercore:$bitmovinPlayerVersion"
+    implementation supportDependencies.appCompat
+    implementation bitmovinPlayerDependencies.bitmovinPlayer
 }
