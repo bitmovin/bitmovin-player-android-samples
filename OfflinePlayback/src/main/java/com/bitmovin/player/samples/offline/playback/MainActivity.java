@@ -368,6 +368,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
 
         // Initialize a SourceItem
         SourceItem artOfMotion = new SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd");
+        artOfMotion.setThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt");
         artOfMotion.setTitle("Art of Motion");
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"

@@ -10,6 +10,7 @@ package com.bitmovin.player.samples.offline.playback;
 
 import com.bitmovin.player.offline.options.OfflineContentOptions;
 import com.bitmovin.player.offline.options.OfflineOptionEntry;
+import com.bitmovin.player.offline.options.ThumbnailOfflineOptionEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,11 @@ public class Util
         List<OfflineOptionEntry> offlineOptionEntries = new ArrayList<OfflineOptionEntry>(offlineContentOptions.getVideoOptions());
         offlineOptionEntries.addAll(offlineContentOptions.getAudioOptions());
         offlineOptionEntries.addAll(offlineContentOptions.getTextOptions());
+        ThumbnailOfflineOptionEntry thumbnailOfflineOptionEntry = offlineContentOptions.getThumbnailOption();
+        if (thumbnailOfflineOptionEntry != null)
+        {
+            offlineOptionEntries.add(thumbnailOfflineOptionEntry);
+        }
         return offlineOptionEntries;
     }
 }

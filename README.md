@@ -21,7 +21,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 
 ## Using The Sample Apps
 In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
-    
+
     <meta-data
                 android:name="BITMOVIN_PLAYER_LICENSE_KEY"
                 android:value="YOUR_LICENSE_KEY" />
@@ -50,44 +50,44 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
 
 1.  Add a link to our release repository to your applications `build.gradle` file. In addition to that, the google maven repository must be added.
-    
+
         allprojects {
             repositories {
                 google()
                 jcenter()
-                
+
                 maven {
                     url 'http://bitmovin.bintray.com/maven'
                 }
             }
         }
-        
+
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.18.1'
-        
+        implementation 'com.bitmovin.player:playercore:2.19.0'
+
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
-    
+
         implementation 'com.google.android.gms:play-services-cast-framework:16.0.1'
         implementation 'com.android.support:mediarouter-v7:27.1.1'
         implementation 'com.android.support:appcompat-v7:27.1.1'
         implementation 'com.android.support:support-v4:27.1.1'
-         
+
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`. 
     For more details see the  `BasicCasting` sample application.
-    
+
          <activity
                  android:name="com.bitmovin.player.cast.ExpandedControllerActivity"
                  android:launchMode="singleTask"
                  android:screenOrientation="portrait"
                  ... >
          </activity>
-    
+
          <meta-data
                  android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
                  android:value="com.bitmovin.player.cast.BitmovinCastOptionsProvider"
                  />
-    
+
 1.  If advertising support should be enabled, also add the following dependencies to your project:
 
          implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.8.7'
@@ -95,7 +95,7 @@ When you want to develop an own Android application using the Bitmovin Player An
          implementation 'com.android.support:support-v4:27.1.1'
 
 1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
-        
+
         <uses-permission android:name="android.permission.INTERNET" />
 
 1.  If the Bitmovin Android SDK is used to download content for offline playback, also add the permission for checking the network state
