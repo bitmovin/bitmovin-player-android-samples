@@ -3,7 +3,7 @@ ext {
     supportLibraryVersion = '27.1.1'
     playServicesAdsVersion = '15.0.1'
     playServicesCastVersion = '16.0.1'
-    bitmovinPlayerVersion = '2.19.1'
+    bitmovinPlayerVersion = '2.20.0'
 
     // Library dependencies
     supportDependencies = [
