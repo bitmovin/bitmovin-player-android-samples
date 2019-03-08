@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity
         SourceItem sourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd");
 
         // setup DRM handling
-        String drmLicenseUrl = "http://widevine-proxy.appspot.com/proxy";
+        String drmLicenseUrl = "https://widevine-proxy.appspot.com/proxy";
         UUID drmSchemeUuid = DRMSystems.WIDEVINE_UUID;
         sourceItem.addDRMConfiguration(drmSchemeUuid, drmLicenseUrl);
 

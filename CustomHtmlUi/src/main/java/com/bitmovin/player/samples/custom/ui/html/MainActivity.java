@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         // Create a new source configuration
         SourceConfiguration sourceConfiguration = new SourceConfiguration();
         // Add a new source item
-        sourceConfiguration.addSourceItem("http://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
+        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
 
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();

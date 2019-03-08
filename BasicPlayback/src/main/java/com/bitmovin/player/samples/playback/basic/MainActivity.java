@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity
         SourceConfiguration sourceConfiguration = new SourceConfiguration();
 
         // Add a new source item
-        sourceConfiguration.addSourceItem("http://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
+        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
 
         // load source using the created source configuration
         this.bitmovinPlayer.load(sourceConfiguration);

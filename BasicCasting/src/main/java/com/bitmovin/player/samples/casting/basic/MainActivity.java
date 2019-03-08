@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
     private List<ListItem> getExampleListItems()
     {
         List<ListItem> items = new ArrayList<ListItem>();
-        items.add(new ListItem("Sintel", "http://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        items.add(new ListItem("Sintel", "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
         items.add(new ListItem("Art of Motion", "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"));
         return items;
     }
