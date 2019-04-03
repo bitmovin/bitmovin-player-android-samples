@@ -9,7 +9,7 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     defaultConfig {
-        applicationId "com.bitmovin.player.samples.custom.ui.view.subtitle"
+        applicationId "com.bitmovin.player.samples.custom.ui.subtitleview"
         minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
