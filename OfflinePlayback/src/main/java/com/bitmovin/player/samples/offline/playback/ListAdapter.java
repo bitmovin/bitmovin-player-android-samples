@@ -99,6 +99,21 @@ class ListAdapter extends ArrayAdapter<ListItem>
                     }
                 });
             }
+            else if (hasFailed(offlineContentOptions))
+            {
+                state.setText(String.format("Failed - %.0f %%", listItem.getProgress()));
+                state.setVisibility(View.VISIBLE);
+                pauseResume.setImageResource(R.drawable.ic_play_arrow_black_24dp);
+                pauseResume.setVisibility(View.VISIBLE);
+                pauseResume.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        listItemActionListener.resume(listItem);
+                    }
+                });
+            }
             else
             {
                 state.setVisibility(View.INVISIBLE);
@@ -164,6 +179,25 @@ class ListAdapter extends ArrayAdapter<ListItem>
         for (OfflineOptionEntry entry : allOfflineOptionEntries)
         {
             if (entry.getState() == OfflineOptionEntryState.SUSPENDED)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#FAILED}
+     *
+     * @param offlineContentOptions
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#FAILED}
+     */
+    private boolean hasFailed(OfflineContentOptions offlineContentOptions)
+    {
+        List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
+        for (OfflineOptionEntry entry : allOfflineOptionEntries)
+        {
+            if (entry.getState() == OfflineOptionEntryState.FAILED)
             {
                 return true;
             }
