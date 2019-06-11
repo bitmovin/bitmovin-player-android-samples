@@ -64,7 +64,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.25.1'
+        implementation 'com.bitmovin.player:playercore:2.25.2'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
