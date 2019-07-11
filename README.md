@@ -64,7 +64,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.25.3'
+        implementation 'com.bitmovin.player:playercore:2.26.0'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
@@ -73,7 +73,7 @@ When you want to develop an own Android application using the Bitmovin Player An
         implementation 'com.android.support:appcompat-v7:27.1.1'
         implementation 'com.android.support:support-v4:27.1.1'
 
-    Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`. 
+    Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`.
     For more details see the  `BasicCasting` sample application.
 
          <activity
@@ -119,7 +119,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 ## Proguard
 
-When using Proguard, we recommend to do no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`. 
+When using Proguard, we recommend to do no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`.
 This can be achieved by adding following Progurad rules to your project.
 
 ```proguard
@@ -135,7 +135,7 @@ The Bitmovin Player Android SDK logs against a logging facade (SLF4J). In order 
 
 ## Java Documentation
 
-Our release repository also holds a `.jar` containing the javadoc for the `playercore`. 
+Our release repository also holds a `.jar` containing the javadoc for the `playercore`.
 If AndroidStudio is used, the documentation should be downloaded and included automatically .
 
 ## Additional Resources
