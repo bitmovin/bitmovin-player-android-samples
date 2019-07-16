@@ -9,7 +9,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
-+   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
++   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI. In addition this sample includes how to communication between the javascript UI and the native code.
 +   **BasicFullscreenHandling** Shows how a simple FullscreenHandler can be implemented and configured on the Bitmovin Player
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download protected and unprotected content for offline playback.
 +   **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
