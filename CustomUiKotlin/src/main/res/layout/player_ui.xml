@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/controlView"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_light"
+        android:layout_alignParentBottom="true">
+
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp">
+
+        <ImageButton
+                android:id="@+id/playButton"
+                style="@style/MediaButton"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:layout_centerInParent="true" />
+
+        <ImageButton
+                android:id="@+id/fullscreenButton"
+                style="@style/MediaButton"
+                android:src="@drawable/ic_fullscreen_black_24dp"
+                android:layout_alignParentRight="true" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/positionView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingLeft="8dp"
+                android:paddingRight="4dp"
+                android:includeFontPadding="false"
+                android:textColor="#FF464646"
+                android:text="00:00" />
+
+        <SeekBar
+                android:id="@+id/seekbar"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="26dp" />
+
+        <TextView
+                android:id="@+id/durationView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:paddingLeft="4dp"
+                android:paddingRight="8dp"
+                android:includeFontPadding="false"
+                android:textColor="#FF464646"
+                android:text="00:00" />
+
+    </LinearLayout>
+
+</LinearLayout>
