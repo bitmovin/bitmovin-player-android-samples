@@ -18,6 +18,8 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicControlNotification** Shows how the `BitmovinPlayerNotificationManager` can be used to show playback control notifications.
 +   **BackgroundPlayback** Shows how background playback can be implemented for the Bitmovin Player.
 +   **BasicPlaybackTV** Shows how the Bitmovin Player can be setup for basic playback in an Android TV application.
++   **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
++   **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
 
 ## Using The Sample Apps
 In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -45,6 +47,8 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.notification.basic
     com.bitmovin.player.samples.playback.background
     com.bitmovin.player.samples.tv.playback.basic
+    com.bitmovin.player.samples.playback.lowlatency
+    com.bitmovin.player.samples.custom.adaptation
 
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
@@ -64,7 +68,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.30.0'
+        implementation 'com.bitmovin.player:playercore:2.32.0'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
