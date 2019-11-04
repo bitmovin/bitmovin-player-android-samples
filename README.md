@@ -98,6 +98,18 @@ When you want to develop an own Android application using the Bitmovin Player An
          implementation 'com.google.android.gms:play-services-ads:17.1.2'
          implementation 'com.android.support:support-v4:27.1.1'
 
+     And update the manifest file with an Ad Manager <meta-data> tag:
+
+         <meta-data
+                 android:name="com.google.android.gms.ads.AD_MANAGER_APP"
+                 android:value="true"/>
+
+     Alternatively, you can use an AdMob App ID <meta-data> tag, as shown below:
+
+         <meta-data
+                 android:name="com.google.android.gms.ads.APPLICATION_ID"
+                 android:value="--Your-AdMob-Id--"/>
+
 1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
 
         <uses-permission android:name="android.permission.INTERNET" />
