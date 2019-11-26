@@ -26,6 +26,8 @@ public class CustomFullscreenHandler implements FullscreenHandler
     private View decorView;
     private PlayerUI playerUI;
 
+    private PlayerOrientationListener playerOrientationListener;
+
     private boolean isFullscreen;
 
 
@@ -34,6 +36,9 @@ public class CustomFullscreenHandler implements FullscreenHandler
         this.activity = activity;
         this.playerUI = playerUI;
         this.decorView = activity.getWindow().getDecorView();
+        this.playerOrientationListener = new PlayerOrientationListener(activity);
+
+        this.playerOrientationListener.enable();
     }
 
 
@@ -41,36 +46,8 @@ public class CustomFullscreenHandler implements FullscreenHandler
     {
         this.isFullscreen = fullscreen;
 
-        this.doRotation(fullscreen);
         this.doSystemUiVisibility(fullscreen);
         this.doLayoutChanges(fullscreen);
-    }
-
-    private void doRotation(boolean fullScreen)
-    {
-        int rotation = this.activity.getWindowManager().getDefaultDisplay().getRotation();
-
-        if (playerUI != null)
-        {
-            playerUI.setVisible(false);
-        }
-
-        if (fullScreen)
-        {
-            switch (rotation)
-            {
-                case Surface.ROTATION_270:
-                    this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                    break;
-
-                default:
-                    this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            }
-        }
-        else
-        {
-            this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
     }
 
     private void doSystemUiVisibility(final boolean fullScreen)
@@ -116,23 +93,11 @@ public class CustomFullscreenHandler implements FullscreenHandler
                 }
             }
 
-            ViewGroup.LayoutParams params = playerUI.getLayoutParams();
+            ViewGroup.LayoutParams params = this.playerUI.getLayoutParams();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
             params.height = ViewGroup.LayoutParams.MATCH_PARENT;
-            playerUI.setLayoutParams(params);
-            playerUI.setPadding(0, 0, 0, 0);
-        }
-
-        if (playerUI != null)
-        {
-            playerUI.postDelayed(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    playerUI.setVisible(true);
-                }
-            }, 600L);
+            this.playerUI.setLayoutParams(params);
+            this.playerUI.setPadding(0, 0, 0, 0);
         }
     }
 
@@ -151,9 +116,9 @@ public class CustomFullscreenHandler implements FullscreenHandler
     @Override
     public void onResume()
     {
-        if (isFullscreen)
+        if (this.isFullscreen)
         {
-            doSystemUiVisibility(isFullscreen);
+            this.doSystemUiVisibility(this.isFullscreen);
         }
     }
 
@@ -165,10 +130,11 @@ public class CustomFullscreenHandler implements FullscreenHandler
     @Override
     public void onDestroy()
     {
+        this.playerOrientationListener.disable();
     }
 
     public boolean isFullScreen()
     {
-        return isFullscreen;
+        return this.isFullscreen;
     }
 }

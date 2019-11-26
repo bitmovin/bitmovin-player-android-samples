@@ -9,33 +9,21 @@ import android.view.ViewGroup
 import com.bitmovin.player.ui.FullscreenHandler
 import com.bitmovin.player.ui.FullscreenUtil
 
-class CustomFullscreenHandler(private val activity: Activity, private val playerUI: PlayerUI?) : FullscreenHandler {
+class CustomFullscreenHandler(private val activity: Activity, private val playerUI: PlayerUI) : FullscreenHandler {
 
     private val decorView: View = activity.window.decorView
     private var isFullscreen: Boolean = false
+    private val playerOrientationListener = PlayerOrientationListener(activity)
+
+    init {
+        this.playerOrientationListener.enable()
+    }
 
     private fun handleFullscreen(fullscreen: Boolean) {
         this.isFullscreen = fullscreen
 
-        this.doRotation(fullscreen)
         this.doSystemUiVisibility(fullscreen)
         this.doLayoutChanges(fullscreen)
-    }
-
-    private fun doRotation(fullScreen: Boolean) {
-        val rotation = this.activity.windowManager.defaultDisplay.rotation
-
-        playerUI?.setVisible(false)
-
-        if (fullScreen) {
-            if (rotation == Surface.ROTATION_270) {
-                this.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-            } else {
-                this.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-            }
-        } else {
-            this.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
     }
 
     private fun doSystemUiVisibility(fullScreen: Boolean) {
@@ -54,24 +42,22 @@ class CustomFullscreenHandler(private val activity: Activity, private val player
             actionBar?.show()
         }
 
-        if (this.playerUI?.parent is ViewGroup) {
+        if (this.playerUI.parent is ViewGroup) {
             val parentView = this.playerUI.parent as ViewGroup
 
             for (i in 0 until parentView.childCount) {
                 val child = parentView.getChildAt(i)
-                if (child !== playerUI) {
+                if (child !== this.playerUI) {
                     child.visibility = if (fullscreen) View.GONE else View.VISIBLE
                 }
             }
 
-            val params = playerUI.layoutParams
+            val params = this.playerUI.layoutParams
             params.width = ViewGroup.LayoutParams.MATCH_PARENT
             params.height = ViewGroup.LayoutParams.MATCH_PARENT
-            playerUI.layoutParams = params
-            playerUI.setPadding(0, 0, 0, 0)
+            this.playerUI.layoutParams = params
+            this.playerUI.setPadding(0, 0, 0, 0)
         }
-
-        playerUI?.postDelayed({ playerUI.setVisible(true) }, 600L)
     }
 
     override fun onFullscreenRequested() {
@@ -83,16 +69,16 @@ class CustomFullscreenHandler(private val activity: Activity, private val player
     }
 
     override fun onResume() {
-        if (isFullscreen) {
-            doSystemUiVisibility(isFullscreen)
+        if (this.isFullscreen) {
+            this.doSystemUiVisibility(this.isFullscreen)
         }
     }
 
     override fun onPause() {}
 
-    override fun onDestroy() {}
-
-    override fun isFullScreen(): Boolean {
-        return isFullscreen
+    override fun onDestroy() {
+        this.playerOrientationListener.disable()
     }
+
+    override fun isFullScreen(): Boolean = this.isFullscreen
 }

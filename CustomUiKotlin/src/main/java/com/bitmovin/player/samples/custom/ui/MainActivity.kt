@@ -10,7 +10,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var playerUi: PlayerUI? = null
+    private lateinit var playerUi: PlayerUI
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,37 +34,37 @@ class MainActivity : AppCompatActivity() {
         playerConfiguration.sourceConfiguration = sourceConfiguration
 
         this.playerUi = PlayerUI(this, playerConfiguration)
-        val fullscreenHandler = CustomFullscreenHandler(this, playerUi)
+        val fullscreenHandler = CustomFullscreenHandler(this, this.playerUi)
 
         // Set the FullscreenHandler of the PlayerUI
-        this.playerUi?.setFullscreenHandler(fullscreenHandler)
+        this.playerUi.setFullscreenHandler(fullscreenHandler)
 
-        this.playerUi?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+        this.playerUi.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         rootView.addView(this.playerUi)
     }
 
     override fun onStart() {
-        this.playerUi?.onStart()
         super.onStart()
+        this.playerUi.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        this.playerUi?.onResume()
+        this.playerUi.onResume()
     }
 
     override fun onPause() {
-        this.playerUi?.onPause()
+        this.playerUi.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        this.playerUi?.onStop()
+        this.playerUi.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        this.playerUi?.onDestroy()
+        this.playerUi.onDestroy()
         super.onDestroy()
     }
 }

@@ -11,13 +11,10 @@ package com.bitmovin.player.samples.fullscreen.basic;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
 import android.os.Handler;
 import android.os.Looper;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -32,6 +29,8 @@ public class CustomFullscreenHandler implements FullscreenHandler
     private BitmovinPlayerView playerView;
     private Toolbar toolbar;
 
+    private PlayerOrientationListener playerOrientationListener;
+
     private boolean isFullscreen;
 
 
@@ -41,37 +40,17 @@ public class CustomFullscreenHandler implements FullscreenHandler
         this.playerView = playerView;
         this.toolbar = toolbar;
         this.decorView = activity.getWindow().getDecorView();
+        this.playerOrientationListener = new PlayerOrientationListener(activity);
+
+        this.playerOrientationListener.enable();
     }
 
     private void handleFullscreen(boolean fullscreen)
     {
         this.isFullscreen = fullscreen;
 
-        this.doRotation(fullscreen);
         this.doSystemUiVisibility(fullscreen);
         this.doLayoutChanges(fullscreen);
-    }
-
-    private void doRotation(boolean fullScreen)
-    {
-        int rotation = this.activity.getWindowManager().getDefaultDisplay().getRotation();
-
-        if (fullScreen)
-        {
-            switch (rotation)
-            {
-                case Surface.ROTATION_270:
-                    this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
-                    break;
-
-                default:
-                    this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-            }
-        }
-        else
-        {
-            this.activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
     }
 
     private void doSystemUiVisibility(final boolean fullScreen)
@@ -136,6 +115,7 @@ public class CustomFullscreenHandler implements FullscreenHandler
     @Override
     public void onDestroy()
     {
+        this.playerOrientationListener.disable();
     }
 
     public boolean isFullScreen()

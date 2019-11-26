@@ -61,8 +61,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart()
     {
-        this.playerUi.onStart();
         super.onStart();
+        this.playerUi.onStart();
     }
 
     @Override
