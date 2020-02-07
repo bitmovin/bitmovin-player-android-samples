@@ -68,14 +68,14 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.37.0'
+        implementation 'com.bitmovin.player:playercore:2.38.0'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
-        implementation 'com.google.android.gms:play-services-cast-framework:16.1.2'
-        implementation 'com.android.support:mediarouter-v7:27.1.1'
-        implementation 'com.android.support:appcompat-v7:27.1.1'
-        implementation 'com.android.support:support-v4:27.1.1'
+        implementation 'com.google.android.gms:play-services-cast-framework:17.0.0'
+        implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+        implementation 'androidx.mediarouter:mediarouter:1.1.0'
+        implementation 'androidx.appcompat:appcompat:1.1.0'
 
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`.
     For more details see the  `BasicCasting` sample application.

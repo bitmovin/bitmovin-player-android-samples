@@ -31,6 +31,6 @@ dependencies {
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 
     implementation "com.google.android.gms:play-services-cast-framework:$playServicesCastVersion" //only needed if Chromecast is used
-    implementation "com.android.support:mediarouter-v7:$supportLibraryVersion"  //only needed if Chromecast is used
-    implementation "com.android.support:support-v4:$supportLibraryVersion"  //only needed if Chromecast is used
+    implementation 'androidx.mediarouter:mediarouter:1.0.0'  //only needed if Chromecast is used
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'  //only needed if Chromecast is used
 }

@@ -3,7 +3,7 @@ package com.bitmovin.player.samples.fullscreen.basic
 import android.app.Activity
 import android.os.Handler
 import android.os.Looper
-import android.support.v7.widget.Toolbar
+import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.view.ViewGroup
 import com.bitmovin.player.BitmovinPlayerView

@@ -10,10 +10,10 @@ package com.bitmovin.player.samples.custom.ui;
 
 
 import android.app.Activity;
-import android.content.pm.ActivityInfo;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Surface;
+
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.View;
 import android.view.ViewGroup;
 

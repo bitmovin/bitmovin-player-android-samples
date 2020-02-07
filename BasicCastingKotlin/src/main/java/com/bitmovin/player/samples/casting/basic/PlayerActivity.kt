@@ -1,7 +1,7 @@
 package com.bitmovin.player.samples.casting.basic
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.cast.BitmovinCastManager
 import com.bitmovin.player.config.media.SourceConfiguration

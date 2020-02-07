@@ -1,7 +1,7 @@
 package com.bitmovin.player.samples.custom.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
 import com.bitmovin.player.config.PlayerConfiguration
 import com.bitmovin.player.config.StyleConfiguration

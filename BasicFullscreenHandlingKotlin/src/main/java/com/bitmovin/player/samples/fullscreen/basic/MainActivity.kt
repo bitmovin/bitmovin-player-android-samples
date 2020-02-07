@@ -1,7 +1,7 @@
 package com.bitmovin.player.samples.fullscreen.basic
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.config.media.SourceConfiguration
 import kotlinx.android.synthetic.main.activity_main.*
