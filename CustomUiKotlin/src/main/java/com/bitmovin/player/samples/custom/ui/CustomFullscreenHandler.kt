@@ -1,13 +1,11 @@
 package com.bitmovin.player.samples.custom.ui
 
 import android.app.Activity
-import android.content.pm.ActivityInfo
-import androidx.appcompat.app.AppCompatActivity
-import android.view.Surface
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.ui.FullscreenHandler
-import com.bitmovin.player.ui.FullscreenUtil
+import com.bitmovin.player.ui.getSystemUiVisibilityFlags
 
 class CustomFullscreenHandler(private val activity: Activity, private val playerUI: PlayerUI) : FullscreenHandler {
 
@@ -28,7 +26,7 @@ class CustomFullscreenHandler(private val activity: Activity, private val player
 
     private fun doSystemUiVisibility(fullScreen: Boolean) {
         this.decorView.post {
-            val uiParams = FullscreenUtil.getSystemUiVisibilityFlags(fullScreen, true)
+            val uiParams = getSystemUiVisibilityFlags(fullScreen, true)
             decorView.systemUiVisibility = uiParams
         }
     }
