@@ -20,6 +20,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicPlaybackTV** Shows how the Bitmovin Player can be setup for basic playback in an Android TV application.
 +   **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
 +   **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
++   **IntegrationAdobeAnalytics** Shows how the Bitmovin Player can be setup with `com.bitmovin.player.integration.adobeanalytics` module to track Adobe Media Analytics events.
 
 ## Using The Sample Apps
 In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -49,6 +50,7 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.tv.playback.basic
     com.bitmovin.player.samples.playback.lowlatency
     com.bitmovin.player.samples.custom.adaptation
+    com.bitmovin.player.samples.integration.adobeanalytics
 
 ## Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
