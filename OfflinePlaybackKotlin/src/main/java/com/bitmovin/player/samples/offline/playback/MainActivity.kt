@@ -3,14 +3,15 @@ package com.bitmovin.player.samples.offline.playback
 import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.DrmLicenseKeyExpiredException
 import com.bitmovin.player.IllegalOperationException
 import com.bitmovin.player.NoConnectionException
 import com.bitmovin.player.api.event.data.ErrorEvent
+import com.bitmovin.player.config.drm.DRMConfiguration
 import com.bitmovin.player.config.drm.WidevineConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.offline.OfflineContentManager
@@ -38,7 +39,10 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
+    override fun onStart() {
+        super.onStart()
         // Get the folder into which the downloaded offline content will be stored.
         // There can be multiple of such root folders and every can contain several offline contents.
         this.rootFolder = this.getDir("offline", ContextWrapper.MODE_PRIVATE)
@@ -50,22 +54,25 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             onListItemClicked(parent.getItemAtPosition(position) as ListItem)
         }
-        requestOfflineContentOptions(this.listItems)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requestOfflineContentOptions(listItems)
     }
 
     override fun onStop() {
         super.onStop()
-        for (item in listItems) {
-            item.offlineContentManager.release()
-        }
+        listItems.map { it.offlineContentManager }.forEach(OfflineContentManager::release)
+        listItems.clear()
+        listAdapter = null
+        listView.onItemClickListener = null
     }
 
     private fun requestOfflineContentOptions(listItems: List<ListItem>) {
         // Request OfflineContentOptions from the OfflineContentManager.
         // Note that the getOptions call is asynchronous, and that the result will be delivered to the according listener method onOptionsAvailable
-        for (item in listItems) {
-            item.offlineContentManager.getOptions()
-        }
+        listItems.map { it.offlineContentManager }.forEach(OfflineContentManager::getOptions)
     }
 
     private fun onListItemClicked(listItem: ListItem) {
@@ -116,7 +123,6 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     /*
      * OfflineContentManagerListener callbacks
      */
-
     override fun onCompleted(sourceItem: SourceItem, offlineContentOptions: OfflineContentOptions) {
         val listItem = getListItemWithSourceItem(sourceItem)
         // Update the OfflineContentOptions, reset progress and notify the ListAdapter to update the views
@@ -173,7 +179,6 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     /*
      * Listener methods for the two buttons every ListItem has
      */
-
     override fun showSelectionDialog(listItem: ListItem) {
         val offlineContentOptions = listItem.offlineContentOptions
 
