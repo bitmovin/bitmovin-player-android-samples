@@ -6,6 +6,7 @@ This repository contains sample apps using the Bitmovin Player Android SDK. The 
 +   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevice Modular protected content.
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
 +   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.  
++   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads.
 +   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
@@ -36,6 +37,7 @@ In addition to that you have to log in to [https://dashboard.bitmovin.com](https
     com.bitmovin.player.samples.drm.basic
     com.bitmovin.player.samples.metadata.basic
     com.bitmovin.player.samples.ads.basic
+    com.bitmovin.player.samples.ads.companion
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.vr.basic
     com.bitmovin.player.samples.custom.ui
@@ -70,7 +72,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.50.0'
+        implementation 'com.bitmovin.player:playercore:2.51.0'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
