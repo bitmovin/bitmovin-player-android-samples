@@ -5,7 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.BitmovinPlayerFragment;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -39,13 +39,7 @@ public class MainActivity extends AppCompatActivity
 
     private void initializePlayer()
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-
-        // load source using the created source configuration
-        this.playerFragment.getPlayer().load(sourceConfiguration);
+        // load source using a source item
+        this.playerFragment.getPlayer().load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
     }
 }

@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.api.event.listener.OnPictureInPictureEnterListener
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.ui.DefaultPictureInPictureHandler
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -58,14 +58,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-
-        // load source using the created source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load source using a source item
+        this.bitmovinPlayer?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {

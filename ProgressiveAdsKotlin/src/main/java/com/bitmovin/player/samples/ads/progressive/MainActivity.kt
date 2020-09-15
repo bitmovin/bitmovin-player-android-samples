@@ -9,7 +9,7 @@ import com.bitmovin.player.config.advertising.AdItem
 import com.bitmovin.player.config.advertising.AdSource
 import com.bitmovin.player.config.advertising.AdSourceType
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 private const val AD_SOURCE_1 = "https://bitmovin-a.akamaihd.net/content/testing/ads/testad2s.mp4"
@@ -21,12 +21,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Create a new source configuration
-        val sourceConfig = SourceConfiguration().apply {
-            // Add a new source item
-            addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-        }
 
         // Create AdSources
         val firstAdSource = AdSource(AdSourceType.PROGRESSIVE, AD_SOURCE_1)
@@ -42,7 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         // Creating a new PlayerConfiguration
         val playerConfiguration = PlayerConfiguration().apply {
-            sourceConfiguration = sourceConfig
             // All ads in the AdvertisingConfiguration will be scheduled automatically
             advertisingConfiguration = advertisingConfig
         }
@@ -50,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration).apply {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
+        // Load the SourceItem
+        bitmovinPlayerView.player?.load(SourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add BitmovinPlayerView to the layout
         root.addView(this.bitmovinPlayerView, 0)

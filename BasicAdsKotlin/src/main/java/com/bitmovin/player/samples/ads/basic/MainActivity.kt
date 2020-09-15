@@ -9,7 +9,7 @@ import com.bitmovin.player.config.advertising.AdItem
 import com.bitmovin.player.config.advertising.AdSource
 import com.bitmovin.player.config.advertising.AdSourceType
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,11 +25,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
 
         // Create AdSources
         val firstAdSource = AdSource(AdSourceType.IMA, AD_SOURCE_1)
@@ -50,8 +45,6 @@ class MainActivity : AppCompatActivity() {
 
         // Creating a new PlayerConfiguration
         val playerConfiguration = PlayerConfiguration()
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.sourceConfiguration = sourceConfiguration
         // Assing the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.advertisingConfiguration = advertisingConfiguration
@@ -59,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         // Create new BitmovinPlayerView with our PlayerConfiguration
         this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
         this.bitmovinPlayerView?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        this.bitmovinPlayerView?.player?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add BitmovinPlayerView to the layout
         root.addView(this.bitmovinPlayerView, 0)

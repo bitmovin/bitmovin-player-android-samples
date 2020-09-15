@@ -7,7 +7,7 @@ import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.api.event.data.MetadataEvent
 import com.bitmovin.player.api.event.listener.OnMetadataListener
 import com.bitmovin.player.api.event.listener.OnMetadataParsedListener
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.model.emsg.EventMessage
 import com.bitmovin.player.model.id3.Id3Frame
 import com.bitmovin.player.model.scte.ScteMessage
@@ -63,15 +63,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
 
-        // Add a new source item
         //TODO: add source containing metadata
-        sourceConfiguration.addSourceItem("")
-
-        // load source using the created source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load source using the created source item
+        this.bitmovinPlayer?.load(SourceItem(""))
     }
 
     private fun logMetadata(metadataEvent: MetadataEvent) {

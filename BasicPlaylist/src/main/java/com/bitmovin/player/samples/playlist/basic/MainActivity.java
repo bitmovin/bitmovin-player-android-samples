@@ -11,7 +11,6 @@ import com.bitmovin.player.api.event.data.ReadyEvent;
 import com.bitmovin.player.api.event.listener.OnPlayListener;
 import com.bitmovin.player.api.event.listener.OnPlaybackFinishedListener;
 import com.bitmovin.player.api.event.listener.OnReadyListener;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 
 public class MainActivity extends AppCompatActivity
@@ -63,12 +62,8 @@ public class MainActivity extends AppCompatActivity
         SourceItem sourceItem = new SourceItem(itemToPlay.getUrl());
         sourceItem.setTitle(itemToPlay.getTitle());
 
-        // Create a source configuration and add the sourceItem
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        sourceConfiguration.addSourceItem(sourceItem);
-
-        // load the new source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load the new source item
+        this.bitmovinPlayer.load(sourceItem);
     }
 
     private OnPlayListener onPlayListener = new OnPlayListener()

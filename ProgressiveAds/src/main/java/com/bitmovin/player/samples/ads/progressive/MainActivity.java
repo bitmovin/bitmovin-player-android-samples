@@ -10,7 +10,7 @@ import com.bitmovin.player.config.advertising.AdItem;
 import com.bitmovin.player.config.advertising.AdSource;
 import com.bitmovin.player.config.advertising.AdSourceType;
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -25,11 +25,6 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-
         // Create AdSources
         AdSource firstAdSource = new AdSource(AdSourceType.PROGRESSIVE, AD_SOURCE_1);
         AdSource secondAdSource = new AdSource(AdSourceType.PROGRESSIVE, AD_SOURCE_2);
@@ -43,8 +38,6 @@ public class MainActivity extends AppCompatActivity
 
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
         // Assign the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
@@ -52,6 +45,9 @@ public class MainActivity extends AppCompatActivity
         // Create new BitmovinPlayerView with our PlayerConfiguration
         this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
         this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+
+        // Load the SourceItem
+        this.bitmovinPlayerView.getPlayer().load(new SourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         LinearLayout rootView = (LinearLayout) this.findViewById(R.id.activity_main);
 

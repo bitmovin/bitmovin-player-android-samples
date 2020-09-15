@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.config.drm.DRMSystems
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -46,9 +45,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
         // Create a new source item
         val sourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd")
 
@@ -57,10 +53,7 @@ class MainActivity : AppCompatActivity() {
         val drmSchemeUuid = DRMSystems.WIDEVINE_UUID
         sourceItem.addDRMConfiguration(drmSchemeUuid, drmLicenseUrl)
 
-        // Add source item including DRM configuration to source configuration
-        sourceConfiguration.addSourceItem(sourceItem)
-
-        // load source using the created source configuration
-        bitmovinPlayer?.load(sourceConfiguration)
+        // load source using the created source item
+        bitmovinPlayer?.load(sourceItem)
     }
 }

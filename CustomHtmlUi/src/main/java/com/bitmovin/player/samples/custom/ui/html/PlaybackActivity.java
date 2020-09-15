@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import com.bitmovin.player.BitmovinPlayerView;
 import com.bitmovin.player.config.PlayerConfiguration;
 import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.ui.CustomMessageHandler;
 
 public class PlaybackActivity extends AppCompatActivity
@@ -40,17 +40,10 @@ public class PlaybackActivity extends AppCompatActivity
         styleConfiguration.setPlayerUiJs("file:///android_asset/custom-bitmovinplayer-ui.min.js");
         styleConfiguration.setPlayerUiCss("file:///android_asset/custom-bitmovinplayer-ui.min.css");
 
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         // Assign created StyleConfiguration to the PlayerConfiguration
         playerConfiguration.setStyleConfiguration(styleConfiguration);
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         Object javascriptInterface = new Object() {
@@ -70,6 +63,9 @@ public class PlaybackActivity extends AppCompatActivity
 
         // Set the CustomMessageHandler to the bitmovinPlayerView
         this.bitmovinPlayerView.setCustomMessageHandler(customMessageHandler);
+
+        //load the SourceItem into the player
+        this.bitmovinPlayerView.getPlayer().load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         LinearLayout playerRootLayout = (LinearLayout) this.findViewById(R.id.player_view);
 

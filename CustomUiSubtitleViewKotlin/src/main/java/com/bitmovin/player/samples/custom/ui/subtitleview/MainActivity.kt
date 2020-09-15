@@ -1,14 +1,14 @@
 package com.bitmovin.player.samples.custom.ui.subtitleview
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.BitmovinPlayerView
 import com.bitmovin.player.BitmovinSubtitleView
 import com.bitmovin.player.config.PlayerConfiguration
 import com.bitmovin.player.config.StyleConfiguration
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -26,22 +26,16 @@ class MainActivity : AppCompatActivity() {
         // Disable default Bitmovin UI
         styleConfiguration.isUiEnabled = false
 
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd")
-
         // Creating a new PlayerConfiguration
         val playerConfiguration = PlayerConfiguration()
         // Assign created StyleConfiguration to the PlayerConfiguration
         playerConfiguration.styleConfiguration = styleConfiguration
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.sourceConfiguration = sourceConfiguration
 
         // Creating a BitmovinPlayerView and get it's BitmovinPlayer instance.
         this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
         this.bitmovinPlayerView?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         this.bitmovinPlayer = this.bitmovinPlayerView?.player
+        bitmovinPlayer?.load(SourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Creating a BitmovinSubtitleView and assign the current player instance.
         this.bitmovinSubtitleView = BitmovinSubtitleView(this)

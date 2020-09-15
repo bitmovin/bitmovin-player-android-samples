@@ -15,6 +15,7 @@ import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.BitmovinPlayerView
 import com.bitmovin.player.api.event.listener.*
 import com.bitmovin.player.config.PlayerConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.ui.FullscreenHandler
 import kotlinx.android.synthetic.main.player_ui.view.*
 import java.util.*
@@ -65,6 +66,10 @@ class PlayerUI: RelativeLayout {
 
         addPlayerListener()
         updateUi()
+    }
+
+    fun load(sourceItem: SourceItem){
+        this.bitmovinPlayer?.load(sourceItem)
     }
 
     private fun addPlayerListener() {

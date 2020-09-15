@@ -7,7 +7,7 @@ import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.BitmovinPlayerView
 import com.bitmovin.player.config.PlayerConfiguration
 import com.bitmovin.player.config.advertising.*
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,11 +32,9 @@ class MainActivity : AppCompatActivity() {
         // Finish setup of the player
         val playerConfiguration = PlayerConfiguration().apply {
             this.advertisingConfiguration = advertisingConfiguration
-            sourceConfiguration = SourceConfiguration().apply {
-                addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-            }
         }
         this.bitmovinPlayer.setup(playerConfiguration);
+        this.bitmovinPlayer.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
     }
 
     override fun onStart() {

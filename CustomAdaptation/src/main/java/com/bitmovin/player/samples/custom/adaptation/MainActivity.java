@@ -11,7 +11,7 @@ import com.bitmovin.player.config.AdaptationConfiguration;
 import com.bitmovin.player.config.PlayerConfiguration;
 import com.bitmovin.player.config.adaptation.VideoAdaptation;
 import com.bitmovin.player.config.adaptation.data.VideoAdaptationData;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.config.quality.VideoQuality;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         PlayerConfiguration playerConfiguration = this.createPlayerConfiguration();
         this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
         this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         LinearLayout rootView = this.findViewById(R.id.root);
         this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -71,14 +72,9 @@ public class MainActivity extends AppCompatActivity {
         adaptationConfiguration.setStartupBitrate(1_200_000);
         adaptationConfiguration.setVideoAdaptation(videoAdaptationListener);
 
-        // Setup source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-
-        // Assign adaptation and source configuration to player configuration
+        // Assign adaptation to player configuration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         playerConfiguration.setAdaptationConfiguration(adaptationConfiguration);
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
         return playerConfiguration;
     }
 

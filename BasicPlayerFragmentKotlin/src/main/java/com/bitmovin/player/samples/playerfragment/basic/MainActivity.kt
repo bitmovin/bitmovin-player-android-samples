@@ -3,7 +3,7 @@ package com.bitmovin.player.samples.playerfragment.basic
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayerFragment
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,13 +32,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-
-        // load source using the created source configuration
-        this.playerFragment?.player?.load(sourceConfiguration)
+        // load source using a source item
+        this.playerFragment?.player?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
     }
 }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.cast.BitmovinCastManager
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_player.*
 
@@ -61,17 +60,11 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer(sourceUrl: String, sourceTitle: String) {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
         // Create a new source item
         val sourceItem = SourceItem(sourceUrl)
         sourceItem.title = sourceTitle
 
-        // Add source item to source configuration
-        sourceConfiguration.addSourceItem(sourceItem)
-
-        // load source using the created source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load source using the created source item
+        this.bitmovinPlayer?.load(sourceItem)
     }
 }

@@ -13,7 +13,6 @@ import com.bitmovin.player.config.PlaybackConfiguration;
 import com.bitmovin.player.config.PlayerConfiguration;
 import com.bitmovin.player.config.StyleConfiguration;
 import com.bitmovin.player.config.media.DASHSource;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.samples.tv.playback.basic.R;
 
@@ -56,10 +55,8 @@ public class MainActivity extends AppCompatActivity
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
 
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        sourceConfiguration.addSourceItem(sourceItem);
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
+        // Assign created SourceItem to the PlayerConfiguration
+        playerConfiguration.setSourceItem(sourceItem);
 
         // Here a custom bitmovinplayer-ui.js is loaded which utilizes the Cast-UI as this matches our needs here perfectly.
         // I.e. UI controls get shown / hidden whenever the Player API is called. This is needed due to the fact that on Android TV no touch events are received

@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 
 import com.bitmovin.player.config.PlayerConfiguration;
 import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.ui.FullscreenHandler;
 
 public class MainActivity extends AppCompatActivity
@@ -34,17 +34,12 @@ public class MainActivity extends AppCompatActivity
         // Disable UI
         styleConfiguration.setUiEnabled(false);
 
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         // Assign created StyleConfiguration to the PlayerConfiguration
         playerConfiguration.setStyleConfiguration(styleConfiguration);
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
+        // Assign a SourceItem to the PlayerConfiguration
+        playerConfiguration.setSourceItem(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         this.playerUi = new PlayerUI(this, playerConfiguration);
         this.fullscreenHandler = new CustomFullscreenHandler(this, playerUi);

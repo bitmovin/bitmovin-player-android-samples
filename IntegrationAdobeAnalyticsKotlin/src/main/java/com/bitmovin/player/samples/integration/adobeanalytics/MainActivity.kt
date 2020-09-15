@@ -14,7 +14,6 @@ import com.bitmovin.player.config.advertising.AdItem
 import com.bitmovin.player.config.advertising.AdSource
 import com.bitmovin.player.config.advertising.AdSourceType
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.integration.adobeanalytics.AdobeMediaAnalyticsDataOverride
 import com.bitmovin.player.integration.adobeanalytics.AdobeMediaAnalyticsTracker
@@ -82,12 +81,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
         // Add a new source item
         val sourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
         sourceItem.title = "Art of Motion"
-        sourceConfiguration.addSourceItem(sourceItem)
 
         // Create AdSources
         val vmapAdSource = AdSource(AdSourceType.IMA, VMAP_SOURCE)
@@ -103,8 +99,8 @@ class MainActivity : AppCompatActivity() {
 
         // Creating a new PlayerConfiguration
         val playerConfiguration = PlayerConfiguration()
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.sourceConfiguration = sourceConfiguration
+        // Assign created SourceItem to the PlayerConfiguration
+        playerConfiguration.setSourceItem(sourceItem)
         // Assigning the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.advertisingConfiguration = advertisingConfiguration

@@ -3,7 +3,6 @@ package com.bitmovin.player.samples.offline.playback
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.offline.OfflineSourceItem
 import com.google.gson.Gson
@@ -69,13 +68,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer(sourceItem: SourceItem) {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
-        // Add source item to source configuration
-        sourceConfiguration.addSourceItem(sourceItem)
-
-        // load source using the created source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load source
+        this.bitmovinPlayer?.load(sourceItem)
     }
 }

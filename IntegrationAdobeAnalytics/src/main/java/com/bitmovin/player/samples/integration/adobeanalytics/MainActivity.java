@@ -14,7 +14,6 @@ import com.bitmovin.player.config.advertising.AdItem;
 import com.bitmovin.player.config.advertising.AdSource;
 import com.bitmovin.player.config.advertising.AdSourceType;
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.integration.adobeanalytics.AdobeMediaAnalyticsDataOverride;
 import com.bitmovin.player.integration.adobeanalytics.AdobeMediaAnalyticsTracker;
@@ -115,12 +114,10 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
+
         // Add a new source item
         SourceItem sourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd");
         sourceItem.setTitle("Art of Motion");
-        sourceConfiguration.addSourceItem(sourceItem);
 
         // Create AdSources
         AdSource vmapAdSource = new AdSource(AdSourceType.IMA, VMAP_SOURCE);
@@ -136,8 +133,8 @@ public class MainActivity extends AppCompatActivity
 
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
+        // Assign created SourceItem to the PlayerConfiguration
+        playerConfiguration.setSourceItem(sourceItem);
         // Assing the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);

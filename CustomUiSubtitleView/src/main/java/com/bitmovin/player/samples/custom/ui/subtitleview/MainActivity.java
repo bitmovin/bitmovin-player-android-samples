@@ -10,7 +10,7 @@ import com.bitmovin.player.BitmovinPlayerView;
 import com.bitmovin.player.BitmovinSubtitleView;
 import com.bitmovin.player.config.PlayerConfiguration;
 import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -29,17 +29,10 @@ public class MainActivity extends AppCompatActivity
         // Disable default Bitmovin UI
         styleConfiguration.setUiEnabled(false);
 
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd");
-
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         // Assign created StyleConfiguration to the PlayerConfiguration
         playerConfiguration.setStyleConfiguration(styleConfiguration);
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
 
         RelativeLayout playerContainer = this.findViewById(R.id.player_container);
 
@@ -47,6 +40,7 @@ public class MainActivity extends AppCompatActivity
         this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
         this.bitmovinPlayerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        this.bitmovinPlayer.load(new SourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         // Creating a BitmovinSubtitleView and assign the current player instance.
         this.bitmovinSubtitleView = new BitmovinSubtitleView(this);

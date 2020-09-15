@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.config.vr.VRConfiguration;
 import com.bitmovin.player.config.vr.VRContentType;
@@ -67,9 +66,6 @@ public class MainActivity extends AppCompatActivity
 
     protected void initializePlayer()
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
         // Create a new SourceItem
         SourceItem vrSourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd");
 
@@ -80,10 +76,7 @@ public class MainActivity extends AppCompatActivity
         // Set the start position to 180 degrees
         vrConfiguration.setStartPosition(180);
 
-        // Add a the SourceItem to the SourceConfiguration
-        sourceConfiguration.addSourceItem(vrSourceItem);
-
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load source using the created source item
+        this.bitmovinPlayer.load(vrSourceItem);
     }
 }

@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import com.bitmovin.player.BitmovinPlayerView
 import com.bitmovin.player.config.PlayerConfiguration
 import com.bitmovin.player.config.StyleConfiguration
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.ui.CustomMessageHandler
 import kotlinx.android.synthetic.main.activity_playback.*
 
@@ -28,17 +28,13 @@ class PlaybackActivity : AppCompatActivity() {
         styleConfiguration.playerUiJs = "file:///android_asset/custom-bitmovinplayer-ui.min.js"
         styleConfiguration.playerUiCss = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
 
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-        // Add a new source item
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-
         // Creating a new PlayerConfiguration
         val playerConfiguration = PlayerConfiguration()
         // Assign created StyleConfiguration to the PlayerConfiguration
         playerConfiguration.styleConfiguration = styleConfiguration
-        // Assign created SourceConfiguration to the PlayerConfiguration
-        playerConfiguration.sourceConfiguration = sourceConfiguration
+
+        // Assign the SourceItem to the PlayerConfiguration
+        playerConfiguration.setSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         val javascriptInterface = object : Any() {
@@ -58,6 +54,9 @@ class PlaybackActivity : AppCompatActivity() {
 
         // Set the CustomMessageHandler to the bitmovinPlayerView
         this.bitmovinPlayerView?.setCustomMessageHandler(customMessageHandler)
+
+        //load the SourceItem into the player
+        bitmovinPlayerView?.player?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add BitmovinPlayerView to the layout as first child
         playerRootLayout.addView(this.bitmovinPlayerView, 0)

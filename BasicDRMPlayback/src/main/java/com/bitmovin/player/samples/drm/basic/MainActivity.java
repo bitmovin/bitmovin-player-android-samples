@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
 import com.bitmovin.player.config.drm.DRMSystems;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 
 import java.util.UUID;
@@ -73,9 +72,6 @@ public class MainActivity extends AppCompatActivity
 
     protected void initializePlayer()
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
         // Create a new source item
         SourceItem sourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd");
 
@@ -84,10 +80,7 @@ public class MainActivity extends AppCompatActivity
         UUID drmSchemeUuid = DRMSystems.WIDEVINE_UUID;
         sourceItem.addDRMConfiguration(drmSchemeUuid, drmLicenseUrl);
 
-        // Add source item including DRM configuration to source configuration
-        sourceConfiguration.addSourceItem(sourceItem);
-
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load source using the created source item
+        this.bitmovinPlayer.load(sourceItem);
     }
 }

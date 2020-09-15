@@ -14,7 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
 import com.bitmovin.player.cast.BitmovinCastManager;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 
 public class PlayerActivity extends AppCompatActivity
@@ -84,17 +83,13 @@ public class PlayerActivity extends AppCompatActivity
 
     protected void initializePlayer(String sourceUrl, String sourceTitle)
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
 
         // Create a new source item
         SourceItem sourceItem = new SourceItem(sourceUrl);
         sourceItem.setTitle(sourceTitle);
 
-        // Add source item to source configuration
-        sourceConfiguration.addSourceItem(sourceItem);
 
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load source using the created source item
+        this.bitmovinPlayer.load(sourceItem);
     }
 }

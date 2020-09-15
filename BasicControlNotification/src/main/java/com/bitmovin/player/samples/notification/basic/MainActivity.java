@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.notification.BitmovinPlayerNotificationManager;
 
@@ -79,15 +78,11 @@ public class MainActivity extends AppCompatActivity
 
     protected void initializePlayer()
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
         // Add a new source item
         SourceItem sourceItem = new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
         sourceItem.setPosterSource("https://bitmovin-a.akamaihd.net/content/sintel/poster.png");
-        sourceConfiguration.addSourceItem(sourceItem);
 
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load source using the created source item
+        this.bitmovinPlayer.load(sourceItem);
     }
 }

@@ -100,7 +100,7 @@ public class PlayerActivity extends AppCompatActivity
         {
             sourceItem.addDRMConfiguration(new WidevineConfiguration(drm));
         }
-        playerConfiguration.getSourceConfiguration().addSourceItem(sourceItem);
+        playerConfiguration.setSourceItem(sourceItem);
 
         playerConfiguration.getPlaybackConfiguration().setAutoplayEnabled(true);
 

@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.BitmovinPlayer;
 import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceConfiguration;
 import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.offline.OfflineSourceItem;
 import com.google.gson.Gson;
@@ -92,13 +91,7 @@ public class PlayerActivity extends AppCompatActivity
 
     protected void initializePlayer(SourceItem sourceItem)
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
-        // Add source item to source configuration
-        sourceConfiguration.addSourceItem(sourceItem);
-
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        // load source
+        this.bitmovinPlayer.load(sourceItem);
     }
 }

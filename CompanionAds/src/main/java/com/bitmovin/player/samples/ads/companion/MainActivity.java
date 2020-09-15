@@ -13,7 +13,7 @@ import com.bitmovin.player.config.advertising.AdSource;
 import com.bitmovin.player.config.advertising.AdSourceType;
 import com.bitmovin.player.config.advertising.AdvertisingConfiguration;
 import com.bitmovin.player.config.advertising.CompanionAdContainer;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,10 +46,8 @@ public class MainActivity extends AppCompatActivity {
         // Finish setup of the player
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-        playerConfiguration.setSourceConfiguration(sourceConfiguration);
         this.bitmovinPlayer.setup(playerConfiguration);
+        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
     }
 
     @Override

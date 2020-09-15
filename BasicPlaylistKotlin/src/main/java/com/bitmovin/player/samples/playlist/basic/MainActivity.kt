@@ -6,7 +6,6 @@ import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.api.event.listener.OnPlayListener
 import com.bitmovin.player.api.event.listener.OnPlaybackFinishedListener
 import com.bitmovin.player.api.event.listener.OnReadyListener
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -55,12 +54,8 @@ class MainActivity : AppCompatActivity() {
         val sourceItem = SourceItem(itemToPlay.url)
         sourceItem.title = itemToPlay.title
 
-        // Create a source configuration and add the sourceItem
-        val sourceConfiguration = SourceConfiguration()
-        sourceConfiguration.addSourceItem(sourceItem)
-
-        // load the new source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load the new source item
+        this.bitmovinPlayer?.load(sourceItem)
     }
 
     private val onPlayListener = OnPlayListener {

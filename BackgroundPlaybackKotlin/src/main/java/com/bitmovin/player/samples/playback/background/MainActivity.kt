@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import com.bitmovin.player.BitmovinPlayer
 import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.media.SourceConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -70,16 +69,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initializePlayer() {
-        // Create a new source configuration
-        val sourceConfiguration = SourceConfiguration()
-
         // Add a new source item
         val sourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
         sourceItem.setPosterSource("https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg")
-        sourceConfiguration.addSourceItem(sourceItem)
 
-        // load source using the created source configuration
-        this.bitmovinPlayer?.load(sourceConfiguration)
+        // load source using the created source item
+        this.bitmovinPlayer?.load(sourceItem)
     }
 
     /**

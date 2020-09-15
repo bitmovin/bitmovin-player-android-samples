@@ -8,7 +8,7 @@ import com.bitmovin.player.BitmovinPlayerView
 import com.bitmovin.player.config.AdaptationConfiguration
 import com.bitmovin.player.config.PlayerConfiguration
 import com.bitmovin.player.config.adaptation.VideoAdaptation
-import com.bitmovin.player.config.media.SourceConfiguration
+import com.bitmovin.player.config.media.SourceItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         val playerConfiguration = this.createPlayerConfiguration()
         this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
         this.bitmovinPlayer = this.bitmovinPlayerView?.player
+        this.bitmovinPlayer?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         this.bitmovinPlayerView?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         root.addView(this.bitmovinPlayerView, 0)
@@ -61,14 +62,9 @@ class MainActivity : AppCompatActivity() {
         adaptationConfiguration.startupBitrate = 1_200_000
         adaptationConfiguration.videoAdaptation = videoAdaptationListener
 
-        // Setup source configuration
-        val sourceConfiguration = SourceConfiguration()
-        sourceConfiguration.addSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-
-        // Assign adaptation and source configuration to player configuration
+        // Assign adaptation configuration to player configuration
         val playerConfiguration = PlayerConfiguration()
         playerConfiguration.adaptationConfiguration = adaptationConfiguration
-        playerConfiguration.sourceConfiguration = sourceConfiguration
         return playerConfiguration
     }
 

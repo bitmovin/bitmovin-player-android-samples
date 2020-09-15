@@ -18,7 +18,7 @@ import com.bitmovin.player.api.event.data.MetadataEvent;
 import com.bitmovin.player.api.event.data.MetadataParsedEvent;
 import com.bitmovin.player.api.event.listener.OnMetadataListener;
 import com.bitmovin.player.api.event.listener.OnMetadataParsedListener;
-import com.bitmovin.player.config.media.SourceConfiguration;
+import com.bitmovin.player.config.media.SourceItem;
 import com.bitmovin.player.model.Metadata;
 import com.bitmovin.player.model.emsg.EventMessage;
 import com.bitmovin.player.model.id3.Id3Frame;
@@ -90,15 +90,8 @@ public class MainActivity extends AppCompatActivity
 
     protected void initializePlayer()
     {
-        // Create a new source configuration
-        SourceConfiguration sourceConfiguration = new SourceConfiguration();
-
-        // Add a new source item
         //TODO: add source containing metadata
-        sourceConfiguration.addSourceItem("");
-
-        // load source using the created source configuration
-        this.bitmovinPlayer.load(sourceConfiguration);
+        this.bitmovinPlayer.load(new SourceItem(""));
     }
 
     private void logMetadata(MetadataEvent metadataEvent) {
