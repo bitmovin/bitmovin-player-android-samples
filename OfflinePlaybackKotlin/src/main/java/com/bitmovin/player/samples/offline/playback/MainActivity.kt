@@ -11,7 +11,6 @@ import com.bitmovin.player.DrmLicenseKeyExpiredException
 import com.bitmovin.player.IllegalOperationException
 import com.bitmovin.player.NoConnectionException
 import com.bitmovin.player.api.event.data.ErrorEvent
-import com.bitmovin.player.config.drm.DRMConfiguration
 import com.bitmovin.player.config.drm.WidevineConfiguration
 import com.bitmovin.player.config.media.SourceItem
 import com.bitmovin.player.offline.OfflineContentManager
@@ -29,7 +28,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListItemActionListener {
 
-    private var rootFolder: File? = null
+    private lateinit var rootFolder: File
     private var listItems = ArrayList<ListItem>()
     private var listAdapter: ListAdapter? = null
 
@@ -225,7 +224,9 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         try {
             // Passing the OfflineContentOptions with set OfflineOptionEntryActions to the OfflineContentManager
-            offlineContentManager.process(listItem.offlineContentOptions)
+            listItem.offlineContentOptions?.let {
+                offlineContentManager.process(it)
+            }
         } catch (e: NoConnectionException) {
             e.printStackTrace()
         }
@@ -261,7 +262,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"
         val artOfMotionOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotion,
-                this.rootFolder?.path, "artOfMotion", this, this)
+                this.rootFolder.path, "artOfMotion", this, this)
 
         // Create a ListItem from the SourceItem and the OfflienContentManager
         val artOfMotionListItem = ListItem(artOfMotion, artOfMotionOfflineContentManager)
@@ -276,7 +277,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"
         val artOfMotionDrmOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotionDrm,
-                this.rootFolder?.path, "artOfMotionDrm", this, this)
+                this.rootFolder.path, "artOfMotionDrm", this, this)
 
         // Create a ListItem from the SourceItem and the OfflineContentManager
         val artOfMotionDrmListItem = ListItem(artOfMotionDrm, artOfMotionDrmOfflineContentManager)
