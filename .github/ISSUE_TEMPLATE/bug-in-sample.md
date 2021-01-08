@@ -21,10 +21,12 @@ Steps to reproduce the behavior:
 ## Expected behavior
 <!-- A clear and concise description of what you expected to happen. -->
 
-## Smartphone (please complete the following information):
- - Device: 
+## Device (please complete the following information):
+ - Device (Smartphone, Tablet...):  
+ - Model:
  - OS: 
  - Version:
+ - Bitmovin Player SDK version: 
 
 ## Additional context
 <!-- Add any other context about the problem here. -->
