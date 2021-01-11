@@ -25,7 +25,7 @@ Steps to reproduce the behavior:
  - Device (Smartphone, Tablet...):  
  - Model:
  - OS: 
- - Version:
+ - OS Version:
  - Bitmovin Player SDK version: 
 
 ## Additional context
