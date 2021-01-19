@@ -72,14 +72,14 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
-        implementation 'com.bitmovin.player:playercore:2.59.0'
+        implementation 'com.bitmovin.player:playercore:2.60.0'
 
 1.  Additionally, if you want to use the Chromecast feature, add the following dependencies to your project:
 
         implementation 'com.google.android.gms:play-services-cast-framework:17.0.0'
         implementation 'androidx.legacy:legacy-support-v4:1.0.0'
         implementation 'androidx.mediarouter:mediarouter:1.1.0'
-        implementation 'androidx.appcompat:appcompat:1.1.0'
+        implementation 'androidx.appcompat:appcompat:1.2.0'
 
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`.
     For more details see the  `BasicCasting` sample application.
@@ -118,7 +118,11 @@ When you want to develop an own Android application using the Bitmovin Player An
 
         <uses-permission android:name="android.permission.INTERNET" />
 
-1.  If the Bitmovin Android SDK is used to download content for offline playback, also add the permission for checking the network state
+1.  If the Bitmovin Android SDK is used to download content for offline playback, the following dependency has to be added:
+
+         implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
+
+    In addition, also add the permission for checking the network state
 
         <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 

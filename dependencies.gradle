@@ -4,11 +4,12 @@ ext {
     playServicesAdsVersion = '19.3.0'
     imaSdkVersion = '3.19.4'
     playServicesCastVersion = '17.0.0'
-    bitmovinPlayerVersion = '2.59.0'
+    bitmovinPlayerVersion = '2.60.0'
 
     // Library dependencies
     supportDependencies = [
-            appCompat        : 'androidx.appcompat:appcompat:1.0.0'
+            appCompat            : 'androidx.appcompat:appcompat:1.2.0',
+            localbroadcastmanager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     ]
 
     bitmovinPlayerDependencies = [
