@@ -3,8 +3,8 @@ ext {
     supportLibraryVersion = '27.1.1'
     playServicesAdsVersion = '19.3.0'
     imaSdkVersion = '3.19.4'
-    playServicesCastVersion = '17.0.0'
-    bitmovinPlayerVersion = '2.63.0'
+    playServicesCastVersion = '19.0.0'
+    bitmovinPlayerVersion = '2.64.0'
 
     // Library dependencies
     supportDependencies = [
