@@ -217,7 +217,7 @@ The Bitmovin Player Android SDK logs against a logging facade (SLF4J). In order 
 ## Documentation & Release Notes
 
 + **Documentation for your IDE** - Our release repository also holds a `.jar` containing the javadoc for the `player`, as well as the source code of the api package. If AndroidStudio is used, the documentation and sources should be downloaded and included automatically .
-+ **Android API Reference documentation** - You can find the latest one [here](https://cdn.bitmovin.com/player/android/3.0.0/docs/index.html)
++ **Android API Reference documentation** - You can find the latest one [here](https://cdn.bitmovin.com/player/android/3/docs/index.html)
 + **Android SDK Release Notes** can be found [here](https://bitmovin.com/release-notes-android-sdk/)
 
 ## Support
