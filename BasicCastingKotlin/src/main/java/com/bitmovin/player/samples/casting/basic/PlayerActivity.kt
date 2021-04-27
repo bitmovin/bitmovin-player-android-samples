@@ -2,19 +2,16 @@ package com.bitmovin.player.samples.casting.basic
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.cast.BitmovinCastManager
-import com.bitmovin.player.config.media.SourceItem
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.casting.BitmovinCastManager
 import kotlinx.android.synthetic.main.activity_player.*
 
+const val SOURCE_URL = "SOURCE_URL"
+const val SOURCE_TITLE = "SOURCE_TITLE"
+
 class PlayerActivity : AppCompatActivity() {
-
-    companion object {
-        const val SOURCE_URL = "SOURCE_URL"
-        const val SOURCE_TITLE = "SOURCE_TITLE"
-    }
-
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private lateinit var player: Player
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +26,9 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        this.bitmovinPlayer = bitmovinPlayerView.player
+        player = bitmovinPlayerView.player!!
 
-        this.initializePlayer(sourceUrl, sourceTitle)
+        initializePlayer(sourceUrl, sourceTitle)
     }
 
     override fun onStart() {
@@ -61,10 +58,11 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun initializePlayer(sourceUrl: String, sourceTitle: String) {
         // Create a new source item
-        val sourceItem = SourceItem(sourceUrl)
-        sourceItem.title = sourceTitle
+        val sourceItem = SourceConfig.fromUrl(sourceUrl).apply {
+            title = sourceTitle
+        }
 
         // load source using the created source item
-        this.bitmovinPlayer?.load(sourceItem)
+        player.load(sourceItem)
     }
 }

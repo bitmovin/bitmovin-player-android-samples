@@ -1,17 +1,21 @@
 package com.bitmovin.player.samples.offline.playback
 
 import android.content.Context
-import androidx.annotation.LayoutRes
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import com.bitmovin.player.offline.options.OfflineContentOptions
-import com.bitmovin.player.offline.options.OfflineOptionEntry
-import com.bitmovin.player.offline.options.OfflineOptionEntryState
+import androidx.annotation.LayoutRes
+import com.bitmovin.player.api.offline.options.OfflineContentOptions
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryState
 import kotlinx.android.synthetic.main.list_item.view.*
 
-class ListAdapter(context: Context, @LayoutRes resource: Int, objects: List<ListItem>, private val listItemActionListener: ListItemActionListener) : ArrayAdapter<ListItem>(context, resource, objects) {
+class ListAdapter(
+        context: Context,
+        @LayoutRes resource: Int,
+        objects: List<ListItem>,
+        private val listItemActionListener: ListItemActionListener
+) : ArrayAdapter<ListItem>(context, resource, objects) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
         var view = convertView
@@ -21,9 +25,9 @@ class ListAdapter(context: Context, @LayoutRes resource: Int, objects: List<List
         }
         val listItem = getItem(position)
 
-        val sourceItem = listItem?.sourceItem
+        val sourceConfig = listItem?.sourceConfig
         val offlineContentOptions = listItem?.offlineContentOptions
-        view?.title?.text = sourceItem?.title
+        view?.title?.text = sourceConfig?.title
 
         if (offlineContentOptions != null) {
             view?.btnDownload?.visibility = View.VISIBLE
@@ -73,46 +77,46 @@ class ListAdapter(context: Context, @LayoutRes resource: Int, objects: List<List
     }
 
     /**
-     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.DOWNLOADING]
+     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Downloading]
      *
      * @param offlineContentOptions
-     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.DOWNLOADING]
+     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Downloading]
      */
     private fun isDownloading(offlineContentOptions: OfflineContentOptions): Boolean {
         val allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions)
-        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.DOWNLOADING }
+        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.Downloading }
     }
 
     /**
-     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.SUSPENDED]
+     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Suspended]
      *
      * @param offlineContentOptions
-     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.SUSPENDED]
+     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Suspended]
      */
     private fun isSuspended(offlineContentOptions: OfflineContentOptions): Boolean {
         val allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions)
-        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.SUSPENDED }
+        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.Suspended }
     }
 
     /**
-     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.FAILED]
+     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Failed]
      *
      * @param offlineContentOptions
-     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.FAILED]
+     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Failed]
      */
     private fun hasFailed(offlineContentOptions: OfflineContentOptions): Boolean {
         val allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions)
-        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.FAILED }
+        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.Failed }
     }
 
     /**
-     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.DOWNLOADED]
+     * Returns true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Downloaded]
      *
      * @param offlineContentOptions
-     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.DOWNLOADED]
+     * @return true, if one [OfflineOptionEntry]s state is [OfflineOptionEntryState.Downloaded]
      */
     private fun hasDownloaded(offlineContentOptions: OfflineContentOptions): Boolean {
         val allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions)
-        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.DOWNLOADED }
+        return allOfflineOptionEntries.any { entry -> entry.state == OfflineOptionEntryState.Downloaded }
     }
 }

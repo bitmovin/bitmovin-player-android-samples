@@ -3,16 +3,17 @@ package com.bitmovin.player.samples.vr.basic;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.config.vr.VRConfiguration;
-import com.bitmovin.player.config.vr.VRContentType;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
+import com.bitmovin.player.api.vr.VrConfig;
+import com.bitmovin.player.api.vr.VrContentType;
 
 public class MainActivity extends AppCompatActivity
 {
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+    private PlayerView bitmovinPlayerView;
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -20,19 +21,19 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        bitmovinPlayerView =  findViewById(R.id.bitmovinPlayerView);
+        player = bitmovinPlayerView.getPlayer();
 
         // Enabling the gyroscopic controlling for the 360° video
-        this.bitmovinPlayer.enableGyroscope();
+        player.getVr().setGyroscopeEnabled(true);
 
-        this.initializePlayer();
+        initializePlayer();
     }
 
     @Override
     protected void onStart()
     {
-        this.bitmovinPlayerView.onStart();
+        bitmovinPlayerView.onStart();
         super.onStart();
     }
 
@@ -40,43 +41,43 @@ public class MainActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        bitmovinPlayerView.onResume();
     }
 
     @Override
     protected void onPause()
     {
-        this.bitmovinPlayerView.onPause();
+        bitmovinPlayerView.onPause();
         super.onPause();
     }
 
     @Override
     protected void onStop()
     {
-        this.bitmovinPlayerView.onStop();
+        bitmovinPlayerView.onStop();
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        this.bitmovinPlayerView.onDestroy();
+        bitmovinPlayerView.onDestroy();
         super.onDestroy();
     }
 
     protected void initializePlayer()
     {
         // Create a new SourceItem
-        SourceItem vrSourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd");
+        SourceConfig vrSourceItem = new SourceConfig("https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd", SourceType.Dash);
 
         // Get the current VRConfiguration of the SourceItem
-        VRConfiguration vrConfiguration = vrSourceItem.getVrConfiguration();
+        VrConfig vrConfiguration = vrSourceItem.getVrConfig();
         // Set the VrContentType on the VRConfiguration
-        vrConfiguration.setVrContentType(VRContentType.SINGLE);
+        vrConfiguration.setVrContentType(VrContentType.Single);
         // Set the start position to 180 degrees
         vrConfiguration.setStartPosition(180);
 
         // load source using the created source item
-        this.bitmovinPlayer.load(vrSourceItem);
+        player.load(vrSourceItem);
     }
 }

@@ -8,18 +8,15 @@
 
 package com.bitmovin.player.samples.offline.playback;
 
-import com.bitmovin.player.offline.options.OfflineContentOptions;
-import com.bitmovin.player.offline.options.OfflineOptionEntry;
-import com.bitmovin.player.offline.options.ThumbnailOfflineOptionEntry;
+import com.bitmovin.player.api.offline.options.OfflineContentOptions;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntry;
+import com.bitmovin.player.api.offline.options.ThumbnailOfflineOptionEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Util
-{
-    private Util()
-    {
-    }
+public class Util {
+    private Util() { }
 
     /**
      * Returns the video, audio and text options of the {@link OfflineContentOptions} in one list
@@ -27,14 +24,12 @@ public class Util
      * @param offlineContentOptions
      * @return
      */
-    public static List<OfflineOptionEntry> getAsOneList(OfflineContentOptions offlineContentOptions)
-    {
+    public static List<OfflineOptionEntry> getAsOneList(OfflineContentOptions offlineContentOptions) {
         List<OfflineOptionEntry> offlineOptionEntries = new ArrayList<OfflineOptionEntry>(offlineContentOptions.getVideoOptions());
         offlineOptionEntries.addAll(offlineContentOptions.getAudioOptions());
         offlineOptionEntries.addAll(offlineContentOptions.getTextOptions());
         ThumbnailOfflineOptionEntry thumbnailOfflineOptionEntry = offlineContentOptions.getThumbnailOption();
-        if (thumbnailOfflineOptionEntry != null)
-        {
+        if (thumbnailOfflineOptionEntry != null) {
             offlineOptionEntries.add(thumbnailOfflineOptionEntry);
         }
         return offlineOptionEntries;

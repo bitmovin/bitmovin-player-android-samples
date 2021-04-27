@@ -1,100 +1,102 @@
 package com.bitmovin.player.samples.ads.basic;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.advertising.AdItem;
-import com.bitmovin.player.config.advertising.AdSource;
-import com.bitmovin.player.config.advertising.AdSourceType;
-import com.bitmovin.player.config.advertising.AdvertisingConfiguration;
-import com.bitmovin.player.config.media.SourceItem;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
-{
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.advertising.AdItem;
+import com.bitmovin.player.api.advertising.AdSource;
+import com.bitmovin.player.api.advertising.AdSourceType;
+import com.bitmovin.player.api.advertising.AdvertisingConfig;
+import com.bitmovin.player.api.source.SourceConfig;
+
+public class MainActivity extends AppCompatActivity {
     // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
     private static final String AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator=";
     private static final String AD_SOURCE_2 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=";
     private static final String AD_SOURCE_3 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=";
     private static final String AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirectlinear&correlator=";
 
-    private BitmovinPlayerView bitmovinPlayerView;
+    private PlayerView playerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Create AdSources
-        AdSource firstAdSource = new AdSource(AdSourceType.IMA, AD_SOURCE_1);
-        AdSource secondAdSource = new AdSource(AdSourceType.IMA, AD_SOURCE_2);
-        AdSource thirdAdSource = new AdSource(AdSourceType.IMA, AD_SOURCE_3);
-        AdSource fourthAdSource = new AdSource(AdSourceType.IMA, AD_SOURCE_4);
+        AdSource firstAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_1);
+        AdSource secondAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_2);
+        AdSource thirdAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_3);
+        AdSource fourthAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_4);
 
-        // Setup a pre-roll ad
+        // Set up a pre-roll ad
         AdItem preRoll = new AdItem("pre", thirdAdSource);
-        // Setup a mid-roll waterfalling ad at 10% of the content duration
-        // NOTE: AdItems containing more than one AdSource, will be executed as waterfalling ad
+
+        // Set up a mid-roll waterfalling ad at 10% of the content duration
+        // NOTE: AdItems containing more than one AdSource will be executed as waterfalling ad
         AdItem midRoll = new AdItem("10%", firstAdSource, secondAdSource);
-        // Setup a post-roll ad
+
+        // Set up a post-roll ad
         AdItem postRoll = new AdItem("post", fourthAdSource);
 
-        // Add the AdItems to the AdvertisingConfiguration
-        AdvertisingConfiguration advertisingConfiguration = new AdvertisingConfiguration(preRoll, midRoll, postRoll);
+        // Add the AdItems to the AdvertisingConfig
+        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll);
 
-        // Creating a new PlayerConfiguration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assing the AdvertisingConfiguration to the PlayerConfiguration
-        // All ads in the AdvertisingConfiguration will be scheduled automatically
-        playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
+        // Create a new PlayerConfiguration
+        PlayerConfig playerConfig = new PlayerConfig();
+
+        // Add the AdvertisingConfig to the PlayerConfig. Ads in the AdvertisingConfig will be scheduled automatically.
+        playerConfig.setAdvertisingConfig(advertisingConfig);
 
         // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
-        this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        playerView = new PlayerView(this, Player.create(this, playerConfig));
+        playerView.setLayoutParams(
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                )
+        );
 
-        this.bitmovinPlayerView.getPlayer().load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        playerView.getPlayer().load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
 
-        LinearLayout rootView = (LinearLayout) this.findViewById(R.id.activity_main);
+        LinearLayout rootView = findViewById(R.id.activity_main);
 
-        // Add BitmovinPlayerView to the layout
-        rootView.addView(this.bitmovinPlayerView, 0);
+        // Add PlayerView to the layout
+        rootView.addView(playerView, 0);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 }

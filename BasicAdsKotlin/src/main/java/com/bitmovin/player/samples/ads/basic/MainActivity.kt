@@ -1,85 +1,88 @@
 package com.bitmovin.player.samples.ads.basic
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.PlayerConfiguration
-import com.bitmovin.player.config.advertising.AdItem
-import com.bitmovin.player.config.advertising.AdSource
-import com.bitmovin.player.config.advertising.AdSourceType
-import com.bitmovin.player.config.advertising.AdvertisingConfiguration
-import com.bitmovin.player.config.media.SourceItem
+import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.advertising.AdItem
+import com.bitmovin.player.api.advertising.AdSource
+import com.bitmovin.player.api.advertising.AdSourceType
+import com.bitmovin.player.api.advertising.AdvertisingConfig
 import kotlinx.android.synthetic.main.activity_main.*
 
+// These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
+private const val AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator="
+private const val AD_SOURCE_2 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="
+private const val AD_SOURCE_3 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator="
+private const val AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirectlinear&correlator="
+
 class MainActivity : AppCompatActivity() {
-
-    // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
-    private val AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator="
-    private val AD_SOURCE_2 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="
-    private val AD_SOURCE_3 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator="
-    private val AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirectlinear&correlator="
-
-    private var bitmovinPlayerView: BitmovinPlayerView? = null
+    private lateinit var playerView: PlayerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         // Create AdSources
-        val firstAdSource = AdSource(AdSourceType.IMA, AD_SOURCE_1)
-        val secondAdSource = AdSource(AdSourceType.IMA, AD_SOURCE_2)
-        val thirdAdSource = AdSource(AdSourceType.IMA, AD_SOURCE_3)
-        val fourthAdSource = AdSource(AdSourceType.IMA, AD_SOURCE_4)
+        val firstAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_1)
+        val secondAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_2)
+        val thirdAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_3)
+        val fourthAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_4)
 
-        // Setup a pre-roll ad
+        // Set up a pre-roll ad
         val preRoll = AdItem("pre", thirdAdSource)
-        // Setup a mid-roll waterfalling ad at 10% of the content duration
+
+        // Set up a mid-roll waterfalling ad at 10% of the content duration
         // NOTE: AdItems containing more than one AdSource, will be executed as waterfalling ad
         val midRoll = AdItem("10%", firstAdSource, secondAdSource)
-        // Setup a post-roll ad
+
+        // Set up a post-roll ad
         val postRoll = AdItem("post", fourthAdSource)
 
-        // Add the AdItems to the AdvertisingConfiguration
-        val advertisingConfiguration = AdvertisingConfiguration(preRoll, midRoll, postRoll)
+        // Add the AdItems to the AdvertisingConfig
+        val advertisingConfig = AdvertisingConfig(preRoll, midRoll, postRoll)
 
-        // Creating a new PlayerConfiguration
-        val playerConfiguration = PlayerConfiguration()
-        // Assing the AdvertisingConfiguration to the PlayerConfiguration
-        // All ads in the AdvertisingConfiguration will be scheduled automatically
-        playerConfiguration.advertisingConfiguration = advertisingConfiguration
+        // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
+        val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)
 
-        // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
-        this.bitmovinPlayerView?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        this.bitmovinPlayerView?.player?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        // Create new PlayerView with our PlayerConfig
+        playerView = PlayerView(this, Player.create(this, playerConfig)).apply {
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+            )
+            player?.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        }
 
-        // Add BitmovinPlayerView to the layout
-        root.addView(this.bitmovinPlayerView, 0)
+        // Add PlayerView to the layout
+        root.addView(playerView, 0)
     }
 
     override fun onStart() {
         super.onStart()
-        this.bitmovinPlayerView?.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        this.bitmovinPlayerView?.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        this.bitmovinPlayerView?.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        this.bitmovinPlayerView?.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        this.bitmovinPlayerView?.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 

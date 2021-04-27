@@ -8,29 +8,26 @@
 
 package com.bitmovin.player.samples.offline.playback;
 
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.offline.OfflineContentManager;
-import com.bitmovin.player.offline.options.OfflineContentOptions;
+import com.bitmovin.player.api.offline.OfflineContentManager;
+import com.bitmovin.player.api.offline.options.OfflineContentOptions;
+import com.bitmovin.player.api.source.SourceConfig;
 
 /**
  * A class representing a ListItem
  */
-class ListItem
-{
-    private SourceItem sourceItem;
+class ListItem {
+    private SourceConfig sourceConfig;
     private OfflineContentManager offlineContentManager;
     private OfflineContentOptions offlineContentOptions;
     private float progress;
 
-    public ListItem(SourceItem sourceItem, OfflineContentManager offlineContentManager)
-    {
-        this.sourceItem = sourceItem;
+    public ListItem(SourceConfig sourceConfig, OfflineContentManager offlineContentManager) {
+        this.sourceConfig = sourceConfig;
         this.offlineContentManager = offlineContentManager;
     }
 
-    public SourceItem getSourceItem()
-    {
-        return this.sourceItem;
+    public SourceConfig getSourceConfig() {
+        return this.sourceConfig;
     }
 
     public OfflineContentManager getOfflineContentManager()
@@ -48,8 +45,7 @@ class ListItem
         return this.progress;
     }
 
-    public void setOfflineContentOptions(OfflineContentOptions offlineContentOptions)
-    {
+    public void setOfflineContentOptions(OfflineContentOptions offlineContentOptions) {
         this.offlineContentOptions = offlineContentOptions;
     }
 

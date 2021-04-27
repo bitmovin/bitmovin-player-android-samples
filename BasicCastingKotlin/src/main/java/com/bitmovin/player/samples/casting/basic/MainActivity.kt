@@ -12,7 +12,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.bitmovin.player.cast.BitmovinCastManager
+import com.bitmovin.player.casting.BitmovinCastManager
 import com.google.android.gms.cast.framework.CastButtonFactory
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -45,8 +45,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun onListItemClicked(item: ListItem) {
         val playerIntent = Intent(this, PlayerActivity::class.java)
-        playerIntent.putExtra(PlayerActivity.SOURCE_URL, item.url)
-        playerIntent.putExtra(PlayerActivity.SOURCE_TITLE, item.title)
+        playerIntent.putExtra(SOURCE_URL, item.url)
+        playerIntent.putExtra(SOURCE_TITLE, item.title)
         startActivity(playerIntent)
     }
 

@@ -19,127 +19,80 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.offline.options.OfflineContentOptions;
-import com.bitmovin.player.offline.options.OfflineOptionEntry;
-import com.bitmovin.player.offline.options.OfflineOptionEntryState;
+import com.bitmovin.player.api.offline.options.OfflineContentOptions;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntry;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryState;
+import com.bitmovin.player.api.source.SourceConfig;
 
 import java.util.List;
 
-class ListAdapter extends ArrayAdapter<ListItem>
-{
+class ListAdapter extends ArrayAdapter<ListItem> {
     private ListItemActionListener listItemActionListener;
 
-    public ListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListItem> objects, ListItemActionListener listItemActionListener)
-    {
+    public ListAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<ListItem> objects, ListItemActionListener listItemActionListener) {
         super(context, resource, objects);
         this.listItemActionListener = listItemActionListener;
     }
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent)
-    {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
 
-        if (view == null)
-        {
+        if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
         }
         final ListItem listItem = getItem(position);
 
-        TextView title = (TextView) view.findViewById(R.id.title);
-        TextView state = (TextView) view.findViewById(R.id.state);
-        ImageButton pauseResume = (ImageButton) view.findViewById(R.id.btnPauseResume);
-        ImageButton btnDelete = (ImageButton) view.findViewById(R.id.btnDelete);
-        ImageButton btnDownload = (ImageButton) view.findViewById(R.id.btnDownload);
+        TextView title = view.findViewById(R.id.title);
+        TextView state = view.findViewById(R.id.state);
+        ImageButton pauseResume = view.findViewById(R.id.btnPauseResume);
+        ImageButton btnDelete = view.findViewById(R.id.btnDelete);
+        ImageButton btnDownload = view.findViewById(R.id.btnDownload);
 
-        SourceItem sourceItem = listItem.getSourceItem();
+        SourceConfig sourceConfig = listItem.getSourceConfig();
         OfflineContentOptions offlineContentOptions = listItem.getOfflineContentOptions();
 
-        title.setText(sourceItem.getTitle());
-        if (offlineContentOptions != null)
-        {
+        title.setText(sourceConfig.getTitle());
+        if (offlineContentOptions != null) {
             btnDownload.setVisibility(View.VISIBLE);
-            btnDownload.setOnClickListener(new View.OnClickListener()
-            {
-                @Override
-                public void onClick(View v)
-                {
-                    listItemActionListener.showSelectionDialog(listItem);
-                }
-            });
+            btnDownload.setOnClickListener(v -> listItemActionListener.showSelectionDialog(listItem));
 
             // If any option is downloading, we show a progress in the list
-            if (isDownloading(offlineContentOptions))
-            {
+            if (isDownloading(offlineContentOptions)) {
                 state.setText(String.format("Downloading - %.0f %%", listItem.getProgress()));
                 state.setVisibility(View.VISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_pause_black_24dp);
                 pauseResume.setVisibility(View.VISIBLE);
-                pauseResume.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        listItemActionListener.suspend(listItem);
-                    }
-                });
+                pauseResume.setOnClickListener(v -> listItemActionListener.suspend(listItem));
             }
-            else if (isSuspended(offlineContentOptions))
-            {
+            else if (isSuspended(offlineContentOptions)) {
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 pauseResume.setVisibility(View.VISIBLE);
-                pauseResume.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        listItemActionListener.resume(listItem);
-                    }
-                });
+                pauseResume.setOnClickListener(v -> listItemActionListener.resume(listItem));
             }
-            else if (hasFailed(offlineContentOptions))
-            {
+            else if (hasFailed(offlineContentOptions)) {
                 state.setText(String.format("Failed - %.0f %%", listItem.getProgress()));
                 state.setVisibility(View.VISIBLE);
                 pauseResume.setImageResource(R.drawable.ic_play_arrow_black_24dp);
                 pauseResume.setVisibility(View.VISIBLE);
-                pauseResume.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        listItemActionListener.resume(listItem);
-                    }
-                });
+                pauseResume.setOnClickListener(v -> listItemActionListener.resume(listItem));
             }
-            else
-            {
+            else {
                 state.setVisibility(View.INVISIBLE);
                 pauseResume.setVisibility(View.INVISIBLE);
             }
             // If any option is downloaded, we show the delete button
-            if (hasDownloaded(offlineContentOptions))
-            {
+            if (hasDownloaded(offlineContentOptions)) {
                 btnDelete.setVisibility(View.VISIBLE);
-                btnDelete.setOnClickListener(new View.OnClickListener()
-                {
-                    @Override
-                    public void onClick(View v)
-                    {
-                        listItemActionListener.delete(listItem);
-                    }
-                });
+                btnDelete.setOnClickListener(v -> listItemActionListener.delete(listItem));
             }
-            else
-            {
+            else {
                 btnDelete.setVisibility(View.GONE);
             }
 
         }
-        else
-        {
+        else {
             // If no options are available, we hide the download and the delete button
             btnDelete.setVisibility(View.GONE);
             btnDownload.setVisibility(View.GONE);
@@ -149,18 +102,15 @@ class ListAdapter extends ArrayAdapter<ListItem>
     }
 
     /**
-     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#DOWNLOADING}
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Downloading}
      *
      * @param offlineContentOptions
-     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#DOWNLOADING}
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Downloading}
      */
-    private boolean isDownloading(OfflineContentOptions offlineContentOptions)
-    {
+    private boolean isDownloading(OfflineContentOptions offlineContentOptions) {
         List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
-        for (OfflineOptionEntry entry : allOfflineOptionEntries)
-        {
-            if (entry.getState() == OfflineOptionEntryState.DOWNLOADING)
-            {
+        for (OfflineOptionEntry entry : allOfflineOptionEntries) {
+            if (entry.getState() == OfflineOptionEntryState.Downloading) {
                 return true;
             }
         }
@@ -168,18 +118,15 @@ class ListAdapter extends ArrayAdapter<ListItem>
     }
 
     /**
-     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#SUSPENDED}
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Suspended}
      *
      * @param offlineContentOptions
-     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#SUSPENDED}
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Suspended}
      */
-    private boolean isSuspended(OfflineContentOptions offlineContentOptions)
-    {
+    private boolean isSuspended(OfflineContentOptions offlineContentOptions) {
         List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
-        for (OfflineOptionEntry entry : allOfflineOptionEntries)
-        {
-            if (entry.getState() == OfflineOptionEntryState.SUSPENDED)
-            {
+        for (OfflineOptionEntry entry : allOfflineOptionEntries) {
+            if (entry.getState() == OfflineOptionEntryState.Suspended) {
                 return true;
             }
         }
@@ -187,18 +134,15 @@ class ListAdapter extends ArrayAdapter<ListItem>
     }
 
     /**
-     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#FAILED}
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Failed}
      *
      * @param offlineContentOptions
-     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#FAILED}
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Failed}
      */
-    private boolean hasFailed(OfflineContentOptions offlineContentOptions)
-    {
+    private boolean hasFailed(OfflineContentOptions offlineContentOptions) {
         List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
-        for (OfflineOptionEntry entry : allOfflineOptionEntries)
-        {
-            if (entry.getState() == OfflineOptionEntryState.FAILED)
-            {
+        for (OfflineOptionEntry entry : allOfflineOptionEntries) {
+            if (entry.getState() == OfflineOptionEntryState.Failed) {
                 return true;
             }
         }
@@ -206,18 +150,15 @@ class ListAdapter extends ArrayAdapter<ListItem>
     }
 
     /**
-     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#DOWNLOADED}
+     * Returns true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Downloaded}
      *
      * @param offlineContentOptions
-     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#DOWNLOADED}
+     * @return true, if one {@link OfflineOptionEntry}s state is {@link OfflineOptionEntryState#Downloaded}
      */
-    private boolean hasDownloaded(OfflineContentOptions offlineContentOptions)
-    {
+    private boolean hasDownloaded(OfflineContentOptions offlineContentOptions) {
         List<OfflineOptionEntry> allOfflineOptionEntries = Util.getAsOneList(offlineContentOptions);
-        for (OfflineOptionEntry entry : allOfflineOptionEntries)
-        {
-            if (entry.getState() == OfflineOptionEntryState.DOWNLOADED)
-            {
+        for (OfflineOptionEntry entry : allOfflineOptionEntries) {
+            if (entry.getState() == OfflineOptionEntryState.Downloaded) {
                 return true;
             }
         }

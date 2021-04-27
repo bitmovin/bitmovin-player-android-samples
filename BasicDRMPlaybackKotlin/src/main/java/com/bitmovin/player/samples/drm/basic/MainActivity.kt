@@ -2,58 +2,55 @@ package com.bitmovin.player.samples.drm.basic
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.config.drm.DRMSystems
-import com.bitmovin.player.config.media.SourceItem
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.drm.WidevineConfig
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private var player: Player? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        bitmovinPlayer = bitmovinPlayerView.player
+        player = playerView.player
         initializePlayer()
     }
 
     override fun onStart() {
-        bitmovinPlayerView.onStart()
+        playerView.onStart()
         super.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        bitmovinPlayerView.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        bitmovinPlayerView.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
     private fun initializePlayer() {
-        // Create a new source item
-        val sourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd")
+        // Create a new source config
+        val sourceConfig = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd")
 
-        // setup DRM handling
-        val drmLicenseUrl = "https://widevine-proxy.appspot.com/proxy"
-        val drmSchemeUuid = DRMSystems.WIDEVINE_UUID
-        sourceItem.addDRMConfiguration(drmSchemeUuid, drmLicenseUrl)
+        // Attach DRM handling to the source config
+        sourceConfig.drmConfig = WidevineConfig("https://widevine-proxy.appspot.com/proxy")
 
-        // load source using the created source item
-        bitmovinPlayer?.load(sourceItem)
+        // Load the source
+        player?.load(sourceConfig)
     }
 }

@@ -25,7 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bitmovin.player.cast.BitmovinCastManager;
+import com.bitmovin.player.casting.BitmovinCastManager;
 import com.google.android.gms.cast.framework.CastButtonFactory;
 
 import java.util.ArrayList;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         //Setup ListView, ListAdapter and the ListItems
         List<ListItem> exampleListItems = getExampleListItems();
-        this.listView = (ListView) findViewById(R.id.listview);
+        this.listView = findViewById(R.id.listview);
         this.listAdapter = new ListAdapter(this, 0, exampleListItems);
         this.listView.setAdapter(this.listAdapter);
         this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
@@ -90,8 +90,8 @@ public class MainActivity extends AppCompatActivity
 
     private static class ListItem
     {
-        private String title;
-        private String url;
+        private final String title;
+        private final String url;
 
         public ListItem(String title, String url)
         {

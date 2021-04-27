@@ -19,19 +19,22 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.bitmovin.player.DrmLicenseKeyExpiredException;
-import com.bitmovin.player.IllegalOperationException;
-import com.bitmovin.player.NoConnectionException;
-import com.bitmovin.player.api.event.data.ErrorEvent;
-import com.bitmovin.player.config.drm.WidevineConfiguration;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.offline.OfflineContentManager;
-import com.bitmovin.player.offline.OfflineContentManagerListener;
-import com.bitmovin.player.offline.OfflineSourceItem;
-import com.bitmovin.player.offline.options.OfflineContentOptions;
-import com.bitmovin.player.offline.options.OfflineOptionEntry;
-import com.bitmovin.player.offline.options.OfflineOptionEntryAction;
-import com.bitmovin.player.offline.options.OfflineOptionEntryState;
+
+import com.bitmovin.player.api.deficiency.ErrorEvent;
+import com.bitmovin.player.api.deficiency.exception.DrmLicenseKeyExpiredException;
+import com.bitmovin.player.api.deficiency.exception.IllegalOperationException;
+import com.bitmovin.player.api.deficiency.exception.NoConnectionException;
+import com.bitmovin.player.api.drm.WidevineConfig;
+import com.bitmovin.player.api.media.thumbnail.ThumbnailTrack;
+import com.bitmovin.player.api.offline.OfflineContentManager;
+import com.bitmovin.player.api.offline.OfflineContentManagerListener;
+import com.bitmovin.player.api.offline.OfflineSourceConfig;
+import com.bitmovin.player.api.offline.options.OfflineContentOptions;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntry;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryAction;
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryState;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
 import com.google.gson.Gson;
 
 import java.io.File;
@@ -39,8 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements OfflineContentManagerListener, ListItemActionListener
-{
+public class MainActivity extends AppCompatActivity implements OfflineContentManagerListener, ListItemActionListener {
     private File rootFolder;
     private List<ListItem> listItems;
     private ListView listView;
@@ -51,114 +53,95 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     private ListItem listItemForRetry = null;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.gson = new Gson();
-        this.listView = (ListView) findViewById(R.id.listview);
+        gson = new Gson();
+        listView = (ListView) findViewById(R.id.listview);
 
         // Get the folder into which the downloaded offline content will be stored.
         // There can be multiple of such root folders and every can contain several offline contents.
-        this.rootFolder = this.getDir("offline", ContextWrapper.MODE_PRIVATE);
+        rootFolder = getDir("offline", ContextWrapper.MODE_PRIVATE);
 
         // Creating the ListView containing 2 example streams, which can be downloaded using this app.
-        this.listItems = getListItems();
-        this.listAdapter = new ListAdapter(this, 0, this.listItems, this);
-        this.listView.setAdapter(this.listAdapter);
-        this.listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        listItems = getListItems();
+        listAdapter = new ListAdapter(this, 0, listItems, this);
+        listView.setAdapter(listAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 onListItemClicked((ListItem) parent.getItemAtPosition(position));
             }
         });
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        requestOfflineContentOptions(this.listItems);
+        requestOfflineContentOptions(listItems);
     }
 
     @Override
-    protected void onStop()
-    {
-        for (ListItem listItem : this.listItems)
-        {
+    protected void onStop() {
+        for (ListItem listItem : listItems) {
             listItem.getOfflineContentManager().release();
         }
-        this.gson = null;
-        this.listItems = null;
-        this.listAdapter = null;
-        this.listView.setOnItemClickListener(null);
+        listItems = null;
+        listAdapter = null;
+        listView.setOnItemClickListener(null);
         super.onStop();
     }
 
-    private void requestOfflineContentOptions(List<ListItem> listItems)
-    {
-        for (ListItem listItem : listItems)
-        {
+    private void requestOfflineContentOptions(List<ListItem> listItems) {
+        for (ListItem listItem : listItems) {
             // Request OfflineContentOptions from the OfflineContentManager.
             // Note that the getOptions call is asynchronous, and that the result will be delivered to the according listener method onOptionsAvailable
             listItem.getOfflineContentManager().getOptions();
         }
     }
 
-    private void onListItemClicked(ListItem listItem)
-    {
+    private void onListItemClicked(ListItem listItem) {
         playSource(listItem);
     }
 
-    private void playSource(ListItem listItem)
-    {
-        SourceItem sourceItem = null;
-        try
-        {
-            // First we try to get an OfflineSourceItem from the OfflineContentManager, as we prefer offline content
-            sourceItem = listItem.getOfflineContentManager().getOfflineSourceItem();
+    private void playSource(ListItem listItem) {
+        SourceConfig sourceConfig = null;
+        try {
+            // First we try to get an OfflineSourceConfig from the OfflineContentManager, as we prefer offline content
+            sourceConfig = listItem.getOfflineContentManager().getOfflineSourceConfig();
         }
-        catch (IOException e)
-        {
+        catch (IOException e) {
             // If it fails to load needed files
         }
-        catch (DrmLicenseKeyExpiredException e)
-        {
-            try
-            {
-                this.listItemForRetry = listItem;
-                this.retryOfflinePlayback = true;
+        catch (DrmLicenseKeyExpiredException e) {
+            try {
+                listItemForRetry = listItem;
+                retryOfflinePlayback = true;
                 listItem.getOfflineContentManager().renewOfflineLicense();
             }
-            catch (NoConnectionException e1)
-            {
+            catch (NoConnectionException e1) {
                 Toast.makeText(this, "The DRM license expired, but there is no network connection", Toast.LENGTH_LONG).show();
             }
         }
 
-        // If no offline content is available, or it fails to get an OfflineSourceItem, we take the original SourceItem for online streaming
-        if (sourceItem == null)
-        {
-            sourceItem = listItem.getSourceItem();
+        // If no offline content is available, or it fails to get an OfflineSourceConfig, we take the original SourceConfig for online streaming
+        if (sourceConfig == null) {
+            sourceConfig = listItem.getSourceConfig();
         }
-        startPlayerActivity(sourceItem);
+        startPlayerActivity(sourceConfig);
     }
 
-    private void startPlayerActivity(SourceItem sourceItem)
-    {
+    private void startPlayerActivity(SourceConfig sourceConfig) {
         Intent playerActivityIntent = new Intent(this, PlayerActivity.class);
 
-        // Add the SourceItem to the Intent
-        String extraName = sourceItem instanceof OfflineSourceItem ? PlayerActivity.OFFLINE_SOURCE_ITEM : PlayerActivity.SOURCE_ITEM;
-        playerActivityIntent.putExtra(extraName, gson.toJson(sourceItem));
+        // Add the SourceConfig to the Intent
+        String extraName = sourceConfig instanceof OfflineSourceConfig ? PlayerActivity.OFFLINE_SOURCE_ITEM : PlayerActivity.SOURCE_ITEM;
+        playerActivityIntent.putExtra(extraName, gson.toJson(sourceConfig));
 
         //Start the PlayerActivity
         startActivity(playerActivityIntent);
@@ -169,80 +152,67 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
      */
 
     @Override
-    public void onCompleted(SourceItem sourceItem, OfflineContentOptions offlineContentOptions)
-    {
-        ListItem listItem = getListItemWithSourceItem(sourceItem);
-        if (listItem != null)
-        {
+    public void onCompleted(SourceConfig sourceConfig, OfflineContentOptions offlineContentOptions) {
+        ListItem listItem = getListItemWithSourceConfig(sourceConfig);
+        if (listItem != null) {
             // Update the OfflineContentOptions, reset progress and notify the ListAdapter to update the views
             listItem.setOfflineContentOptions(offlineContentOptions);
             listItem.setProgress(0);
-            this.listAdapter.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onError(SourceItem sourceItem, ErrorEvent errorEvent)
-    {
+    public void onError(SourceConfig sourceConfig, ErrorEvent errorEvent) {
         Toast.makeText(this, errorEvent.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onProgress(SourceItem sourceItem, float progress)
-    {
-        ListItem listItem = getListItemWithSourceItem(sourceItem);
-        if (listItem != null)
-        {
+    public void onProgress(SourceConfig sourceConfig, float progress) {
+        ListItem listItem = getListItemWithSourceConfig(sourceConfig);
+        if (listItem != null) {
             float oldProgress = listItem.getProgress();
             listItem.setProgress(progress);
 
             // Only show full progress changes
-            if ((int) oldProgress != (int) progress)
-            {
+            if ((int) oldProgress != (int) progress) {
                 listAdapter.notifyDataSetChanged();
             }
         }
     }
 
     @Override
-    public void onOptionsAvailable(SourceItem sourceItem, OfflineContentOptions offlineContentOptions)
-    {
-        ListItem listItem = getListItemWithSourceItem(sourceItem);
-        if (listItem != null)
-        {
+    public void onOptionsAvailable(SourceConfig sourceConfig, OfflineContentOptions offlineContentOptions) {
+        ListItem listItem = getListItemWithSourceConfig(sourceConfig);
+        if (listItem != null) {
             // Update the OfflineContentOptions and notify the ListAdapter to update the views
             listItem.setOfflineContentOptions(offlineContentOptions);
-            this.listAdapter.notifyDataSetChanged();
+            listAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onDrmLicenseUpdated(SourceItem sourceItem)
-    {
-        if (this.retryOfflinePlayback)
-        {
-            if (this.listItemForRetry.getSourceItem() == sourceItem)
-            {
+    public void onDrmLicenseUpdated(SourceConfig sourceConfig) {
+        if (retryOfflinePlayback) {
+            if (listItemForRetry.getSourceConfig() == sourceConfig) {
                 // At the last try, the license was expired
                 // so we try it now again
-                ListItem listItem = this.listItemForRetry;
-                this.retryOfflinePlayback = false;
-                this.listItemForRetry = null;
+                ListItem listItem = listItemForRetry;
+                retryOfflinePlayback = false;
+                listItemForRetry = null;
                 playSource(listItem);
             }
         }
     }
 
     @Override
-    public void onSuspended(SourceItem sourceItem)
-    {
-        Toast.makeText(this, "Suspended: " + sourceItem.getTitle(),Toast.LENGTH_SHORT).show();
+    public void onSuspended(SourceConfig sourceConfig) {
+        Toast.makeText(this, "Suspended: " + sourceConfig.getTitle(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onResumed(SourceItem sourceItem)
-    {
-        Toast.makeText(this, "Resumed: " + sourceItem.getTitle(),Toast.LENGTH_SHORT).show();
+    public void onResumed(SourceConfig sourceConfig) {
+        Toast.makeText(this, "Resumed: " + sourceConfig.getTitle(),Toast.LENGTH_SHORT).show();
     }
 
     /*
@@ -250,28 +220,24 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
      */
 
     @Override
-    public void showSelectionDialog(ListItem listItem)
-    {
+    public void showSelectionDialog(ListItem listItem) {
         OfflineContentOptions offlineContentOptions = listItem.getOfflineContentOptions();
 
         // Generating the needed lists, to create an AlertDialog, listing all options
         List<OfflineOptionEntry> entries = Util.getAsOneList(offlineContentOptions);
         String[] entriesAsText = new String[entries.size()];
         boolean[] entriesCheckList = new boolean[entries.size()];
-        for (int i = 0; i < entriesAsText.length; i++)
-        {
+        for (int i = 0; i < entriesAsText.length; i++) {
             OfflineOptionEntry oh = entries.get(i);
-            try
-            {
+            try {
                 // Resetting the Action if set
                 oh.setAction(null);
             }
-            catch (IllegalOperationException e)
-            {
+            catch (IllegalOperationException e) {
                 // Won't happen
             }
             entriesAsText[i] = oh.getId() + "-" + oh.getMimeType();
-            entriesCheckList[i] = oh.getState() == OfflineOptionEntryState.DOWNLOADED || oh.getAction() == OfflineOptionEntryAction.DOWNLOAD;
+            entriesCheckList[i] = oh.getState() == OfflineOptionEntryState.Downloaded || oh.getAction() == OfflineOptionEntryAction.Download;
         }
 
         // Building and showing the AlertDialog
@@ -280,11 +246,10 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     }
 
     @Override
-    public void delete(ListItem listItem)
-    {
+    public void delete(ListItem listItem) {
         // To delete everything of a specific OfflineContentManager, we call deleteAll
         listItem.getOfflineContentManager().deleteAll();
-        Toast.makeText(this, "Deleting " + listItem.getSourceItem().getTitle(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Deleting " + listItem.getSourceConfig().getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -299,96 +264,76 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         listItem.getOfflineContentManager().resume();
     }
 
-    public void download(ListItem listItem)
-    {
+    public void download(ListItem listItem) {
         OfflineContentManager offlineContentManager = listItem.getOfflineContentManager();
-        if (offlineContentManager == null)
-        {
+        if (offlineContentManager == null) {
             return;
         }
 
-        try
-        {
+        try {
             // Passing the OfflineContentOptions with set OfflineOptionEntryActions to the OfflineContentManager
             offlineContentManager.process(listItem.getOfflineContentOptions());
         }
-        catch (NoConnectionException e)
-        {
+        catch (NoConnectionException e) {
             e.printStackTrace();
         }
     }
 
-    private AlertDialog.Builder generateAlertDialogBuilder(final ListItem listItem, final List<OfflineOptionEntry> entries, String[] entriesAsText, boolean[] entryCheckList)
-    {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this).setMultiChoiceItems(entriesAsText, entryCheckList, new DialogInterface.OnMultiChoiceClickListener()
-        {
+    private AlertDialog.Builder generateAlertDialogBuilder(final ListItem listItem, final List<OfflineOptionEntry> entries, String[] entriesAsText, boolean[] entryCheckList) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this).setMultiChoiceItems(entriesAsText, entryCheckList, new DialogInterface.OnMultiChoiceClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked)
-            {
-                try
-                {
+            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                try {
                     // Set an Download/Delete action, if the user changes the checked state
                     OfflineOptionEntry offlineOptionEntry = entries.get(which);
-                    offlineOptionEntry.setAction(isChecked ? OfflineOptionEntryAction.DOWNLOAD : OfflineOptionEntryAction.DELETE);
+                    offlineOptionEntry.setAction(isChecked ? OfflineOptionEntryAction.Download : OfflineOptionEntryAction.Delete);
                 }
-                catch (IllegalOperationException e)
-                {
+                catch (IllegalOperationException e) {
                 }
 
             }
         });
-        dialogBuilder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener()
-        {
-            @Override
-            public void onClick(DialogInterface dialog, int which)
-            {
-                download(listItem);
-            }
-        });
+        dialogBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> download(listItem));
         dialogBuilder.setNegativeButton(android.R.string.cancel, null);
         return dialogBuilder;
     }
 
-    private ListItem getListItemWithSourceItem(SourceItem sourceItem)
-    {
-        // Find the matching SourceItem in the List, containing all our SourceItems
-        for (ListItem listItem : this.listItems)
-        {
-            if (listItem.getSourceItem() == sourceItem)
-            {
+    private ListItem getListItemWithSourceConfig(SourceConfig sourceConfig) {
+        // Find the matching SourceConfig in the List, containing all our SourceConfigs
+        for (ListItem listItem : listItems) {
+            if (listItem.getSourceConfig() == sourceConfig) {
                 return listItem;
             }
         }
         return null;
     }
 
-    private List<ListItem> getListItems()
-    {
+    private List<ListItem> getListItems() {
         List<ListItem> listItems = new ArrayList<>();
 
-        // Initialize a SourceItem
-        SourceItem artOfMotion = new SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd");
-        artOfMotion.setThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt");
+        // Initialize a SourceConfig
+        SourceConfig artOfMotion = new SourceConfig("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash);
+        artOfMotion.setThumbnailTrack(new ThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt"));
         artOfMotion.setTitle("Art of Motion");
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"
-        OfflineContentManager artOfMotionOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotion, this.rootFolder.getPath(), "artOfMotion", this, this);
+        OfflineContentManager artOfMotionOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotion, rootFolder.getPath(), "artOfMotion", this, this);
 
-        // Create a ListItem from the SourceItem and the OfflienContentManager
+        // Create a ListItem from the SourceConfig and the OfflienContentManager
         ListItem artOfMotionListItem = new ListItem(artOfMotion, artOfMotionOfflineContentManager);
 
         // Add the ListItem to the List
         listItems.add(artOfMotionListItem);
 
-        // Initialize a SourceItem with a DRM configuration
-        SourceItem artOfMotionDrm = new SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd");
-        artOfMotionDrm.addDRMConfiguration(new WidevineConfiguration("https://widevine-proxy.appspot.com/proxy"));
+        // Initialize a SourceConfig with a DRM configuration
+        SourceConfig artOfMotionDrm = new SourceConfig("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash);
+        artOfMotionDrm.setDrmConfig(new WidevineConfig("https://widevine-proxy.appspot.com/proxy"));
         artOfMotionDrm.setTitle("Art of Motion with DRM");
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"
-        OfflineContentManager artOfMotionDrmOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotionDrm, this.rootFolder.getPath(), "artOfMotionDrm", this, this);
+        OfflineContentManager artOfMotionDrmOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotionDrm, rootFolder.getPath(), "artOfMotionDrm", this, this);
 
-        // Create a ListItem from the SourceItem and the OfflienContentManager
+        // Create a ListItem from the SourceConfig and the OfflienContentManager
         ListItem artOfMotionDrmListItem = new ListItem(artOfMotionDrm, artOfMotionDrmOfflineContentManager);
 
         // Add the ListItem to the List

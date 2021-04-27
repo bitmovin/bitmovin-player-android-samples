@@ -2,64 +2,65 @@ package com.bitmovin.player.samples.vr.basic
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.config.media.SourceItem
-import com.bitmovin.player.config.vr.VRContentType
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.api.vr.VrConfig
+import com.bitmovin.player.api.vr.VrContentType
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private lateinit var player: Player
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.bitmovinPlayer = bitmovinPlayerView.player
+        player = playerView.player!!
 
         // Enabling the gyroscopic controlling for the 360° video
-        this.bitmovinPlayer?.enableGyroscope()
-
-        this.initializePlayer()
+        player.vr.isGyroscopeEnabled = true
+        initializePlayer()
     }
 
     override fun onStart() {
         super.onStart()
-        bitmovinPlayerView.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        bitmovinPlayerView.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        bitmovinPlayerView.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
     private fun initializePlayer() {
         // Create a new SourceItem
-        val vrSourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd")
-
-        // Get the current VRConfiguration of the SourceItem
-        val vrConfiguration = vrSourceItem.vrConfiguration
-        // Set the VrContentType on the VRConfiguration
-        vrConfiguration.vrContentType = VRContentType.SINGLE
-        // Set the start position to 180 degrees
-        vrConfiguration.startPosition = 180.0
+        val vrSourceItem = SourceConfig(
+                url = "https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd",
+                type = SourceType.Dash,
+                vrConfig = VrConfig(
+                        vrContentType = VrContentType.Single,
+                        startPosition = 180.0
+                )
+        )
 
         // load source using the created source item
-        this.bitmovinPlayer?.load(vrSourceItem)
+        player.load(vrSourceItem)
     }
 }

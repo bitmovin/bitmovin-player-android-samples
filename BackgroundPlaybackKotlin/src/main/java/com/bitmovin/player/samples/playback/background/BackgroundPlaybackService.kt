@@ -7,98 +7,97 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.notification.BitmovinPlayerNotificationManager
-import com.bitmovin.player.notification.CustomActionReceiver
-import com.bitmovin.player.notification.DefaultMediaDescriptor
-import com.bitmovin.player.notification.NotificationListener
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.ui.notification.CustomActionReceiver
+import com.bitmovin.player.api.ui.notification.NotificationListener
+import com.bitmovin.player.ui.notification.DefaultMediaDescriptor
+import com.bitmovin.player.ui.notification.PlayerNotificationManager
+
 import com.google.android.exoplayer2.util.NotificationUtil
-import java.util.ArrayList
-import java.util.HashMap
+
+private const val NOTIFICATION_CHANNEL_ID = "com.bitmovin.player"
+private const val NOTIFICATION_ID = 1
 
 class BackgroundPlaybackService : Service() {
-
-    private val NOTIFICATION_CHANNEL_ID = "com.bitmovin.player"
-    private val NOTIFICATION_ID = 1
-
     // Binder given to clients
     private val binder = BackgroundBinder()
     private var bound = 0
 
-    private var player: BitmovinPlayer? = null
-    private var playerNotificationManager: BitmovinPlayerNotificationManager? = null
+    private var player: Player? = null
+    private lateinit var playerNotificationManager: PlayerNotificationManager
 
     /**
      * Class used for the client Binder. Because we know this service always
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
     inner class BackgroundBinder : Binder() {
-        // Return this instance of BitmovinPlayer so clients can use the player instance
-        val player: BitmovinPlayer?
-            get() = this@BackgroundPlaybackService.player
+        // Return this instance of Player so clients can use the player instance
+        val player get() = this@BackgroundPlaybackService.player
     }
 
     override fun onCreate() {
         super.onCreate()
-        this.player = BitmovinPlayer(this)
+        player = Player.create(this)
 
-        // Create a BitmovinPlayerNotificationManager with the static create method
+        // Create a PlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.
         NotificationUtil.createNotificationChannel(this, NOTIFICATION_CHANNEL_ID, R.string.control_notification_channel, NotificationUtil.IMPORTANCE_LOW)
-        this.playerNotificationManager = BitmovinPlayerNotificationManager(
-                this, NOTIFICATION_CHANNEL_ID, NOTIFICATION_ID, DefaultMediaDescriptor(this.assets), this.customActionReceiver)
 
-        this.playerNotificationManager?.setNotificationListener(object : NotificationListener {
-            override fun onNotificationStarted(notificationId: Int, notification: Notification) {
-                startForeground(notificationId, notification)
-            }
+        playerNotificationManager = PlayerNotificationManager(
+            this,
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_ID,
+            DefaultMediaDescriptor(assets),
+            customActionReceiver
+        ).apply {
+            setNotificationListener(object : NotificationListener {
+                override fun onNotificationStarted(notificationId: Int, notification: Notification) {
+                    startForeground(notificationId, notification)
+                }
 
-            override fun onNotificationCancelled(notificationId: Int) {
-                stopSelf()
-            }
-        })
+                override fun onNotificationCancelled(notificationId: Int) {
+                    stopSelf()
+                }
+            })
 
-        // Attaching the BitmovinPlayer to the BitmovinPlayerNotificationManager
-        this.playerNotificationManager?.setPlayer(this.player)
+            // Attaching the Player to the PlayerNotificationManager
+            setPlayer(player)
+        }
     }
 
     override fun onDestroy() {
-        this.playerNotificationManager?.setPlayer(null)
-        this.player?.destroy()
-        this.player = null
+        playerNotificationManager.setPlayer(null)
+        player?.destroy()
+        player = null
 
         super.onDestroy()
     }
 
-    override fun onBind(intent: Intent): IBinder? {
-        this.bound++
-        return this.binder
+    override fun onBind(intent: Intent): IBinder {
+        bound++
+        return binder
     }
 
     override fun onUnbind(intent: Intent): Boolean {
-        this.bound--
+        bound--
         return super.onUnbind(intent)
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int = START_STICKY
+    override fun onStartCommand(intent: Intent, flags: Int, startId: Int) = START_STICKY
 
     private val customActionReceiver = object : CustomActionReceiver {
-        override fun createCustomActions(context: Context): Map<String, NotificationCompat.Action> =
-                HashMap()
+        override fun createCustomActions(context: Context): Map<String, NotificationCompat.Action> = emptyMap()
 
-        override fun getCustomActions(player: BitmovinPlayer): List<String> {
-            val actions = ArrayList<String>()
-            if (!player.isPlaying && bound == 0) {
-                actions.add(BitmovinPlayerNotificationManager.ACTION_STOP)
-            }
-            return actions
+        override fun getCustomActions(player: Player) = if (!player.isPlaying && bound == 0) {
+            listOf(PlayerNotificationManager.ACTION_STOP)
+        } else {
+            emptyList()
         }
 
-        override fun onCustomAction(player: BitmovinPlayer, action: String, intent: Intent) {
+        override fun onCustomAction(player: Player, action: String, intent: Intent) {
             when (action) {
-                BitmovinPlayerNotificationManager.ACTION_STOP -> stopSelf()
+                PlayerNotificationManager.ACTION_STOP -> stopSelf()
             }
         }
     }
-
 }

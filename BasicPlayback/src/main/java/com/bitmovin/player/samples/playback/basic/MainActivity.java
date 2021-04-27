@@ -9,67 +9,64 @@
 package com.bitmovin.player.samples.playback.basic;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.bitmovinPlayerView);
 
-        this.initializePlayer();
+
+        initializePlayer();
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
-        // load source using a source item
-        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+    protected void initializePlayer() {
+        player = Player.create(this);
+        playerView.setPlayer(player);
+
+        // load source using a source config
+        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
     }
 }

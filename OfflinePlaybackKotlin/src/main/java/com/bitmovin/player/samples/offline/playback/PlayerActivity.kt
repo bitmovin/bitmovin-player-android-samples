@@ -2,20 +2,20 @@ package com.bitmovin.player.samples.offline.playback
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.config.media.SourceItem
-import com.bitmovin.player.offline.OfflineSourceItem
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.offline.OfflineSourceConfig
+import com.bitmovin.player.api.source.SourceConfig
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
 
     companion object {
-        const val SOURCE_ITEM = "SOURCE_ITEM"
-        const val OFFLINE_SOURCE_ITEM = "OFFLINE_SOURCE_ITEM"
+        const val SOURCE_CONFIG = "SOURCE_CONFIG"
+        const val OFFLINE_SOURCE_CONFIG = "OFFLINE_SOURCE_CONFIG"
     }
 
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private var player: Player? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,13 +23,13 @@ class PlayerActivity : AppCompatActivity() {
 
         val gson = Gson()
 
-        val sourceItem: SourceItem
+        val sourceConfig: SourceConfig
         when {
-            intent.hasExtra(SOURCE_ITEM) -> {
-                sourceItem = gson.fromJson(intent.getStringExtra(SOURCE_ITEM), SourceItem::class.java)
+            intent.hasExtra(SOURCE_CONFIG) -> {
+                sourceConfig = gson.fromJson(intent.getStringExtra(SOURCE_CONFIG), SourceConfig::class.java)
             }
-            intent.hasExtra(OFFLINE_SOURCE_ITEM) -> {
-                sourceItem = gson.fromJson(intent.getStringExtra(OFFLINE_SOURCE_ITEM), OfflineSourceItem::class.java)
+            intent.hasExtra(OFFLINE_SOURCE_CONFIG) -> {
+                sourceConfig = gson.fromJson(intent.getStringExtra(OFFLINE_SOURCE_CONFIG), OfflineSourceConfig::class.java)
             }
             else -> {
                 finish()
@@ -37,38 +37,38 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        this.bitmovinPlayer = bitmovinPlayerView.player
+        player = playerView.player
 
-        this.initializePlayer(sourceItem)
+        initializePlayer(sourceConfig)
     }
 
     override fun onStart() {
         super.onStart()
-        bitmovinPlayerView.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        bitmovinPlayerView.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        bitmovinPlayerView.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
-    private fun initializePlayer(sourceItem: SourceItem) {
+    private fun initializePlayer(sourceConfig: SourceConfig) {
         // load source
-        this.bitmovinPlayer?.load(sourceItem)
+        player?.load(sourceConfig)
     }
 }

@@ -18,15 +18,14 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.ui.FullscreenHandler;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.ui.FullscreenHandler;
 import com.bitmovin.player.ui.FullscreenUtil;
 
-public class CustomFullscreenHandler implements FullscreenHandler
-{
+public class CustomFullscreenHandler implements FullscreenHandler {
     private Activity activity;
     private View decorView;
-    private BitmovinPlayerView playerView;
+    private PlayerView playerView;
     private Toolbar toolbar;
 
     private PlayerOrientationListener playerOrientationListener;
@@ -34,131 +33,102 @@ public class CustomFullscreenHandler implements FullscreenHandler
     private boolean isFullscreen;
 
 
-    public CustomFullscreenHandler(Activity activity, BitmovinPlayerView playerView, Toolbar toolbar)
-    {
+    public CustomFullscreenHandler(Activity activity, PlayerView playerView, Toolbar toolbar) {
         this.activity = activity;
         this.playerView = playerView;
         this.toolbar = toolbar;
-        this.decorView = activity.getWindow().getDecorView();
-        this.playerOrientationListener = new PlayerOrientationListener(activity);
+        decorView = activity.getWindow().getDecorView();
+        playerOrientationListener = new PlayerOrientationListener(activity);
 
-        this.playerOrientationListener.enable();
+        playerOrientationListener.enable();
     }
 
-    private void handleFullscreen(boolean fullscreen)
-    {
+    private void handleFullscreen(boolean fullscreen) {
         this.isFullscreen = fullscreen;
 
-        this.doSystemUiVisibility(fullscreen);
-        this.doLayoutChanges(fullscreen);
+        doSystemUiVisibility(fullscreen);
+        doLayoutChanges(fullscreen);
     }
 
-    private void doSystemUiVisibility(final boolean fullScreen)
-    {
-        this.decorView.post(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                int uiParams = FullscreenUtil.getSystemUiVisibilityFlags(fullScreen, true);
+    private void doSystemUiVisibility(final boolean fullScreen) {
+        this.decorView.post(() -> {
+            int uiParams = FullscreenUtil.getSystemUiVisibilityFlags(fullScreen, true);
 
-                decorView.setSystemUiVisibility(uiParams);
-            }
+            decorView.setSystemUiVisibility(uiParams);
         });
     }
 
-    private void doLayoutChanges(final boolean fullscreen)
-    {
+    private void doLayoutChanges(final boolean fullscreen) {
         Looper mainLooper = Looper.getMainLooper();
-        boolean isMainLooperAlready = Looper.myLooper() == mainLooper;
+        boolean isAlreadyMainLooper = Looper.myLooper() == mainLooper;
 
+        UpdateLayoutRunnable updateLayoutRunnable = new UpdateLayoutRunnable((AppCompatActivity) activity, fullscreen);
 
-        UpdateLayoutRunnable updateLayoutRunnable = new UpdateLayoutRunnable((AppCompatActivity) this.activity, fullscreen);
-
-        if (isMainLooperAlready)
-        {
+        if (isAlreadyMainLooper) {
             updateLayoutRunnable.run();
-        }
-        else
-        {
+        } else {
             Handler handler = new Handler(mainLooper);
             handler.post(updateLayoutRunnable);
         }
     }
 
     @Override
-    public void onFullscreenRequested()
-    {
-        this.handleFullscreen(true);
+    public void onFullscreenRequested() {
+        handleFullscreen(true);
     }
 
     @Override
-    public void onFullscreenExitRequested()
-    {
-        this.handleFullscreen(false);
+    public void onFullscreenExitRequested() {
+        handleFullscreen(false);
     }
 
     @Override
-    public void onResume()
-    {
-        if (isFullscreen)
-        {
+    public void onResume() {
+        if (isFullscreen) {
             doSystemUiVisibility(isFullscreen);
         }
     }
 
     @Override
-    public void onPause()
-    {
+    public void onPause() {}
+
+    @Override
+    public void onDestroy() {
+        playerOrientationListener.disable();
     }
 
     @Override
-    public void onDestroy()
-    {
-        this.playerOrientationListener.disable();
-    }
-
-    public boolean isFullScreen()
-    {
+    public boolean isFullscreen() {
         return isFullscreen;
     }
 
-    private class UpdateLayoutRunnable implements Runnable
-    {
+    private class UpdateLayoutRunnable implements Runnable {
         private AppCompatActivity activity;
         private boolean fullscreen;
 
-        private UpdateLayoutRunnable(AppCompatActivity activity, boolean fullscreen)
-        {
+        private UpdateLayoutRunnable(AppCompatActivity activity, boolean fullscreen) {
             this.activity = activity;
             this.fullscreen = fullscreen;
         }
 
         @Override
         @SuppressLint("RestrictedApi")
-        public void run()
-        {
-            if (CustomFullscreenHandler.this.toolbar != null)
-            {
-                if (this.fullscreen)
-                {
+        public void run() {
+            if (CustomFullscreenHandler.this.toolbar != null) {
+                if (this.fullscreen) {
                     CustomFullscreenHandler.this.toolbar.setVisibility(View.GONE);
-                }
-                else
-                {
+                } else {
                     CustomFullscreenHandler.this.toolbar.setVisibility(View.VISIBLE);
                 }
             }
 
-            if (CustomFullscreenHandler.this.playerView.getParent() instanceof ViewGroup)
-            {
+            if (CustomFullscreenHandler.this.playerView.getParent() instanceof ViewGroup) {
                 ViewGroup parentView = (ViewGroup) CustomFullscreenHandler.this.playerView.getParent();
 
-                for (int i = 0; i < parentView.getChildCount(); i++)
-                {
+                for (int i = 0; i < parentView.getChildCount(); i++) {
                     View child = parentView.getChildAt(i);
-                    if (child != playerView)
-                    {
+
+                    if (child != playerView) {
                         child.setVisibility(fullscreen ? View.GONE : View.VISIBLE);
                     }
                 }

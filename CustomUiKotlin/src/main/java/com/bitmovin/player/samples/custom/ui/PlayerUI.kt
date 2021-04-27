@@ -1,8 +1,8 @@
 package com.bitmovin.player.samples.custom.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
-import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -11,106 +11,131 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.api.event.listener.*
-import com.bitmovin.player.config.PlayerConfiguration
-import com.bitmovin.player.config.media.SourceItem
-import com.bitmovin.player.ui.FullscreenHandler
+import androidx.core.content.ContextCompat
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.event.*
+import com.bitmovin.player.api.source.Source
+import com.bitmovin.player.api.ui.FullscreenHandler
 import kotlinx.android.synthetic.main.player_ui.view.*
 import java.util.*
 
-class PlayerUI: RelativeLayout {
+private const val LIVE = "Live"
+private const val UI_HIDE_TIMER = 5000
 
-    private val LIVE = "LIVE"
-    private val UI_HIDE_TIME = 5000
+class PlayerUI(
+    context: Context,
+    playerConfig: PlayerConfig
+) : RelativeLayout(context) {
+    // Create new Player with our PlayerConfig
+    private val player: Player = Player.create(context, playerConfig)
 
-    private var bitmovinPlayerView: BitmovinPlayerView? = null
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    // Create new PlayerView with our Player
+    private val playerView: PlayerView = PlayerView(context, player).apply {
+        layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    }
 
     private var playDrawable: Drawable? = null
     private var pauseDrawable: Drawable? = null
-
     private var lastUiInteraction: Long = 0
-
-    private var uiHideTimer: Timer? = null
+    private var uiHideTimer: Timer = Timer()
     private var uiHideTask: TimerTask? = null
-
     private var live: Boolean = false
 
-    constructor(context: Context, playerConfiguration: PlayerConfiguration) : super(context) {
-        // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = BitmovinPlayerView(context, playerConfiguration)
-        this.bitmovinPlayerView?.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        this.bitmovinPlayer = bitmovinPlayerView?.player
-        setup()
+    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
+        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+            // Only seek/timeShift when the user changes the progress (and not the PlayerEvent.TimeChanged )
+            if (fromUser) player.seekOrTimeShift(progress, seekBar)
+        }
+
+        override fun onStartTrackingTouch(seekBar: SeekBar) {}
+
+        override fun onStopTrackingTouch(seekBar: SeekBar) {}
     }
 
-    private fun setup() {
-        LayoutInflater.from(this.context).inflate(R.layout.player_ui, this)
+    private val onClickListener = OnClickListener { view ->
+        when {
+            view === playButton || view === this@PlayerUI -> player.togglePlayback()
+            (view === fullscreenButton) -> playerView.toggleFullscreen()
+        }
+    }
 
-        this.playDrawable = ContextCompat.getDrawable(this.context, R.drawable.ic_play_arrow_black_24dp)
-        this.pauseDrawable = ContextCompat.getDrawable(this.context, R.drawable.ic_pause_black_24dp)
+    @SuppressLint("ClickableViewAccessibility")
+    private val onTouchListener = OnTouchListener { _, event ->
+        lastUiInteraction = System.currentTimeMillis()
 
-        seekbar.setOnSeekBarChangeListener(this.seekBarChangeListener)
-        playButton.setOnClickListener(this.onClickListener)
-        fullscreenButton.setOnClickListener(this.onClickListener)
-        playButton.setOnTouchListener(this.onTouchListener)
-        seekbar.setOnTouchListener(this.onTouchListener)
-        setOnTouchListener(this.onTouchListener)
+        if (event.action == MotionEvent.ACTION_UP) {
+            // Start the hider task, when the UI is not touched
+            startUiHiderTask()
+        } else {
+            // When the view is touched, the UI should be visible
+            setControlsVisible(true)
+        }
+        false
+    }
 
-        // Add BitmovinPlayerView to the layout
-        this.addView(this.bitmovinPlayerView, 0)
+    init {
+        LayoutInflater.from(context).inflate(R.layout.player_ui, this)
 
-        uiHideTimer = Timer()
+        playDrawable = ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp)
+        pauseDrawable = ContextCompat.getDrawable(context, R.drawable.ic_pause_black_24dp)
+
+        seekbar.setOnSeekBarChangeListener(seekBarChangeListener)
+        playButton.setOnClickListener(onClickListener)
+        fullscreenButton.setOnClickListener(onClickListener)
+        playButton.setOnTouchListener(onTouchListener)
+        seekbar.setOnTouchListener(onTouchListener)
+        setOnTouchListener(onTouchListener)
+
+        // Add PlayerView to the layout
+        addView(playerView, 0)
 
         addPlayerListener()
         updateUi()
     }
 
-    fun load(sourceItem: SourceItem){
-        this.bitmovinPlayer?.load(sourceItem)
+    fun load(source: Source) {
+        source.next<SourceEvent.Loaded>(::updateUi)
+        player.load(source)
     }
 
     private fun addPlayerListener() {
-        this.bitmovinPlayer?.addEventListener(onTimeChangedListener)
-        this.bitmovinPlayer?.addEventListener(onSourceLoadedListener)
-        this.bitmovinPlayer?.addEventListener(onPlayListener)
-        this.bitmovinPlayer?.addEventListener(onPausedListener)
-        this.bitmovinPlayer?.addEventListener(onStallEndedListener)
-        this.bitmovinPlayer?.addEventListener(onSeekedListener)
-        this.bitmovinPlayer?.addEventListener(onPlaybackFinishedListener)
+        player.on<PlayerEvent.TimeChanged>(::updateUi)
+        player.on<PlayerEvent.Play>(::updateUi)
+        player.on<PlayerEvent.Paused>(::updateUi)
+        player.on<PlayerEvent.StallEnded>(::updateUi)
+        player.on<PlayerEvent.Seeked>(::updateUi)
+        player.on<PlayerEvent.PlaybackFinished>(::updateUi)
+
     }
 
     private fun removePlayerListener() {
-        this.bitmovinPlayer?.removeEventListener(onTimeChangedListener)
-        this.bitmovinPlayer?.removeEventListener(onSourceLoadedListener)
-        this.bitmovinPlayer?.removeEventListener(onPlayListener)
-        this.bitmovinPlayer?.removeEventListener(onPausedListener)
-        this.bitmovinPlayer?.removeEventListener(onStallEndedListener)
-        this.bitmovinPlayer?.removeEventListener(onSeekedListener)
-        this.bitmovinPlayer?.removeEventListener(onPlaybackFinishedListener)
+        player.off(::updateUi)
     }
 
     private fun startUiHiderTask() {
         stopUiHiderTask()
 
-        // Create Task which hides the UI after a specified time (UI_HIDE_TIME)
-        this.uiHideTask = object : TimerTask() {
+        // Create Task which hides the UI after a specified time (UiHideTimer)
+        uiHideTask = object : TimerTask() {
             override fun run() {
                 val timeSincelastUiInteraction = System.currentTimeMillis() - lastUiInteraction
-                if (timeSincelastUiInteraction > UI_HIDE_TIME) {
+                if (timeSincelastUiInteraction > UI_HIDE_TIMER) {
                     setControlsVisible(false)
                 }
             }
         }
         // Schedule the hider task, so it checks the state every 100ms
-        this.uiHideTimer?.scheduleAtFixedRate(this.uiHideTask, 0, 100)
+        uiHideTimer.scheduleAtFixedRate(uiHideTask, 0, 100)
     }
 
     private fun stopUiHiderTask() {
-        this.uiHideTask?.cancel()
-        this.uiHideTask = null
+        uiHideTask?.cancel()
+        uiHideTask = null
     }
 
     fun setVisible(visible: Boolean) {
@@ -132,159 +157,77 @@ class PlayerUI: RelativeLayout {
     }
 
     fun setFullscreenHandler(fullscreenHandler: FullscreenHandler) {
-        this.bitmovinPlayerView?.setFullscreenHandler(fullscreenHandler)
+        playerView.setFullscreenHandler(fullscreenHandler)
     }
 
-    fun destroy() {
-        removePlayerListener()
-        uiHideTimer?.cancel()
-    }
+    fun onStart() = playerView.onStart()
 
-    fun onStart() {
-        this.bitmovinPlayerView?.onStart()
-    }
+    fun onResume() = playerView.onResume()
 
-    fun onResume() {
-        this.bitmovinPlayerView?.onResume()
-    }
+    fun onPause() = playerView.onPause()
 
-    fun onPause() {
-        this.bitmovinPlayerView?.onPause()
-    }
-
-    fun onStop() {
-        this.bitmovinPlayerView?.onStop()
-    }
+    fun onStop() = playerView.onStop()
 
     fun onDestroy() {
-        this.bitmovinPlayerView?.onDestroy()
+        playerView.onDestroy()
         destroy()
+    }
+
+    private fun destroy() {
+        player.source?.off(::updateUi)
+
+        removePlayerListener()
+        uiHideTimer.cancel()
     }
 
     /**
      * UI Listeners
      */
-
     override fun onTouchEvent(event: MotionEvent): Boolean = true
-
-    private val seekBarChangeListener = object : SeekBar.OnSeekBarChangeListener {
-        override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            // Only seek/timeShift when the user changes the progress (and not the TimeChangedEvent)
-            if (fromUser) {
-                // If the current stream is a live stream, we have to use the timeShift method
-                bitmovinPlayer?.let { player ->
-                    if (!player.isLive) {
-                        player.seek(progress / 1000.0)
-                    } else {
-                        player.timeShift((progress - seekBar.max) / 1000.0)
-                    }
-                }
-            }
-        }
-
-        override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-        override fun onStopTrackingTouch(seekBar: SeekBar) {}
-    }
-
-    private val onClickListener = OnClickListener { view ->
-        if (view === playButton || view === this@PlayerUI) {
-            bitmovinPlayer?.let { player ->
-                if (player.isPlaying) {
-                    player.pause()
-                } else {
-                    player.play()
-                }
-            }
-        }
-        if (view === fullscreenButton) {
-            bitmovinPlayerView?.let { playerView ->
-                if (playerView.isFullscreen) {
-                    playerView.exitFullscreen()
-                } else {
-                    playerView.enterFullscreen()
-                }
-            }
-        }
-    }
-
-    private val onTouchListener = OnTouchListener { _, event ->
-        lastUiInteraction = System.currentTimeMillis()
-
-        if (event.action == MotionEvent.ACTION_UP) {
-            // Start the hider task, when the UI is not touched
-            startUiHiderTask()
-        } else {
-            // When the view is touched, the UI should be visible
-            setControlsVisible(true)
-        }
-        false
-    }
-
-    /**
-     * Player Listeners
-     */
-
-    private val onTimeChangedListener = OnTimeChangedListener { updateUi() }
-
-    private val onSourceLoadedListener = OnSourceLoadedListener { updateUi() }
-
-    private val onPlaybackFinishedListener = OnPlaybackFinishedListener { updateUi() }
-
-    private val onPausedListener = OnPausedListener { updateUi() }
-
-    private val onPlayListener = OnPlayListener { updateUi() }
-
-    private val onSeekedListener = OnSeekedListener { updateUi() }
-
-    private val onStallEndedListener = OnStallEndedListener { updateUi() }
 
     /**
      * Methods for UI update
      */
-
-    private fun updateUi() {
+    private fun updateUi(event: Event? = null) {
         seekbar.post {
             // if the live state of the player changed, the UI should change it's mode
-            bitmovinPlayer?.let { player ->
-                val positionMs: Int
-                val durationMs: Int
+            val positionMs: Int
+            val durationMs: Int
 
-                if (live != player.isLive) {
-                    live = player.isLive
-                    if (live) {
-                        positionView.visibility = View.GONE
-                        durationView.text = LIVE
-                    } else {
-                        positionView.visibility = View.VISIBLE
-                    }
-                }
-
+            if (live != player.isLive) {
+                live = player.isLive
                 if (live) {
-                    // The Seekbar does not support negative values
-                    // so the seekable range is shifted to the positive
-                    durationMs = (-player.maxTimeShift * 1000).toInt()
-                    positionMs = (durationMs + player.timeShift * 1000).toInt()
+                    positionView.visibility = View.GONE
+                    durationView.text = LIVE
                 } else {
-                    // Converting to milliseconds
-                    positionMs = (player.currentTime * 1000).toInt()
-                    durationMs = (player.duration * 1000).toInt()
-
-                    // Update the TextViews displaying the current position and duration
-                    positionView.text = millisecondsToTimeString(positionMs)
-                    durationView.text = millisecondsToTimeString(durationMs)
+                    positionView.visibility = View.VISIBLE
                 }
+            }
 
-                // Update the values of the Seekbar
-                seekbar.progress = positionMs
-                seekbar.max = durationMs
+            if (live) {
+                // The Seekbar does not support negative values
+                // so the seekable range is shifted to the positive
+                durationMs = (-player.maxTimeShift * 1000).toInt()
+                positionMs = (durationMs + player.timeShift * 1000).toInt()
+            } else {
+                // Converting to milliseconds
+                positionMs = (player.currentTime * 1000).toInt()
+                durationMs = (player.duration * 1000).toInt()
 
-                // Update the image of the playback button
-                if (player.isPlaying) {
-                    playButton.setImageDrawable(pauseDrawable)
-                } else {
-                    playButton.setImageDrawable(playDrawable)
-                }
+                // Update the TextViews displaying the current position and duration
+                positionView.text = millisecondsToTimeString(positionMs)
+                durationView.text = millisecondsToTimeString(durationMs)
+            }
+
+            // Update the values of the Seekbar
+            seekbar.progress = positionMs
+            seekbar.max = durationMs
+
+            // Update the image of the playback button
+            if (player.isPlaying) {
+                playButton.setImageDrawable(pauseDrawable)
+            } else {
+                playButton.setImageDrawable(playDrawable)
             }
         }
     }
@@ -299,5 +242,23 @@ class PlayerUI: RelativeLayout {
         } else {
             String.format("%02d:%02d", minute, second)
         }
+    }
+}
+
+
+private fun Player.togglePlayback() = if (isPlaying) pause() else play()
+
+private fun PlayerView.toggleFullscreen() = if (isFullscreen) {
+    exitFullscreen()
+} else {
+    enterFullscreen()
+}
+
+// If the current stream is a live stream, we have to use the timeShift method
+private fun Player.seekOrTimeShift(progress: Int, seekBar: SeekBar) {
+    if (!isLive) {
+        seek(progress / 1000.0)
+    } else {
+        timeShift((progress - seekBar.max) / 1000.0)
     }
 }

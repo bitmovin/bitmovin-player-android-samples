@@ -3,28 +3,30 @@ package com.bitmovin.player.samples.pip.basic
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.api.event.listener.OnPictureInPictureEnterListener
-import com.bitmovin.player.config.media.SourceItem
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.event.PlayerEvent
+import com.bitmovin.player.api.event.on
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.ui.DefaultPictureInPictureHandler
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private lateinit var bitmovinPlayer: Player
     private var playerShouldPause = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.bitmovinPlayer = bitmovinPlayerView.player
+        bitmovinPlayer = bitmovinPlayerView.player!!
 
         // Create a PictureInPictureHandler and set it on the BitmovinPlayerView
-        val pictureInPictureHandler = DefaultPictureInPictureHandler(this, this.bitmovinPlayer)
+        val pictureInPictureHandler = DefaultPictureInPictureHandler(this, bitmovinPlayer)
         bitmovinPlayerView.setPictureInPictureHandler(pictureInPictureHandler)
 
-        this.initializePlayer()
+        initializePlayer()
     }
 
     override fun onStart() {
@@ -35,19 +37,19 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        // Add the PictureInPictureEnterListener to the BitmovinPlayerView
-        bitmovinPlayerView.addEventListener(this.pipEnterListener)
+        // Add the PictureInPictureEnterListener to the PlayerView
+        bitmovinPlayerView.on(::onPipEnter)
 
         bitmovinPlayerView.onResume()
     }
 
     override fun onPause() {
-        if (this.playerShouldPause) {
+        if (playerShouldPause) {
             bitmovinPlayerView.onPause()
         }
-        this.playerShouldPause = true
+        playerShouldPause = true
 
-        bitmovinPlayerView.removeEventListener(this.pipEnterListener)
+        bitmovinPlayerView.off(::onPipEnter)
 
         super.onPause()
     }
@@ -59,7 +61,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         // load source using a source item
-        this.bitmovinPlayer?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        bitmovinPlayer.load(
+                SourceConfig(
+                        url = "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd",
+                        type = SourceType.Dash
+                )
+        )
     }
 
     override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
@@ -67,16 +74,16 @@ class MainActivity : AppCompatActivity() {
 
         // Hiding the ActionBar
         if (isInPictureInPictureMode) {
-            this.supportActionBar?.hide()
+            supportActionBar?.hide()
         } else {
-            this.supportActionBar?.show()
+            supportActionBar?.show()
         }
-        this.bitmovinPlayerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        bitmovinPlayerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
-    private val pipEnterListener = OnPictureInPictureEnterListener {
+    private fun onPipEnter(event: PlayerEvent.PictureInPictureEnter) {
         // Android fires an onPause on the Activity when entering PiP mode.
-        // However, we do not want the BitmovinPlayerView to act on this.
+        // However, we do not want the BitmovinPlayerView to act on 
         this@MainActivity.playerShouldPause = false
     }
 }

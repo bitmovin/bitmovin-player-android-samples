@@ -9,82 +9,80 @@
 package com.bitmovin.player.samples.custom.ui;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.ui.FullscreenHandler;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
-{
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
+import com.bitmovin.player.api.ui.FullscreenHandler;
+import com.bitmovin.player.api.ui.StyleConfig;
+
+public class MainActivity extends AppCompatActivity {
     private PlayerUI playerUi;
     private FullscreenHandler fullscreenHandler;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create new StyleConfiguration
-        StyleConfiguration styleConfiguration = new StyleConfiguration();
+        // Create new StyleConfig
+        StyleConfig styleConfig = new StyleConfig();
         // Disable UI
-        styleConfiguration.setUiEnabled(false);
+        styleConfig.setUiEnabled(false);
 
-        // Creating a new PlayerConfiguration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assign created StyleConfiguration to the PlayerConfiguration
-        playerConfiguration.setStyleConfiguration(styleConfiguration);
-        // Assign a SourceItem to the PlayerConfiguration
-        playerConfiguration.setSourceItem(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        // Creating a new PlayerConfig
+        PlayerConfig playerConfig = new PlayerConfig();
+        // Assign created StyleConfig to the PlayerConfig
+        playerConfig.setStyleConfig(styleConfig);
+        // Assign a SourceItem to the PlayerConfig
 
-        this.playerUi = new PlayerUI(this, playerConfiguration);
-        this.fullscreenHandler = new CustomFullscreenHandler(this, playerUi);
+        Player player = Player.create(this, playerConfig);
+        playerUi = new PlayerUI(this, player);
+        fullscreenHandler = new CustomFullscreenHandler(this, playerUi);
+
+        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
 
         // Set the FullscreenHandler of the PlayerUI
-        this.playerUi.setFullscreenHandler(fullscreenHandler);
+        playerUi.setFullscreenHandler(fullscreenHandler);
 
-        LinearLayout rootView = (LinearLayout) this.findViewById(R.id.activity_main);
+        LinearLayout rootView = (LinearLayout) findViewById(R.id.activity_main);
 
-        this.playerUi.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        rootView.addView(this.playerUi);
+        playerUi.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        rootView.addView(playerUi);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.playerUi.onStart();
+        playerUi.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.playerUi.onResume();
+        playerUi.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.playerUi.onPause();
+    protected void onPause() {
+        playerUi.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.playerUi.onStop();
+    protected void onStop() {
+        playerUi.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.playerUi.onDestroy();
+    protected void onDestroy() {
+        playerUi.onDestroy();
         super.onDestroy();
     }
 }

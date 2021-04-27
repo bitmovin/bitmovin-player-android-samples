@@ -1,40 +1,40 @@
 package com.bitmovin.player.samples.custom.ui.html
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.webkit.JavascriptInterface
 import android.widget.LinearLayout
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.PlayerConfiguration
-import com.bitmovin.player.config.StyleConfiguration
-import com.bitmovin.player.config.media.SourceItem
+import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.ui.StyleConfig
 import com.bitmovin.player.ui.CustomMessageHandler
 import kotlinx.android.synthetic.main.activity_playback.*
 
 class PlaybackActivity : AppCompatActivity() {
-
-    private var bitmovinPlayerView: BitmovinPlayerView? = null
+    private lateinit var playerView: PlayerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_playback)
 
-        // Create new StyleConfiguration
-        val styleConfiguration = StyleConfiguration()
-        /*
-         * Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
-         */
-        // Set URLs for the JavaScript and the CSS
-        styleConfiguration.playerUiJs = "file:///android_asset/custom-bitmovinplayer-ui.min.js"
-        styleConfiguration.playerUiCss = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
+        // Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
+        // Creating a new PlayerConfig with a StyleConfig
+        val playerConfig = PlayerConfig(
+            styleConfig = StyleConfig(
+                // Set URLs for the JavaScript and the CSS
+                playerUiJs = "file:///android_asset/custom-bitmovinplayer-ui.min.js",
+                playerUiCss = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
+            )
+        )
 
-        // Creating a new PlayerConfiguration
-        val playerConfiguration = PlayerConfiguration()
-        // Assign created StyleConfiguration to the PlayerConfiguration
-        playerConfiguration.styleConfiguration = styleConfiguration
+        // Create a Player with our PlayerConfig
+        val player = Player.create(this, playerConfig)
 
-        // Assign the SourceItem to the PlayerConfiguration
-        playerConfiguration.setSourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
+        // Create new PlayerView with our Player
+        playerView = PlayerView(this, player)
+        playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         val javascriptInterface = object : Any() {
@@ -48,18 +48,14 @@ class PlaybackActivity : AppCompatActivity() {
         // Setup CustomMessageHandler for communication with Bitmovin Web UI
         val customMessageHandler = CustomMessageHandler(javascriptInterface)
 
-        // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
-        this.bitmovinPlayerView?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        // Set the CustomMessageHandler to the playerView
+        playerView.setCustomMessageHandler(customMessageHandler)
 
-        // Set the CustomMessageHandler to the bitmovinPlayerView
-        this.bitmovinPlayerView?.setCustomMessageHandler(customMessageHandler)
+        //load the SourceConfig into the player
+        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
-        //load the SourceItem into the player
-        bitmovinPlayerView?.player?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
-
-        // Add BitmovinPlayerView to the layout as first child
-        playerRootLayout.addView(this.bitmovinPlayerView, 0)
+        // Add PlayerView to the layout as first child
+        playerRootLayout.addView(playerView, 0)
 
         toggleCloseButtonStateButton.setOnClickListener {
             customMessageHandler.sendMessage("toggleCloseButton", null)
@@ -68,26 +64,26 @@ class PlaybackActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        this.bitmovinPlayerView?.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        this.bitmovinPlayerView?.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        this.bitmovinPlayerView?.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        this.bitmovinPlayerView?.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        this.bitmovinPlayerView?.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 }

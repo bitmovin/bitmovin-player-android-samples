@@ -6,75 +6,84 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.Bundle
 import android.os.IBinder
-import androidx.appcompat.app.AppCompatActivity
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.media.SourceItem
+import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private var bitmovinPlayerView: BitmovinPlayerView? = null
-    private var bitmovinPlayer: BitmovinPlayer? = null
+    private lateinit var playerView: PlayerView
+    private var player: Player? = null
     private var bound = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Create a BitmovinPlayerView without a BitmovinPlayer and add it to the View hierarchy
-        this.bitmovinPlayerView = BitmovinPlayerView(this, null as BitmovinPlayer?)
-        this.bitmovinPlayerView?.layoutParams = RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        root.addView(this.bitmovinPlayerView)
+        // Create a PlayerView without a Player and add it to the View hierarchy
+        playerView = PlayerView(this, null as Player?).apply {
+            layoutParams = RelativeLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        }
+        root.addView(playerView)
     }
 
     override fun onStart() {
         super.onStart()
-        this.bitmovinPlayerView?.onStart()
+        playerView.onStart()
+
         // Bind and start the BackgroundPlaybackService
         val intent = Intent(this, BackgroundPlaybackService::class.java)
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE)
+
         // If the Service is not started, it would get destroyed as soon as the Activity unbinds.
         startService(intent)
     }
 
     override fun onResume() {
         super.onResume()
-        // Attach the BitmovinPlayer to allow the BitmovinPlayerView to control the player
-        this.bitmovinPlayerView?.player = this.bitmovinPlayer
-        this.bitmovinPlayerView?.onResume()
+
+        // Attach the Player to allow the PlayerView to control the player
+        playerView.player = player
+        playerView.onResume()
     }
 
     override fun onPause() {
-        // Detach the BitmovinPlayer to decouple it from the BitmovinPlayerView lifecycle
-        this.bitmovinPlayerView?.player = null
-        this.bitmovinPlayerView?.onPause()
+        // Detach the Player to decouple it from the PlayerView lifecycle
+        playerView.player = null
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
         super.onStop()
-        // Unbind the Service and reset the BitmovinPlayer reference
+        // Unbind the Service and reset the Player reference
         unbindService(mConnection)
-        this.bitmovinPlayer = null
-        this.bound = false
-        this.bitmovinPlayerView?.onStop()
+        player = null
+        bound = false
+        playerView.onStop()
     }
 
     override fun onDestroy() {
-        this.bitmovinPlayerView?.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
     private fun initializePlayer() {
-        // Add a new source item
-        val sourceItem = SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
-        sourceItem.setPosterSource("https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg")
+        // Load a new source
+        val sourceConfig = SourceConfig(
+                "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
+                SourceType.Dash,
+                posterSource = "https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg"
+        )
 
-        // load source using the created source item
-        this.bitmovinPlayer?.load(sourceItem)
+        player?.load(sourceConfig)
     }
 
     /**
@@ -82,15 +91,18 @@ class MainActivity : AppCompatActivity() {
      */
     private val mConnection = object : ServiceConnection {
         override fun onServiceConnected(className: ComponentName, service: IBinder) {
-            // We've bound to the Service, cast the IBinder and get the BitmovinPlayer instance
+            // We've bound to the Service, cast the IBinder and get the Player instance
             val binder = service as BackgroundPlaybackService.BackgroundBinder
-            bitmovinPlayer = binder.player
-            // Attach the BitmovinPlayer as soon as we have a reference
-            bitmovinPlayerView?.player = bitmovinPlayer
+            player = binder.player
+
+            // Attach the Player as soon as we have a reference
+            playerView.player = player
+
             // If not already initialized, initialize the player with a source.
-            if (bitmovinPlayer?.config?.sourceItem == null) {
+            if (player?.source == null) {
                 initializePlayer()
             }
+
             bound = true
         }
 
@@ -98,5 +110,4 @@ class MainActivity : AppCompatActivity() {
             bound = false
         }
     }
-
 }

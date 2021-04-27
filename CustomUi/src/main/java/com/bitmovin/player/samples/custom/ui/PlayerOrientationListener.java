@@ -9,7 +9,6 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCA
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
 
 public class PlayerOrientationListener extends OrientationEventListener {
-
     private static final int ROTATION_THRESHOLD = 5;
     private final Activity activity;
 

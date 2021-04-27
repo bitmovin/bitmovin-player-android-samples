@@ -11,76 +11,64 @@ package com.bitmovin.player.samples.drm.basic;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.drm.DRMSystems;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.drm.WidevineConfig;
 
-import java.util.UUID;
-
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.playerView);
+        player = playerView.getPlayer();
 
-        this.initializePlayer();
+        initializePlayer();
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
-        // Create a new source item
-        SourceItem sourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd");
+    protected void initializePlayer() {
+        // Create a new source config
+        SourceConfig sourceConfig = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd");
 
-        // setup DRM handling
-        String drmLicenseUrl = "https://widevine-proxy.appspot.com/proxy";
-        UUID drmSchemeUuid = DRMSystems.WIDEVINE_UUID;
-        sourceItem.addDRMConfiguration(drmSchemeUuid, drmLicenseUrl);
+        // Attach DRM handling to the source config
+        sourceConfig.setDrmConfig(new WidevineConfig("https://widevine-proxy.appspot.com/proxy"));
 
-        // load source using the created source item
-        this.bitmovinPlayer.load(sourceItem);
+        // Load the source
+        this.player.load(sourceConfig);
     }
 }

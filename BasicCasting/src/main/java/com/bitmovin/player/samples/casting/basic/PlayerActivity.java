@@ -11,18 +11,18 @@ package com.bitmovin.player.samples.casting.basic;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.cast.BitmovinCastManager;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.casting.BitmovinCastManager;
 
 public class PlayerActivity extends AppCompatActivity
 {
     public static final String SOURCE_URL = "SOURCE_URL";
     public static final String SOURCE_TITLE = "SOURCE_TITLE";
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+    private PlayerView playerView;
+    private Player player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,8 +40,8 @@ public class PlayerActivity extends AppCompatActivity
             finish();
         }
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        this.playerView = this.findViewById(R.id.bitmovinPlayerView);
+        this.player = this.playerView.getPlayer();
 
         this.initializePlayer(sourceUrl, sourceTitle);
     }
@@ -49,7 +49,7 @@ public class PlayerActivity extends AppCompatActivity
     @Override
     protected void onStart()
     {
-        this.bitmovinPlayerView.onStart();
+        this.playerView.onStart();
         super.onStart();
     }
 
@@ -57,27 +57,27 @@ public class PlayerActivity extends AppCompatActivity
     protected void onResume()
     {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        this.playerView.onResume();
     }
 
     @Override
     protected void onPause()
     {
-        this.bitmovinPlayerView.onPause();
+        this.playerView.onPause();
         super.onPause();
     }
 
     @Override
     protected void onStop()
     {
-        this.bitmovinPlayerView.onStop();
+        this.playerView.onStop();
         super.onStop();
     }
 
     @Override
     protected void onDestroy()
     {
-        this.bitmovinPlayerView.onDestroy();
+        this.playerView.onDestroy();
         super.onDestroy();
     }
 
@@ -85,11 +85,11 @@ public class PlayerActivity extends AppCompatActivity
     {
 
         // Create a new source item
-        SourceItem sourceItem = new SourceItem(sourceUrl);
+        SourceConfig sourceItem = new SourceConfig(sourceUrl);
         sourceItem.setTitle(sourceTitle);
 
 
         // load source using the created source item
-        this.bitmovinPlayer.load(sourceItem);
+        this.player.load(sourceItem);
     }
 }

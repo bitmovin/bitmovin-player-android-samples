@@ -8,11 +8,12 @@
     android:orientation="vertical"
     android:weightSum="2">
 
-    <com.bitmovin.player.BitmovinPlayerView
+    <com.bitmovin.player.PlayerView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/bitmovinPlayerView"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        app:initialize_player="false"/>
 
     <FrameLayout
         android:id="@+id/companionAdContainer"

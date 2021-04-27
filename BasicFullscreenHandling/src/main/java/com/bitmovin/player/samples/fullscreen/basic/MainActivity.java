@@ -1,77 +1,69 @@
 package com.bitmovin.player.samples.fullscreen.basic;
 
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.playerView);
+        player = playerView.getPlayer();
 
         // Instantiate a custom FullscreenHandler
-        CustomFullscreenHandler customFullscreenHandler = new CustomFullscreenHandler(this, this.bitmovinPlayerView, toolbar);
-        // Set the FullscreenHandler to the BitmovinPlayerView
-        this.bitmovinPlayerView.setFullscreenHandler(customFullscreenHandler);
+        CustomFullscreenHandler customFullscreenHandler = new CustomFullscreenHandler(this, playerView, toolbar);
+        // Set the FullscreenHandler to the PlayerView
+        playerView.setFullscreenHandler(customFullscreenHandler);
 
-        this.initializePlayer();
+        initializePlayer();
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
-
-        // load source using a created source item
-        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+    protected void initializePlayer() {
+        // Load a new source
+        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
     }
 }

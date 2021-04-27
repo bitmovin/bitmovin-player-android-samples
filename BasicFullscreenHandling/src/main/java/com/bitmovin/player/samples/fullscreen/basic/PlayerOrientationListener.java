@@ -9,7 +9,6 @@ import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCA
 import static android.content.pm.ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT;
 
 public class PlayerOrientationListener extends OrientationEventListener {
-
     private static final int ROTATION_THRESHOLD = 5;
     private final Activity activity;
 
@@ -20,14 +19,14 @@ public class PlayerOrientationListener extends OrientationEventListener {
 
     @Override
     public void onOrientationChanged(int orientation) {
-        if (Math.abs(orientation - 0) < ROTATION_THRESHOLD) {
-            this.activity.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
+        if (Math.abs(orientation) < ROTATION_THRESHOLD) {
+            activity.setRequestedOrientation(SCREEN_ORIENTATION_PORTRAIT);
         } else if (Math.abs(orientation - 90) < ROTATION_THRESHOLD) {
-            this.activity.setRequestedOrientation(SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
+            activity.setRequestedOrientation(SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
         } else if (Math.abs(orientation - 180) < ROTATION_THRESHOLD) {
-            this.activity.setRequestedOrientation(SCREEN_ORIENTATION_REVERSE_PORTRAIT);
+            activity.setRequestedOrientation(SCREEN_ORIENTATION_REVERSE_PORTRAIT);
         } else if (Math.abs(orientation - 270) < ROTATION_THRESHOLD) {
-            this.activity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
+            activity.setRequestedOrientation(SCREEN_ORIENTATION_LANDSCAPE);
         }
     }
 }

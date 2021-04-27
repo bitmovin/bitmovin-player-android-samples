@@ -11,87 +11,76 @@ package com.bitmovin.player.samples.offline.playback;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.offline.OfflineSourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.offline.OfflineSourceConfig;
+import com.bitmovin.player.api.source.SourceConfig;
 import com.google.gson.Gson;
 
-public class PlayerActivity extends AppCompatActivity
-{
+public class PlayerActivity extends AppCompatActivity {
 
     public static final String SOURCE_ITEM = "SOURCE_ITEM";
     public static final String OFFLINE_SOURCE_ITEM = "OFFLINE_SOURCE_ITEM";
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+    private PlayerView playerView;
+    private Player player;
     private Gson gson = new Gson();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
-        SourceItem sourceItem;
-        if (getIntent().hasExtra(SOURCE_ITEM))
-        {
-            sourceItem = this.gson.fromJson(getIntent().getStringExtra(SOURCE_ITEM), SourceItem.class);
+        SourceConfig sourceConfig;
+        if (getIntent().hasExtra(SOURCE_ITEM)) {
+            sourceConfig = gson.fromJson(getIntent().getStringExtra(SOURCE_ITEM), SourceConfig.class);
         }
-        else if (getIntent().hasExtra(OFFLINE_SOURCE_ITEM))
-        {
-            sourceItem = this.gson.fromJson(getIntent().getStringExtra(OFFLINE_SOURCE_ITEM), OfflineSourceItem.class);
+        else if (getIntent().hasExtra(OFFLINE_SOURCE_ITEM)) {
+            sourceConfig = gson.fromJson(getIntent().getStringExtra(OFFLINE_SOURCE_ITEM), OfflineSourceConfig.class);
         }
-        else
-        {
+        else {
             finish();
             return;
         }
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.playerView);
+        player = playerView.getPlayer();
 
-        this.initializePlayer(sourceItem);
+        initializePlayer(sourceConfig);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer(SourceItem sourceItem)
-    {
+    protected void initializePlayer(SourceConfig sourceConfig) {
         // load source
-        this.bitmovinPlayer.load(sourceItem);
+        player.load(sourceConfig);
     }
 }

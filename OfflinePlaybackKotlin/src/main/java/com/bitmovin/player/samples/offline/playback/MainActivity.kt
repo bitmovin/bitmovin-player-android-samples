@@ -7,19 +7,21 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.DrmLicenseKeyExpiredException
-import com.bitmovin.player.IllegalOperationException
-import com.bitmovin.player.NoConnectionException
-import com.bitmovin.player.api.event.data.ErrorEvent
-import com.bitmovin.player.config.drm.WidevineConfiguration
-import com.bitmovin.player.config.media.SourceItem
-import com.bitmovin.player.offline.OfflineContentManager
-import com.bitmovin.player.offline.OfflineContentManagerListener
-import com.bitmovin.player.offline.OfflineSourceItem
-import com.bitmovin.player.offline.options.OfflineContentOptions
-import com.bitmovin.player.offline.options.OfflineOptionEntry
-import com.bitmovin.player.offline.options.OfflineOptionEntryAction
-import com.bitmovin.player.offline.options.OfflineOptionEntryState
+import com.bitmovin.player.api.deficiency.ErrorEvent
+import com.bitmovin.player.api.deficiency.exception.DrmLicenseKeyExpiredException
+import com.bitmovin.player.api.deficiency.exception.IllegalOperationException
+import com.bitmovin.player.api.deficiency.exception.NoConnectionException
+import com.bitmovin.player.api.drm.WidevineConfig
+import com.bitmovin.player.api.media.thumbnail.ThumbnailTrack
+import com.bitmovin.player.api.offline.OfflineContentManager
+import com.bitmovin.player.api.offline.OfflineContentManagerListener
+import com.bitmovin.player.api.offline.OfflineSourceConfig
+import com.bitmovin.player.api.offline.options.OfflineContentOptions
+import com.bitmovin.player.api.offline.options.OfflineOptionEntry
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryAction
+import com.bitmovin.player.api.offline.options.OfflineOptionEntryState
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
@@ -27,7 +29,6 @@ import java.io.IOException
 import java.util.*
 
 class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListItemActionListener {
-
     private lateinit var rootFolder: File
     private var listItems = ArrayList<ListItem>()
     private var listAdapter: ListAdapter? = null
@@ -44,12 +45,12 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         super.onStart()
         // Get the folder into which the downloaded offline content will be stored.
         // There can be multiple of such root folders and every can contain several offline contents.
-        this.rootFolder = this.getDir("offline", ContextWrapper.MODE_PRIVATE)
+        rootFolder = getDir("offline", ContextWrapper.MODE_PRIVATE)
 
         // Creating the ListView containing 2 example streams, which can be downloaded using this app.
-        this.listItems.addAll(getListItems())
-        this.listAdapter = ListAdapter(this, 0, this.listItems, this)
-        listView.adapter = this.listAdapter
+        listItems.addAll(getListItems())
+        listAdapter = ListAdapter(this, 0, listItems, this)
+        listView.adapter = listAdapter
         listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             onListItemClicked(parent.getItemAtPosition(position) as ListItem)
         }
@@ -79,41 +80,41 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     }
 
     private fun playSource(listItem: ListItem) {
-        var sourceItem: SourceItem? = null
+        var sourceConfig: SourceConfig? = null
         try {
-            // First we try to get an OfflineSourceItem from the OfflineContentManager, as we prefer offline content
-            sourceItem = listItem.offlineContentManager.offlineSourceItem
+            // First we try to get an OfflineSourceConfig from the OfflineContentManager, as we prefer offline content
+            sourceConfig = listItem.offlineContentManager.offlineSourceConfig
         } catch (e: IOException) {
             // If it fails to load needed files
             Toast.makeText(this, "Unable to load DRM license files", Toast.LENGTH_LONG).show()
         } catch (e: DrmLicenseKeyExpiredException) {
             try {
-                this.listItemForRetry = listItem
-                this.retryOfflinePlayback = true
+                listItemForRetry = listItem
+                retryOfflinePlayback = true
                 listItem.offlineContentManager.renewOfflineLicense()
             } catch (e: NoConnectionException) {
                 Toast.makeText(this, "The DRM license expired, but there is no network connection", Toast.LENGTH_LONG).show()
             }
         }
 
-        // If no offline content is available, or it fails to get an OfflineSourceItem, we take the original SourceItem for online streaming
-        if (sourceItem == null) {
-            sourceItem = listItem.sourceItem
+        // If no offline content is available, or it fails to get an OfflineSourceConfig, we take the original SourceConfig for online streaming
+        if (sourceConfig == null) {
+            sourceConfig = listItem.sourceConfig
         }
-        startPlayerActivity(sourceItem)
+        startPlayerActivity(sourceConfig)
     }
 
-    private fun startPlayerActivity(sourceItem: SourceItem?) {
+    private fun startPlayerActivity(sourceConfig: SourceConfig?) {
         val playerActivityIntent = Intent(this, PlayerActivity::class.java)
 
         // Add the SourceItem to the Intent
-        val extraName = if (sourceItem is OfflineSourceItem) {
-            PlayerActivity.OFFLINE_SOURCE_ITEM
+        val extraName = if (sourceConfig is OfflineSourceConfig) {
+            PlayerActivity.OFFLINE_SOURCE_CONFIG
         } else {
-            PlayerActivity.SOURCE_ITEM
+            PlayerActivity.SOURCE_CONFIG
         }
         val gson = Gson()
-        playerActivityIntent.putExtra(extraName, gson.toJson(sourceItem))
+        playerActivityIntent.putExtra(extraName, gson.toJson(sourceConfig))
 
         //Start the PlayerActivity
         startActivity(playerActivityIntent)
@@ -122,20 +123,20 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     /*
      * OfflineContentManagerListener callbacks
      */
-    override fun onCompleted(sourceItem: SourceItem, offlineContentOptions: OfflineContentOptions) {
-        val listItem = getListItemWithSourceItem(sourceItem)
+    override fun onCompleted(sourceConfig: SourceConfig, offlineContentOptions: OfflineContentOptions) {
+        val listItem = getListItemWithSourceItem(sourceConfig)
         // Update the OfflineContentOptions, reset progress and notify the ListAdapter to update the views
         listItem?.offlineContentOptions = offlineContentOptions
         listItem?.progress = 0f
-        this.listAdapter?.notifyDataSetChanged()
+        listAdapter?.notifyDataSetChanged()
     }
 
-    override fun onError(sourceItem: SourceItem, errorEvent: ErrorEvent) {
+    override fun onError(sourceConfig: SourceConfig, errorEvent: ErrorEvent) {
         Toast.makeText(this, errorEvent.message, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onProgress(sourceItem: SourceItem, progress: Float) {
-        val listItem = getListItemWithSourceItem(sourceItem)
+    override fun onProgress(sourceConfig: SourceConfig, progress: Float) {
+        val listItem = getListItemWithSourceItem(sourceConfig)
         val oldProgress = listItem?.progress
         listItem?.progress = progress
 
@@ -145,21 +146,21 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         }
     }
 
-    override fun onOptionsAvailable(sourceItem: SourceItem, offlineContentOptions: OfflineContentOptions) {
-        val listItem = getListItemWithSourceItem(sourceItem)
+    override fun onOptionsAvailable(sourceConfig: SourceConfig, offlineContentOptions: OfflineContentOptions) {
+        val listItem = getListItemWithSourceItem(sourceConfig)
         // Update the OfflineContentOptions and notify the ListAdapter to update the views
         listItem?.offlineContentOptions = offlineContentOptions
-        this.listAdapter?.notifyDataSetChanged()
+        listAdapter?.notifyDataSetChanged()
     }
 
-    override fun onDrmLicenseUpdated(sourceItem: SourceItem) {
-        if (this.retryOfflinePlayback) {
-            if (this.listItemForRetry?.sourceItem === sourceItem) {
+    override fun onDrmLicenseUpdated(sourceConfig: SourceConfig) {
+        if (retryOfflinePlayback) {
+            if (listItemForRetry?.sourceConfig === sourceConfig) {
                 // At the last try, the license was expired
                 // so we try it now again
-                val listItem = this.listItemForRetry
-                this.retryOfflinePlayback = false
-                this.listItemForRetry = null
+                val listItem = listItemForRetry
+                retryOfflinePlayback = false
+                listItemForRetry = null
                 if (listItem != null) {
                     playSource(listItem)
                 }
@@ -167,12 +168,12 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         }
     }
 
-    override fun onSuspended(sourceItem: SourceItem) {
-        Toast.makeText(this, "Suspended: ${sourceItem.title}", Toast.LENGTH_SHORT).show()
+    override fun onSuspended(sourceConfig: SourceConfig) {
+        Toast.makeText(this, "Suspended: ${sourceConfig.title}", Toast.LENGTH_SHORT).show()
     }
 
-    override fun onResumed(sourceItem: SourceItem) {
-        Toast.makeText(this, "Resumed: ${sourceItem.title}", Toast.LENGTH_SHORT).show()
+    override fun onResumed(sourceConfig: SourceConfig) {
+        Toast.makeText(this, "Resumed: ${sourceConfig.title}", Toast.LENGTH_SHORT).show()
     }
 
     /*
@@ -196,7 +197,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
                 }
 
                 entriesAsText[i] = entry.id + "-" + entry.mimeType
-                entriesCheckList[i] = entry.state == OfflineOptionEntryState.DOWNLOADED || entry.action == OfflineOptionEntryAction.DOWNLOAD
+                entriesCheckList[i] = entry.state == OfflineOptionEntryState.Downloaded || entry.action == OfflineOptionEntryAction.Download
             }
 
             // Building and showing the AlertDialog
@@ -208,7 +209,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     override fun delete(listItem: ListItem) {
         // To delete everything of a specific OfflineContentManager, we call deleteAll
         listItem.offlineContentManager.deleteAll()
-        Toast.makeText(this, "Deleting " + listItem.sourceItem.title, Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Deleting " + listItem.sourceConfig.title, Toast.LENGTH_SHORT).show()
     }
 
     override fun suspend(listItem: ListItem) {
@@ -238,7 +239,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
             try {
                 // Set an Download/Delete action, if the user changes the checked state
                 val offlineOptionEntry = entries[which]
-                offlineOptionEntry.action = if (isChecked) OfflineOptionEntryAction.DOWNLOAD else OfflineOptionEntryAction.DELETE
+                offlineOptionEntry.action = if (isChecked) OfflineOptionEntryAction.Download else OfflineOptionEntryAction.Delete
             } catch (e: IllegalOperationException) {
             }
         }
@@ -247,39 +248,39 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         return dialogBuilder
     }
 
-    private fun getListItemWithSourceItem(sourceItem: SourceItem): ListItem? {
+    private fun getListItemWithSourceItem(sourceConfig: SourceConfig): ListItem? {
         // Find the matching SourceItem in the List, containing all our SourceItems
-        return this.listItems.find { item -> item.sourceItem === sourceItem }
+        return listItems.find { item -> item.sourceConfig === sourceConfig }
     }
 
     private fun getListItems(): List<ListItem> {
         val listItems = ArrayList<ListItem>()
 
-        // Initialize a SourceItem
-        val artOfMotion = SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
-        artOfMotion.setThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt")
+        // Initialize a SourceConfig
+        val artOfMotion = SourceConfig("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash)
+        artOfMotion.thumbnailTrack = ThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt")
         artOfMotion.title = "Art of Motion"
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"
         val artOfMotionOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotion,
-                this.rootFolder.path, "artOfMotion", this, this)
+                rootFolder.path, "artOfMotion", this, this)
 
-        // Create a ListItem from the SourceItem and the OfflienContentManager
+        // Create a ListItem from the SourceConfig and the OfflienContentManager
         val artOfMotionListItem = ListItem(artOfMotion, artOfMotionOfflineContentManager)
 
         // Add the ListItem to the List
         listItems.add(artOfMotionListItem)
 
-        // Initialize a SourceItem with a DRM configuration
-        val artOfMotionDrm = SourceItem("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd")
-        artOfMotionDrm.addDRMConfiguration(WidevineConfiguration("https://widevine-proxy.appspot.com/proxy"))
+        // Initialize a SourceConfig with a DRM configuration
+        val artOfMotionDrm = SourceConfig("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash)
+        artOfMotionDrm.drmConfig = WidevineConfig("https://widevine-proxy.appspot.com/proxy")
         artOfMotionDrm.title = "Art of Motion with DRM"
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"
         val artOfMotionDrmOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotionDrm,
-                this.rootFolder.path, "artOfMotionDrm", this, this)
+                rootFolder.path, "artOfMotionDrm", this, this)
 
-        // Create a ListItem from the SourceItem and the OfflineContentManager
+        // Create a ListItem from the SourceConfig and the OfflineContentManager
         val artOfMotionDrmListItem = ListItem(artOfMotionDrm, artOfMotionDrmOfflineContentManager)
 
         // Add the ListItem to the List

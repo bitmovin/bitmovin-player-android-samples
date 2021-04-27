@@ -20,13 +20,13 @@ Every example is available in `Java` and `Kotlin` :+1:
 
 ### Basics
 +   **BasicPlayback:** Shows how the Bitmovin Player can be setup for basic playback of DASH, HLS or progressive streams.
-+   **BasicPlaylist:** Shows how to implement queueing / playlists.
++   **BasicPlaylist:** Shows how to play back multiple sources / playlists.
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
 +   **BasicPlayerFragment** Shows how the `BitmovinPlayerFragment` can be used to setup playback.
 +   **BasicPlaybackTV** Shows how the Bitmovin Player can be setup for basic playback in an Android TV application.
 
 ### DRM
-+   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevice Modular protected content.
++   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevine protected content.
     
 ### Offline Playback
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download DRM-protected and unprotected content for offline playback.
@@ -49,9 +49,6 @@ Every example is available in `Java` and `Kotlin` :+1:
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
 +   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI. In addition this sample includes how to communication between the javascript UI and the native code.
 +   **BasicFullscreenHandling** Shows how a simple FullscreenHandler can be implemented and configured on the Bitmovin Player
-
-### Analytics
-+   **IntegrationAdobeAnalytics** Shows how the Bitmovin Player can be setup with `com.bitmovin.player.integration.adobeanalytics` module to track Adobe Media Analytics events.
 
 ## Sample Apps Setup Instructions
 1) **Add your Bitmovin Player License Key** - In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
@@ -134,7 +131,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:playercore:2.66.0'
+    implementation 'com.bitmovin.player:player:3.0.0'
     ```
 
 #### Additional SDK dependencies

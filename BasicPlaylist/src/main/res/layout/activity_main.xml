@@ -5,14 +5,14 @@
                 android:layout_height="match_parent"
                 tools:context="com.bitmovin.player.samples.playlist.basic.MainActivity">
 
-    <com.bitmovin.player.BitmovinPlayerView
+    <com.bitmovin.player.PlayerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/bitmovinPlayerView"
+            android:id="@+id/playerView"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-    </com.bitmovin.player.BitmovinPlayerView>
+    </com.bitmovin.player.PlayerView>
 
 </RelativeLayout>

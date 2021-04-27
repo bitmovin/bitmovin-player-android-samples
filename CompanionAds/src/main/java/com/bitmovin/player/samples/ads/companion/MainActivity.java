@@ -5,15 +5,16 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.advertising.AdItem;
-import com.bitmovin.player.config.advertising.AdSource;
-import com.bitmovin.player.config.advertising.AdSourceType;
-import com.bitmovin.player.config.advertising.AdvertisingConfiguration;
-import com.bitmovin.player.config.advertising.CompanionAdContainer;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.advertising.AdItem;
+import com.bitmovin.player.api.advertising.AdSource;
+import com.bitmovin.player.api.advertising.AdSourceType;
+import com.bitmovin.player.api.advertising.AdvertisingConfig;
+import com.bitmovin.player.api.advertising.CompanionAdContainer;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String AD_TAG = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=";
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+    private PlayerView bitmovinPlayerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,57 +31,54 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         ViewGroup companionAdContainerView = findViewById(R.id.companionAdContainer);
-        this.bitmovinPlayerView = findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = bitmovinPlayerView.getPlayer();
+        bitmovinPlayerView = findViewById(R.id.bitmovinPlayerView);
 
         // Setup companion ad container
         List<CompanionAdContainer> companionAdContainerList = new ArrayList<>();
         CompanionAdContainer companionAdContainer = new CompanionAdContainer(companionAdContainerView, 300, 250);
         companionAdContainerList.add(companionAdContainer);
 
-        AdItem adItem = new AdItem("pre", new AdSource(AdSourceType.IMA, AD_TAG));
+        AdItem adItem = new AdItem("pre", new AdSource(AdSourceType.Ima, AD_TAG));
+        AdvertisingConfig advertisingConfig = new AdvertisingConfig(companionAdContainerList, adItem);
 
-        AdvertisingConfiguration advertisingConfiguration = new AdvertisingConfiguration(companionAdContainerList, adItem);
+        // Setup the player
+        PlayerConfig playerConfig = new PlayerConfig();
+        playerConfig.setAdvertisingConfig(advertisingConfig);
 
-        // Finish setup of the player
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
-        this.bitmovinPlayer.setup(playerConfiguration);
-        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        Player bitmovinPlayer = Player.create(this, playerConfig);
+        bitmovinPlayerView.setPlayer(bitmovinPlayer);
+
+
+        bitmovinPlayer.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        bitmovinPlayerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        bitmovinPlayerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        bitmovinPlayerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        bitmovinPlayerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        bitmovinPlayerView.onDestroy();
         super.onDestroy();
     }
 

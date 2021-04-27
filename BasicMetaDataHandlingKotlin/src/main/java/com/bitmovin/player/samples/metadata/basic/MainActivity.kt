@@ -3,34 +3,33 @@ package com.bitmovin.player.samples.metadata.basic
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import android.util.Log
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.api.event.data.MetadataEvent
-import com.bitmovin.player.api.event.listener.OnMetadataListener
-import com.bitmovin.player.api.event.listener.OnMetadataParsedListener
-import com.bitmovin.player.config.media.SourceItem
-import com.bitmovin.player.model.emsg.EventMessage
-import com.bitmovin.player.model.id3.Id3Frame
-import com.bitmovin.player.model.scte.ScteMessage
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.event.PlayerEvent
+import com.bitmovin.player.api.event.SourceEvent
+import com.bitmovin.player.api.event.on
+import com.bitmovin.player.api.metadata.emsg.EventMessage
+import com.bitmovin.player.api.metadata.id3.Id3Frame
+import com.bitmovin.player.api.metadata.scte.ScteMessage
+import com.bitmovin.player.api.source.SourceConfig
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private var bitmovinPlayer: BitmovinPlayer? = null
-    private var gson: Gson? = null
+    private lateinit var player: Player
+    private val gson: Gson = Gson()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        this.gson = Gson()
-        this.bitmovinPlayer = bitmovinPlayerView.player
+        player = bitmovinPlayerView.player!!
 
         // Adding the metadata listener to the player
-        this.bitmovinPlayer?.addEventListener(metadataParsedListener)
-        this.bitmovinPlayer?.addEventListener(metadataListener)
+        player.on(::onMetadataParsed)
+        player.on(::onMetadata)
 
-        this.initializePlayer()
+        initializePlayer()
     }
 
     override fun onStart() {
@@ -55,52 +54,42 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         // Removing metadata listener from player
-        this.bitmovinPlayer?.removeEventListener(metadataParsedListener)
-        this.bitmovinPlayer?.removeEventListener(metadataListener)
-        this.bitmovinPlayerView.onDestroy()
+        player.off(::onMetadataParsed)
+        player.off(::onMetadata)
+        bitmovinPlayerView.onDestroy()
 
         super.onDestroy()
     }
 
     private fun initializePlayer() {
-
         //TODO: add source containing metadata
+
         // load source using the created source item
-        this.bitmovinPlayer?.load(SourceItem(""))
+        player.load(SourceConfig.fromUrl(""))
     }
 
-    private fun logMetadata(metadataEvent: MetadataEvent) {
-        val metadata = metadataEvent.metadata
-
-        when (metadataEvent.type) {
-            ScteMessage.TYPE -> for (i in 0 until metadata.length()) {
-                val scteMessage = metadata.get(i) as ScteMessage
-
-                Log.i("METADATA", "SCTE: " + gson?.toJson(scteMessage))
-            }
-            Id3Frame.TYPE -> for (i in 0 until metadata.length()) {
-                val id3Frame = metadata.get(i) as Id3Frame
-
-                Log.i("METADATA", "ID3Frame: " + gson?.toJson(id3Frame))
-            }
-            EventMessage.TYPE -> for (i in 0 until metadata.length()) {
-                val eventMessage = metadata.get(i) as EventMessage
-
-                Log.i("METADATA", "EMSG: " + gson?.toJson(eventMessage))
-            }
+    private fun logMetadata(metadata: com.bitmovin.player.api.metadata.Metadata, type: String) {
+        when (type) {
+            ScteMessage.TYPE -> (0 until metadata.length())
+                    .map { metadata.get(it) as ScteMessage }
+                    .forEach { Log.i("METADATA", "SCTE: " + gson.toJson(it)) }
+            Id3Frame.TYPE -> (0 until metadata.length())
+                    .map { metadata.get(it) as Id3Frame }
+                    .forEach { Log.i("METADATA", "ID3Frame: " + gson.toJson(it)) }
+            EventMessage.TYPE -> (0 until metadata.length())
+                    .map { metadata.get(it) as EventMessage }
+                    .forEach { Log.i("METADATA", "EMSG: " + gson.toJson(it)) }
         }
     }
 
-    // Metadata Listener
-    private val metadataListener = OnMetadataListener { metadataEvent ->
-        Log.i("METADATA", "onMetadata:")
-        logMetadata(metadataEvent)
+    private fun onMetadataParsed(event: SourceEvent.MetadataParsed){
+        Log.i("METADATA", "onMetadataParsed:")
+        logMetadata(event.metadata, event.type)
     }
 
-    // Parsed Metadata Listener
-    private val metadataParsedListener = OnMetadataParsedListener { metadataEvent ->
-        Log.i("METADATA", "onMetadataParsed:")
-        logMetadata(metadataEvent)
+    private fun onMetadata(event: PlayerEvent.Metadata){
+        Log.i("METADATA", "onMetadata:")
+        logMetadata(event.metadata, event.type)
     }
 
 }

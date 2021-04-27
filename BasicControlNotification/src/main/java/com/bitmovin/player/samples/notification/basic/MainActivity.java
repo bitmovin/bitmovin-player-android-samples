@@ -3,86 +3,82 @@ package com.bitmovin.player.samples.notification.basic;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.notification.BitmovinPlayerNotificationManager;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.ui.notification.PlayerNotificationManager;
 
-public class MainActivity extends AppCompatActivity
-{
+public class MainActivity extends AppCompatActivity {
     private static final String NOTIFICATION_CHANNEL_ID = "com.bitmovin.player";
     private static final int NOTIFICATION_ID = 1;
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
-    private BitmovinPlayerNotificationManager notificationManager;
+    private PlayerView playerView;
+    private Player player;
+    private PlayerNotificationManager notificationManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.playerView);
+        player = playerView.getPlayer();
 
-        // Create a BitmovinPlayerNotificationManager with the static create method
+        // Create a PlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.
-        this.notificationManager = BitmovinPlayerNotificationManager.createWithNotificationChannel(
-                this, NOTIFICATION_CHANNEL_ID, R.string.control_notification_channel, NOTIFICATION_ID, null);
+        notificationManager = PlayerNotificationManager.createWithNotificationChannel(
+            this,
+            NOTIFICATION_CHANNEL_ID,
+            R.string.control_notification_channel,
+            NOTIFICATION_ID,
+            null
+        );
         // Allow to dismiss the Notification
-        this.notificationManager.setOngoing(false);
+        notificationManager.setOngoing(false);
 
-        // Attaching the BitmovinPlayer to the BitmovinPlayerNotificationManager
-        this.notificationManager.setPlayer(this.bitmovinPlayer);
+        // Attach the Player to the PlayerNotificationManager
+        notificationManager.setPlayer(player);
 
-        this.initializePlayer();
+        initializePlayer();
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         // The BitmovinPlayer must be removed from the BitmovinPlayerNotificationManager before it is destroyed
-        this.notificationManager.setPlayer(null);
-        this.bitmovinPlayerView.onDestroy();
+        notificationManager.setPlayer(null);
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
-        // Add a new source item
-        SourceItem sourceItem = new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
-        sourceItem.setPosterSource("https://bitmovin-a.akamaihd.net/content/sintel/poster.png");
+    protected void initializePlayer() {
+        // Load a new source
+        SourceConfig sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
+        sourceConfig.setPosterSource("https://bitmovin-a.akamaihd.net/content/sintel/poster.png");
 
-        // load source using the created source item
-        this.bitmovinPlayer.load(sourceItem);
+        player.load(sourceConfig);
     }
 }

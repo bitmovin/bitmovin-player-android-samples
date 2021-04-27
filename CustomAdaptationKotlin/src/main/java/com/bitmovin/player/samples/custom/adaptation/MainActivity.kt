@@ -1,72 +1,71 @@
 package com.bitmovin.player.samples.custom.adaptation
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.LinearLayout
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.AdaptationConfiguration
-import com.bitmovin.player.config.PlayerConfiguration
-import com.bitmovin.player.config.adaptation.VideoAdaptation
-import com.bitmovin.player.config.media.SourceItem
+import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.media.AdaptationConfig
+import com.bitmovin.player.api.media.video.quality.VideoAdaptation
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
-    private var bitmovinPlayer: BitmovinPlayer? = null
-    private var bitmovinPlayerView: BitmovinPlayerView? = null
+    private lateinit var player: Player
+    private lateinit var playerView: PlayerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val playerConfiguration = this.createPlayerConfiguration()
-        this.bitmovinPlayerView = BitmovinPlayerView(this, playerConfiguration)
-        this.bitmovinPlayer = this.bitmovinPlayerView?.player
-        this.bitmovinPlayer?.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        player = Player.create(this, createPlayerConfig())
+        playerView = PlayerView(this, player)
 
-        this.bitmovinPlayerView?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        root.addView(this.bitmovinPlayerView, 0)
+        player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
+
+        playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        root.addView(playerView, 0)
     }
 
     override fun onStart() {
         super.onStart()
-        this.bitmovinPlayerView?.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        this.bitmovinPlayerView?.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        this.bitmovinPlayerView?.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        this.bitmovinPlayerView?.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        this.bitmovinPlayerView?.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
-    private fun createPlayerConfiguration(): PlayerConfiguration {
-        // Setup adaptation configuration
-        val adaptationConfiguration = AdaptationConfiguration()
-        adaptationConfiguration.isAllowRebuffering = true
-        adaptationConfiguration.maxSelectableVideoBitrate = 800_000
-        adaptationConfiguration.startupBitrate = 1_200_000
-        adaptationConfiguration.videoAdaptation = videoAdaptationListener
-
-        // Assign adaptation configuration to player configuration
-        val playerConfiguration = PlayerConfiguration()
-        playerConfiguration.adaptationConfiguration = adaptationConfiguration
-        return playerConfiguration
-    }
+    /**
+     * Setup PlayerConfig with custom adaption config
+     */
+    private fun createPlayerConfig(): PlayerConfig =
+            PlayerConfig(
+                    adaptationConfig = AdaptationConfig(
+                            isRebufferingAllowed = true,
+                            maxSelectableVideoBitrate = 800_000,
+                            startupBitrate = 1_200_000,
+                    ).apply {
+                        videoAdaptation = videoAdaptationListener
+                    })
 
     /*
      *  Customize this callback to return a different video quality id than what is suggested
@@ -76,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         val suggestedVideoQualityId = videoAdaptationData.suggested
 
         // Add your own logic to choose a different video quality
-        val videoQualities = bitmovinPlayer?.availableVideoQualities
+        val videoQualities = player.availableVideoQualities
 
         // Return video quality id
         suggestedVideoQualityId

@@ -1,94 +1,89 @@
 package com.bitmovin.player.samples.custom.ui.subtitleview;
 
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.BitmovinSubtitleView;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceItem;
+import androidx.appcompat.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayer bitmovinPlayer;
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinSubtitleView bitmovinSubtitleView;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.SubtitleView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
+import com.bitmovin.player.api.ui.StyleConfig;
+
+public class MainActivity extends AppCompatActivity {
+    private Player player;
+    private PlayerView playerView;
+    private SubtitleView subtitleView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create new StyleConfiguration
-        StyleConfiguration styleConfiguration = new StyleConfiguration();
-        // Disable default Bitmovin UI
-        styleConfiguration.setUiEnabled(false);
+        // Create new StyleConfig
+        StyleConfig styleConfig = new StyleConfig();
+        // Disable default Player UI
+        styleConfig.setUiEnabled(false);
 
-        // Creating a new PlayerConfiguration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assign created StyleConfiguration to the PlayerConfiguration
-        playerConfiguration.setStyleConfiguration(styleConfiguration);
+        // Creating a new PlayerConfig
+        PlayerConfig playerConfig = new PlayerConfig();
+        // Assign created StyleConfig to the PlayerConfig
+        playerConfig.setStyleConfig(styleConfig);
 
-        RelativeLayout playerContainer = this.findViewById(R.id.player_container);
+        RelativeLayout playerContainer = findViewById(R.id.player_container);
 
-        // Creating a BitmovinPlayerView and get it's BitmovinPlayer instance.
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
-        this.bitmovinPlayerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
-        this.bitmovinPlayer.load(new SourceItem("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd"));
+        // Creating a PlayerView and get it's Player instance.
+        playerView = new PlayerView(this, Player.create(this, playerConfig));
+        playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        player = playerView.getPlayer();
+        player.load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
 
-        // Creating a BitmovinSubtitleView and assign the current player instance.
-        this.bitmovinSubtitleView = new BitmovinSubtitleView(this);
-        this.bitmovinSubtitleView.setPlayer(this.bitmovinPlayer);
+        // Creating a SubtitleView and assign the current player instance.
+        subtitleView = new SubtitleView(this);
+        subtitleView.setPlayer(player);
 
         // Setup minimalistic controls for the player
-        PlayerControls playerControls = this.findViewById(R.id.player_controls);
-        playerControls.setPlayer(this.bitmovinPlayer);
+        PlayerControls playerControls = findViewById(R.id.player_controls);
+        playerControls.setPlayer(player);
 
-        // Add the BitmovinSubtitleView to the layout
-        playerContainer.addView(this.bitmovinSubtitleView);
+        // Add the SubtitleView to the layout
+        playerContainer.addView(subtitleView);
 
-        // Add the BitmovinPlayerView to the layout as first position (so it is the behind the SubtitleView)
-        playerContainer.addView(this.bitmovinPlayerView, 0);
+        // Add the PlayerView to the layout as first position (so it is the behind the SubtitleView)
+        playerContainer.addView(playerView, 0);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 }

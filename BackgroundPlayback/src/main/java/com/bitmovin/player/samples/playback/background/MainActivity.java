@@ -10,111 +10,113 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
     private boolean bound = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create a BitmovinPlayerView without a BitmovinPlayer and add it to the View hierarchy
+        // Create a PlayerView without a Player and add it to the View hierarchy
         RelativeLayout rootLayout = this.findViewById(R.id.root);
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, (BitmovinPlayer) null);
-        this.bitmovinPlayerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        rootLayout.addView(this.bitmovinPlayerView);
+        playerView = new PlayerView(this, (Player) null);
+        playerView.setLayoutParams(
+            new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+            )
+        );
+        rootLayout.addView(playerView);
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
+
         // Bind and start the BackgroundPlaybackService
         Intent intent = new Intent(this, BackgroundPlaybackService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+
         // If the Service is not started, it would get destroyed as soon as the Activity unbinds.
         startService(intent);
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        // Attach the BitmovinPlayer to allow the BitmovinPlayerView to control the player
-        this.bitmovinPlayerView.setPlayer(this.bitmovinPlayer);
-        this.bitmovinPlayerView.onResume();
+        // Attach the Player to allow the PlayerView to control the player
+        playerView.setPlayer(player);
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        // Detach the BitmovinPlayer to decouple it from the BitmovinPlayerView lifecycle
-        this.bitmovinPlayerView.setPlayer(null);
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        // Detach the Player to decouple it from the PlayerView lifecycle
+        playerView.setPlayer(null);
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
-        // Unbind the Service and reset the BitmovinPlayer reference
+
+        // Unbind the Service and reset the Player reference
         unbindService(mConnection);
-        this.bitmovinPlayer = null;
-        this.bound = false;
-        this.bitmovinPlayerView.onStop();
+        player = null;
+        bound = false;
+        playerView.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
-        // Add a new source item
-        SourceItem sourceItem = new SourceItem("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd");
-        sourceItem.setPosterSource("https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg");
+    protected void initializePlayer() {
+        // Load a new source
+        SourceConfig sourceConfig = new SourceConfig(
+            "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
+            SourceType.Dash
+        );
+        sourceConfig.setPosterSource("https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg");
 
-        // load source using the created source item
-        this.bitmovinPlayer.load(sourceItem);
+        player.load(sourceConfig);
     }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
      */
-    private ServiceConnection mConnection = new ServiceConnection()
-    {
+    private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName className, IBinder service)
-        {
-            // We've bound to the Service, cast the IBinder and get the BitmovinPlayer instance
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            // We've bound to the Service, cast the IBinder and get the Player instance
             BackgroundPlaybackService.BackgroundBinder binder = (BackgroundPlaybackService.BackgroundBinder) service;
-            bitmovinPlayer = binder.getPlayer();
-            // Attach the BitmovinPlayer as soon as we have a reference
-            bitmovinPlayerView.setPlayer(bitmovinPlayer);
+            player = binder.getPlayer();
+
+            // Attach the Player as soon as we have a reference
+            playerView.setPlayer(player);
+
             // If not already initialized, initialize the player with a source.
-            if (bitmovinPlayer.getConfig().getSourceItem() == null)
-            {
+            if (player.getSource() == null) {
                 initializePlayer();
             }
+
             bound = true;
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName arg0)
-        {
+        public void onServiceDisconnected(ComponentName arg0) {
             bound = false;
         }
     };

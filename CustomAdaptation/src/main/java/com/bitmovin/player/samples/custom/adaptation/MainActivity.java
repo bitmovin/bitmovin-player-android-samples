@@ -1,84 +1,88 @@
 package com.bitmovin.player.samples.custom.adaptation;
 
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.widget.LinearLayout;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.AdaptationConfiguration;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.adaptation.VideoAdaptation;
-import com.bitmovin.player.config.adaptation.data.VideoAdaptationData;
-import com.bitmovin.player.config.media.SourceItem;
-import com.bitmovin.player.config.quality.VideoQuality;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.media.AdaptationConfig;
+import com.bitmovin.player.api.media.video.quality.VideoAdaptation;
+import com.bitmovin.player.api.media.video.quality.VideoAdaptationData;
+import com.bitmovin.player.api.media.video.quality.VideoQuality;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
+
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
-
-    private BitmovinPlayer bitmovinPlayer;
-    private BitmovinPlayerView bitmovinPlayerView;
+    private Player player;
+    private PlayerView playerView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        PlayerConfiguration playerConfiguration = this.createPlayerConfiguration();
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
-        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        player = Player.create(this, createPlayerConfig());
+        playerView = new PlayerView(this, player);
 
-        LinearLayout rootView = this.findViewById(R.id.root);
-        this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
-        rootView.addView(this.bitmovinPlayerView, 0);
+        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+
+        LinearLayout rootView = findViewById(R.id.root);
+        playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        rootView.addView(playerView, 0);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
     protected void onPause() {
-        this.bitmovinPlayerView.onPause();
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
     protected void onStop() {
-        this.bitmovinPlayerView.onStop();
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
     protected void onDestroy() {
-        this.bitmovinPlayerView.onDestroy();
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    private PlayerConfiguration createPlayerConfiguration() {
-        // Setup adaptation configuration
-        AdaptationConfiguration adaptationConfiguration = new AdaptationConfiguration();
-        adaptationConfiguration.setAllowRebuffering(true);
-        adaptationConfiguration.setMaxSelectableVideoBitrate(800_000);
-        adaptationConfiguration.setStartupBitrate(1_200_000);
-        adaptationConfiguration.setVideoAdaptation(videoAdaptationListener);
+    private PlayerConfig createPlayerConfig() {
+        // Setup adaptation config
+        AdaptationConfig adaptationConfig = new AdaptationConfig();
+        adaptationConfig.setRebufferingAllowed(true);
+        adaptationConfig.setMaxSelectableVideoBitrate(800_000);
+        adaptationConfig.setStartupBitrate(1_200_000);
+        adaptationConfig.setVideoAdaptation(videoAdaptationListener);
 
-        // Assign adaptation to player configuration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        playerConfiguration.setAdaptationConfiguration(adaptationConfiguration);
-        return playerConfiguration;
+        // Assign adaptation to player config
+        PlayerConfig playerConfig = new PlayerConfig();
+        playerConfig.setAdaptationConfig(adaptationConfig);
+        return playerConfig;
     }
 
-    private VideoAdaptation videoAdaptationListener = new VideoAdaptation() {
+    private final VideoAdaptation videoAdaptationListener = new VideoAdaptation() {
         /*
          *  Customize this method to return a different video quality id than what is suggested
          */
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             String suggestedVideoQualityId = videoAdaptationData.getSuggested();
 
             // Add your own logic to choose a different video quality
-            VideoQuality[] videoQualities = bitmovinPlayer.getAvailableVideoQualities();
+            List<VideoQuality> videoQualities = player.getAvailableVideoQualities();
 
             return suggestedVideoQualityId;
         }

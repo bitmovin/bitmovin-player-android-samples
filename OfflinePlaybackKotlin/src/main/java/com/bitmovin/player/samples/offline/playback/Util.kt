@@ -1,7 +1,7 @@
 package com.bitmovin.player.samples.offline.playback
 
-import com.bitmovin.player.offline.options.OfflineContentOptions
-import com.bitmovin.player.offline.options.OfflineOptionEntry
+import com.bitmovin.player.api.offline.options.OfflineContentOptions
+import com.bitmovin.player.api.offline.options.OfflineOptionEntry
 import java.util.*
 
 object Util {

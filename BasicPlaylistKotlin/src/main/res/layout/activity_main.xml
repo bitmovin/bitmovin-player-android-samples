@@ -1,18 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context="com.bitmovin.player.samples.playlist.basic.MainActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
-    <com.bitmovin.player.BitmovinPlayerView
+    <com.bitmovin.player.PlayerView
+        android:id="@+id/playerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:initialize_player="false"
+        android:layout_weight="1">
+
+    </com.bitmovin.player.PlayerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        android:orientation="horizontal">
+
+        <Button
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/bitmovinPlayerView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="back"
+            android:onClick="previous">
 
-    </com.bitmovin.player.BitmovinPlayerView>
+        </Button>
 
-</RelativeLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="next"
+            android:onClick="next">
+
+        </Button>
+    </LinearLayout>
+
+</LinearLayout>

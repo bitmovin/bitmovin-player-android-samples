@@ -29,5 +29,6 @@ android {
 dependencies {
     implementation supportDependencies.appCompat
     implementation supportDependencies.localbroadcastmanager
+    implementation supportDependencies.gson
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 }

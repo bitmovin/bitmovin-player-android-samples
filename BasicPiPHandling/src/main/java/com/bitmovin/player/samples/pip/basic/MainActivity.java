@@ -2,107 +2,95 @@ package com.bitmovin.player.samples.pip.basic;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.api.event.data.PictureInPictureEnterEvent;
-import com.bitmovin.player.api.event.listener.OnPictureInPictureEnterListener;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.event.EventListener;
+import com.bitmovin.player.api.event.PlayerEvent;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.ui.DefaultPictureInPictureHandler;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
     private boolean playerShouldPause = true;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
+        playerView = findViewById(R.id.bitmovinPlayerView);
+        player = playerView.getPlayer();
 
-        // Create a PictureInPictureHandler and set it on the BitmovinPlayerView
-        DefaultPictureInPictureHandler pictureInPictureHandler = new DefaultPictureInPictureHandler(this, this.bitmovinPlayer);
-        this.bitmovinPlayerView.setPictureInPictureHandler(pictureInPictureHandler);
+        // Create a PictureInPictureHandler and set it on the PlayerView
+        DefaultPictureInPictureHandler pictureInPictureHandler = new DefaultPictureInPictureHandler(this, player);
+        playerView.setPictureInPictureHandler(pictureInPictureHandler);
 
-        this.initializePlayer();
+        initializePlayer();
     }
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
-        // Add the PictureInPictureEnterListener to the BitmovinPlayerView
-        this.bitmovinPlayerView.addEventListener(this.pipEnterListener);
+        // Add the PictureInPictureEnterListener to the PlayerView
+        playerView.on(PlayerEvent.PictureInPictureEnter.class, pipEnterListener);
 
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        if (this.playerShouldPause)
-        {
-            this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        if (playerShouldPause) {
+            playerView.onPause();
         }
-        this.playerShouldPause = true;
+        playerShouldPause = true;
 
-        this.bitmovinPlayerView.removeEventListener(this.pipEnterListener);
+        playerView.off(PlayerEvent.PictureInPictureEnter.class, pipEnterListener);
 
         super.onPause();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 
-    protected void initializePlayer()
-    {
+    protected void initializePlayer() {
         // load source using a source item
-        this.bitmovinPlayer.load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
     }
 
     @Override
-    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig)
-    {
+    public void onPictureInPictureModeChanged(boolean isInPictureInPictureMode, Configuration newConfig) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
 
         // Hiding the ActionBar
-        if (isInPictureInPictureMode)
-        {
-            this.getSupportActionBar().hide();
+        if (isInPictureInPictureMode) {
+            getSupportActionBar().hide();
+        } else {
+            getSupportActionBar().show();
         }
-        else
-        {
-            this.getSupportActionBar().show();
-        }
-        this.bitmovinPlayerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
+        playerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig);
     }
 
-    private OnPictureInPictureEnterListener pipEnterListener = new OnPictureInPictureEnterListener()
-    {
+    private EventListener<PlayerEvent.PictureInPictureEnter> pipEnterListener = new EventListener<PlayerEvent.PictureInPictureEnter>() {
         @Override
-        public void onPictureInPictureEnter(PictureInPictureEnterEvent pictureInPictureEnterEvent)
-        {
+        public void onEvent(PlayerEvent.PictureInPictureEnter pictureInPictureEnter) {
             // Android fires an onPause on the Activity when entering PiP mode.
-            // However, we do not want the BitmovinPlayerView to act on this.
-            MainActivity.this.playerShouldPause = false;
+            // However, we do not want the PlayerView to act on
+            playerShouldPause = false;
         }
     };
 }

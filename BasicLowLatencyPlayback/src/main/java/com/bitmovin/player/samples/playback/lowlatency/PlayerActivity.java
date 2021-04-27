@@ -13,39 +13,41 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.api.event.data.ErrorEvent;
-import com.bitmovin.player.api.event.listener.OnErrorListener;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.drm.WidevineConfiguration;
-import com.bitmovin.player.config.live.LiveConfiguration;
-import com.bitmovin.player.config.live.LiveSynchronizationMethod;
-import com.bitmovin.player.config.live.LowLatencyConfiguration;
-import com.bitmovin.player.config.live.LowLatencySynchronizationConfiguration;
-import com.bitmovin.player.config.media.DASHSource;
-import com.bitmovin.player.config.media.SourceItem;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.buffer.BufferType;
+import com.bitmovin.player.api.drm.WidevineConfig;
+import com.bitmovin.player.api.event.EventListener;
+import com.bitmovin.player.api.event.PlayerEvent;
+import com.bitmovin.player.api.live.LiveConfig;
+import com.bitmovin.player.api.live.LiveSynchronizationMethod;
+import com.bitmovin.player.api.live.LowLatencyConfig;
+import com.bitmovin.player.api.live.LowLatencySynchronizationConfig;
+import com.bitmovin.player.api.media.MediaType;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class PlayerActivity extends AppCompatActivity
-{
+public class PlayerActivity extends AppCompatActivity {
     private static final String TAG = PlayerActivity.class.getSimpleName();
 
     public static final String STREAM = "STREAM";
     public static final String DRM = "DRM";
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+    private PlayerView bitmovinPlayerView;
+    private Player bitmovinPlayer;
 
     public static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm:ss.SSS");
     public static final DecimalFormat decimalFormat = new DecimalFormat("0.0");
@@ -63,16 +65,14 @@ public class PlayerActivity extends AppCompatActivity
     private Calendar calendar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
         Intent intent = this.getIntent();
 
         String stream = intent.getStringExtra(STREAM);
-        if (stream == null)
-        {
+        if (stream == null) {
             finish();
             return;
         }
@@ -86,47 +86,45 @@ public class PlayerActivity extends AppCompatActivity
         this.textBuffer = findViewById(R.id.txt_buffer);
 
         this.seekLatency.setMax(MAX_LATENCY_CENTIES - MIN_LATENCY_CENTIES);
-        this.seekLatency.setProgress((int)(START_LATENCY * 10.0));
+        this.seekLatency.setProgress((int) (START_LATENCY * 10.0));
         this.textTargetLatency.setText(decimalFormat.format(START_LATENCY));
         this.seekLatency.setOnSeekBarChangeListener(this.onSeekBarChangeListener);
 
         LinearLayout playerContainer = findViewById(R.id.playerContainer);
 
-        // Creating a new PlayerConfiguration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
+        // Creating a new PlayerConfig
+        PlayerConfig playerConfig = new PlayerConfig();
 
-        SourceItem sourceItem = new SourceItem(new DASHSource(stream));
-        if (drm != null)
-        {
-            sourceItem.addDRMConfiguration(new WidevineConfiguration(drm));
+        SourceConfig sourceConfig = new SourceConfig(stream, SourceType.Dash);
+        if (drm != null) {
+            sourceConfig.setDrmConfig(new WidevineConfig(drm));
         }
-        playerConfiguration.setSourceItem(sourceItem);
 
-        playerConfiguration.getPlaybackConfiguration().setAutoplayEnabled(true);
+        playerConfig.getPlaybackConfig().setAutoplayEnabled(true);
 
-        LiveConfiguration liveConfiguration = new LiveConfiguration();
-        liveConfiguration.addSynchronizationEntry("time.akamai.com", LiveSynchronizationMethod.NTP);
-        LowLatencyConfiguration lowLatencyConfiguration = new LowLatencyConfiguration(START_LATENCY);
-        lowLatencyConfiguration.setCatchupConfiguration(new LowLatencySynchronizationConfiguration(0.075, 5, 1.2f));
-        lowLatencyConfiguration.setFallbackConfiguration(new LowLatencySynchronizationConfiguration(0.075, 5, 0.95f));
-        liveConfiguration.setLowLatencyConfiguration(lowLatencyConfiguration);
+        LiveConfig liveConfig = new LiveConfig();
+        liveConfig.addSynchronizationEntry("time.akamai.com", LiveSynchronizationMethod.Ntp);
+        LowLatencyConfig lowLatencyConfig = new LowLatencyConfig(START_LATENCY);
+        lowLatencyConfig.setCatchupConfig(new LowLatencySynchronizationConfig(0.075, 5, 1.2f));
+        lowLatencyConfig.setFallbackConfig(new LowLatencySynchronizationConfig(0.075, 5, 0.95f));
+        liveConfig.setLowLatencyConfig(lowLatencyConfig);
 
-        playerConfiguration.setLiveConfiguration(liveConfiguration);
+        playerConfig.setLiveConfig(liveConfig);
 
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
+        this.bitmovinPlayerView = new PlayerView(this, Player.create(this, playerConfig));
         this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         playerContainer.addView(bitmovinPlayerView);
 
         this.bitmovinPlayer = bitmovinPlayerView.getPlayer();
-        this.bitmovinPlayer.addEventListener(this.onErrorListener);
+        this.bitmovinPlayer.on(PlayerEvent.Error.class, this.onErrorListener);
+
+        this.bitmovinPlayer.load(sourceConfig);
 
         Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable()
-        {
+        handler.postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 ticker.run();
                 statsTicker.run();
             }
@@ -134,65 +132,55 @@ public class PlayerActivity extends AppCompatActivity
         this.seekLatency.requestFocus();
     }
 
-    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener()
-    {
+    private SeekBar.OnSeekBarChangeListener onSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-        {
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
             double latency = (progress + MIN_LATENCY_CENTIES) / 10.0;
             Log.e(TAG, "A new TargetLatency is set (" + progress + "): " + latency);
-            bitmovinPlayer.setTargetLatency(latency);
+            bitmovinPlayer.getLowLatency().setTargetLatency(latency);
             textTargetLatency.setText(decimalFormat.format(latency));
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar)
-        {
+        public void onStartTrackingTouch(SeekBar seekBar) {
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar)
-        {
+        public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
 
-    private final Runnable statsTicker = new Runnable()
-    {
-        public void run()
-        {
+    private final Runnable statsTicker = new Runnable() {
+        public void run() {
             updateStats();
 
             Handler handler = textBuffer.getHandler();
-            if (handler == null)
-            {
+            if (handler == null) {
                 return;
             }
             handler.postDelayed(statsTicker, 100);
         }
     };
 
-    private void updateStats()
-    {
-        if (textLatency != null)
-        {
-            textLatency.setText(decimalFormat.format(bitmovinPlayer.getLatency()));
+    private void updateStats() {
+        if (textLatency != null) {
+            textLatency.setText(decimalFormat.format(bitmovinPlayer.getLowLatency().getLatency()));
         }
-        if (textBuffer != null)
-        {
-            double buffer = Math.min(bitmovinPlayer.getVideoBufferLength(), bitmovinPlayer.getAudioBufferLength());
+        if (textBuffer != null) {
+            double buffer = Math.min(
+                    bitmovinPlayer.getBuffer().getLevel(BufferType.ForwardDuration, MediaType.Video).getLevel(),
+                    bitmovinPlayer.getBuffer().getLevel(BufferType.ForwardDuration, MediaType.Audio).getLevel()
+            );
             textBuffer.setText(decimalFormat.format(buffer));
         }
     }
 
     // region system time
 
-    private final Runnable ticker = new Runnable()
-    {
-        public void run()
-        {
-            if (clock == null)
-            {
+    private final Runnable ticker = new Runnable() {
+        public void run() {
+            if (clock == null) {
                 return;
             }
             onTimeChanged();
@@ -201,16 +189,14 @@ public class PlayerActivity extends AppCompatActivity
             long next = now + (10 - now % 10);
 
             Handler handler = clock.getHandler();
-            if (handler == null)
-            {
+            if (handler == null) {
                 return;
             }
             handler.postAtTime(ticker, next);
         }
     };
 
-    private void onTimeChanged()
-    {
+    private void onTimeChanged() {
         this.calendar.setTimeInMillis(System.currentTimeMillis());
         this.clock.setText(simpleDateFormat.format(this.calendar.getTime()));
     }
@@ -219,11 +205,9 @@ public class PlayerActivity extends AppCompatActivity
 
     // region listeners
 
-    private OnErrorListener onErrorListener = new OnErrorListener()
-    {
+    private EventListener<PlayerEvent.Error> onErrorListener = new EventListener<PlayerEvent.Error>() {
         @Override
-        public void onError(ErrorEvent event)
-        {
+        public void onEvent(PlayerEvent.Error event) {
             Log.e(TAG, "An error occurred (" + event.getCode() + "): " + event.getMessage());
         }
     };
@@ -231,36 +215,31 @@ public class PlayerActivity extends AppCompatActivity
     // endregion
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
         this.bitmovinPlayerView.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         this.bitmovinPlayerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         this.bitmovinPlayerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         this.bitmovinPlayerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         this.bitmovinPlayerView.onDestroy();
         super.onDestroy();
     }

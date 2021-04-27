@@ -10,7 +10,8 @@ package com.bitmovin.player.samples.casting.basic;
 
 import android.app.Application;
 
-import com.bitmovin.player.cast.BitmovinCastManager;
+import com.bitmovin.player.casting.BitmovinCastManager;
+
 
 public class SampleApplication extends Application
 {

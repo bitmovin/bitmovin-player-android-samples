@@ -16,14 +16,14 @@
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
 
-    <com.bitmovin.player.BitmovinPlayerView
+    <com.bitmovin.player.PlayerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/bitmovinPlayerView"
+            android:id="@+id/playerView"
             android:layout_below="@id/toolbar"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-    </com.bitmovin.player.BitmovinPlayerView>
+    </com.bitmovin.player.PlayerView>
 
 </RelativeLayout>

@@ -6,94 +6,70 @@ import android.os.Looper
 import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.view.ViewGroup
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.ui.FullscreenHandler
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.ui.FullscreenHandler
 import com.bitmovin.player.ui.getSystemUiVisibilityFlags
 
 
 class CustomFullscreenHandler(
     activity: Activity,
-    private val playerView: BitmovinPlayerView,
+    private val playerView: PlayerView,
     private val toolbar: Toolbar?
 ) : FullscreenHandler {
-
-    private var isFullscreen: Boolean = false
+    override var isFullscreen = false
     private var decorView: View? = activity.window.decorView
-    private val playerOrientationListener = PlayerOrientationListener(activity)
-
-    private val updateLayoutRunnable = Runnable {
-
-        this.toolbar?.visibility = if (this.isFullscreen) {
-            View.GONE
-        } else {
-            View.VISIBLE
-        }
-
-        if (this.playerView.parent is ViewGroup) {
-            val parentView = this.playerView.parent as ViewGroup
-
-            for (i in 0 until parentView.childCount) {
-                val child = parentView.getChildAt(i)
-                if (child !== playerView) {
-                    child.visibility = if (this.isFullscreen) {
-                        View.GONE
-                    } else {
-                        View.VISIBLE
-                    }
-                }
-            }
-        }
-    }
-
-    init {
-        this.playerOrientationListener.enable()
-    }
+    private val playerOrientationListener = PlayerOrientationListener(activity).apply { enable() }
 
     private fun handleFullscreen(fullscreen: Boolean) {
-        this.isFullscreen = fullscreen
-        this.doSystemUiVisibility(fullscreen)
-        this.doLayoutChanges()
+        isFullscreen = fullscreen
+        doSystemUiVisibility(fullscreen)
+        doLayoutChanges()
     }
 
     private fun doSystemUiVisibility(fullScreen: Boolean) {
-        this.decorView?.post {
+        decorView?.post {
             val uiParams = getSystemUiVisibilityFlags(fullScreen, true)
-            this.decorView?.systemUiVisibility = uiParams
+            decorView?.systemUiVisibility = uiParams
         }
     }
 
     private fun doLayoutChanges() {
         val mainLooper = Looper.getMainLooper()
-        val isMainLooperAlready = Looper.myLooper() == mainLooper
+        val isAlreadyMainLooper = Looper.myLooper() == mainLooper
 
-        if (isMainLooperAlready) {
-            this.updateLayoutRunnable.run()
+        if (isAlreadyMainLooper) {
+            updateLayout()
         } else {
             val handler = Handler(mainLooper)
-            handler.post(this.updateLayoutRunnable)
+            handler.post(::updateLayout)
         }
     }
 
-    override fun onFullscreenRequested() {
-        this.handleFullscreen(true)
+    private fun updateLayout() {
+        val parentView = playerView.parent
+        toolbar?.visibility = if (isFullscreen) View.GONE else View.VISIBLE
+
+        if (parentView !is ViewGroup) return
+
+        for (i in 0 until parentView.childCount) {
+            parentView
+                .getChildAt(i)
+                .takeIf { it !== playerView }
+                ?.visibility = if (this.isFullscreen) View.GONE else View.VISIBLE
+        }
     }
 
-    override fun onFullscreenExitRequested() {
-        this.handleFullscreen(false)
-    }
+    override fun onFullscreenRequested() = handleFullscreen(true)
+
+    override fun onFullscreenExitRequested() = handleFullscreen(false)
 
     override fun onResume() {
-        if (this.isFullscreen) {
-            doSystemUiVisibility(this.isFullscreen)
+        if (isFullscreen) {
+            doSystemUiVisibility(isFullscreen)
         }
     }
 
     override fun onPause() {}
 
-    override fun onDestroy() {
-        this.playerOrientationListener.disable()
-    }
-
-    override fun isFullScreen(): Boolean = this.isFullscreen
-
+    override fun onDestroy() = playerOrientationListener.disable()
 }

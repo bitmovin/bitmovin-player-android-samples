@@ -8,42 +8,42 @@
 
 package com.bitmovin.player.samples.custom.ui.html;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.config.StyleConfiguration;
-import com.bitmovin.player.config.media.SourceItem;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.source.SourceConfig;
+import com.bitmovin.player.api.source.SourceType;
+import com.bitmovin.player.api.ui.StyleConfig;
 import com.bitmovin.player.ui.CustomMessageHandler;
 
-public class PlaybackActivity extends AppCompatActivity
-{
-
-    private BitmovinPlayerView bitmovinPlayerView;
+public class PlaybackActivity extends AppCompatActivity {
+    private PlayerView playerView;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
 
-        // Create new StyleConfiguration
-        StyleConfiguration styleConfiguration = new StyleConfiguration();
+        // Create new StyleConfig
+        StyleConfig styleConfig = new StyleConfig();
         /*
          * Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
          */
         // Set URLs for the JavaScript and the CSS
-        styleConfiguration.setPlayerUiJs("file:///android_asset/custom-bitmovinplayer-ui.min.js");
-        styleConfiguration.setPlayerUiCss("file:///android_asset/custom-bitmovinplayer-ui.min.css");
+        styleConfig.setPlayerUiJs("file:///android_asset/custom-bitmovinplayer-ui.min.js");
+        styleConfig.setPlayerUiCss("file:///android_asset/custom-bitmovinplayer-ui.min.css");
 
-        // Creating a new PlayerConfiguration
-        PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assign created StyleConfiguration to the PlayerConfiguration
-        playerConfiguration.setStyleConfiguration(styleConfiguration);
+        // Creating a new PlayerConfig
+        PlayerConfig playerConfig = new PlayerConfig();
+        // Assign created StyleConfig to the PlayerConfig
+        playerConfig.setStyleConfig(styleConfig);
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         Object javascriptInterface = new Object() {
@@ -57,22 +57,24 @@ public class PlaybackActivity extends AppCompatActivity
         // Setup CustomMessageHandler for communication with Bitmovin Web UI
         CustomMessageHandler customMessageHandler = new CustomMessageHandler(javascriptInterface);
 
-        // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = new BitmovinPlayerView(this, playerConfiguration);
-        this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        // Create new Player with our PlayerConfig
+        Player player = Player.create(this, playerConfig);
+        // Create a PlayerView with our Player
+        playerView = new PlayerView(this, player);
+        playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
-        // Set the CustomMessageHandler to the bitmovinPlayerView
-        this.bitmovinPlayerView.setCustomMessageHandler(customMessageHandler);
+        // Set the CustomMessageHandler to the playerView
+        playerView.setCustomMessageHandler(customMessageHandler);
 
-        //load the SourceItem into the player
-        this.bitmovinPlayerView.getPlayer().load(new SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        //load the SourceConfig into the player
+        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
 
-        LinearLayout playerRootLayout = (LinearLayout) this.findViewById(R.id.player_view);
+        LinearLayout playerRootLayout = (LinearLayout) findViewById(R.id.player_view);
 
-        // Add BitmovinPlayerView to the layout as first child
-        playerRootLayout.addView(this.bitmovinPlayerView, 0);
+        // Add PlayerView to the layout as first child
+        playerRootLayout.addView(playerView, 0);
 
-        Button toggleCloseButtonStateButton = (Button) this.findViewById(R.id.toggle_button);
+        Button toggleCloseButtonStateButton = (Button) findViewById(R.id.toggle_button);
 
         toggleCloseButtonStateButton.setOnClickListener(v -> {
             customMessageHandler.sendMessage("toggleCloseButton", null);
@@ -80,37 +82,32 @@ public class PlaybackActivity extends AppCompatActivity
     }
 
     @Override
-    protected void onStart()
-    {
+    protected void onStart() {
         super.onStart();
-        this.bitmovinPlayerView.onStart();
+        playerView.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        playerView.onDestroy();
         super.onDestroy();
     }
 }

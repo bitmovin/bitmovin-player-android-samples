@@ -3,62 +3,62 @@ package com.bitmovin.player.samples.ads.companion
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
-import com.bitmovin.player.BitmovinPlayer
-import com.bitmovin.player.BitmovinPlayerView
-import com.bitmovin.player.config.PlayerConfiguration
-import com.bitmovin.player.config.advertising.*
-import com.bitmovin.player.config.media.SourceItem
+import com.bitmovin.player.PlayerView
+import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.advertising.*
+import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceType
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var bitmovinPlayerView: BitmovinPlayerView
-    private lateinit var bitmovinPlayer: BitmovinPlayer
+    private lateinit var playerView: PlayerView
+    private lateinit var player: Player
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         val companionAdContainerView = findViewById<FrameLayout>(R.id.companionAdContainer)
-        bitmovinPlayerView = findViewById(R.id.bitmovinPlayerView)
-        bitmovinPlayer = bitmovinPlayerView.player!!
+        playerView = findViewById(R.id.bitmovinPlayerView)
 
 
         // Setup companion ad container
-        val companionAdContainer = CompanionAdContainer(companionAdContainerView, 300, 250)
-        val adItem = AdItem("pre", AdSource(AdSourceType.IMA, AD_TAG))
+        val playerConfig = PlayerConfig(
+                advertisingConfig = AdvertisingConfig(
+                        listOf(CompanionAdContainer(companionAdContainerView, 300, 250)),
+                        AdItem("pre", AdSource(AdSourceType.Ima, AD_TAG))
+                )
+        )
 
-        val advertisingConfiguration = AdvertisingConfiguration(listOf(companionAdContainer), adItem)
-
-        // Finish setup of the player
-        val playerConfiguration = PlayerConfiguration().apply {
-            this.advertisingConfiguration = advertisingConfiguration
+        player = Player.create(this, playerConfig).also {
+            playerView.player = it
         }
-        this.bitmovinPlayer.setup(playerConfiguration);
-        this.bitmovinPlayer.load(SourceItem("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+
+        player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
     }
 
     override fun onStart() {
         super.onStart()
-        this.bitmovinPlayerView.onStart()
+        playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        this.bitmovinPlayerView.onResume()
+        playerView.onResume()
     }
 
     override fun onPause() {
-        this.bitmovinPlayerView.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        this.bitmovinPlayerView.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        this.bitmovinPlayerView.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 }

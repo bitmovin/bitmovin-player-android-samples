@@ -10,7 +10,6 @@ package com.bitmovin.player.samples.custom.ui;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
-import androidx.core.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,35 +19,24 @@ import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.api.event.data.PausedEvent;
-import com.bitmovin.player.api.event.data.PlayEvent;
-import com.bitmovin.player.api.event.data.PlaybackFinishedEvent;
-import com.bitmovin.player.api.event.data.SeekedEvent;
-import com.bitmovin.player.api.event.data.SourceLoadedEvent;
-import com.bitmovin.player.api.event.data.StallEndedEvent;
-import com.bitmovin.player.api.event.data.TimeChangedEvent;
-import com.bitmovin.player.api.event.listener.OnPausedListener;
-import com.bitmovin.player.api.event.listener.OnPlayListener;
-import com.bitmovin.player.api.event.listener.OnPlaybackFinishedListener;
-import com.bitmovin.player.api.event.listener.OnSeekedListener;
-import com.bitmovin.player.api.event.listener.OnSourceLoadedListener;
-import com.bitmovin.player.api.event.listener.OnStallEndedListener;
-import com.bitmovin.player.api.event.listener.OnTimeChangedListener;
-import com.bitmovin.player.config.PlayerConfiguration;
-import com.bitmovin.player.ui.FullscreenHandler;
+import androidx.core.content.ContextCompat;
+
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.event.EventListener;
+import com.bitmovin.player.api.event.PlayerEvent;
+import com.bitmovin.player.api.event.SourceEvent;
+import com.bitmovin.player.api.ui.FullscreenHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class PlayerUI extends RelativeLayout
-{
+public class PlayerUI extends RelativeLayout {
     private static final String LIVE = "LIVE";
     private static final int UI_HIDE_TIME = 5000;
 
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer player;
+    private final PlayerView playerView;
+    private final Player player;
     private ImageButton playButton;
     private ImageButton fullscreenButton;
     private SeekBar seekBar;
@@ -66,39 +54,36 @@ public class PlayerUI extends RelativeLayout
     private boolean live;
     private View controlView;
 
-    public PlayerUI(Context context, PlayerConfiguration playerConfiguration)
-    {
+    public PlayerUI(Context context, Player player) {
         super(context);
-        // Create new BitmovinPlayerView with our PlayerConfiguration
-        this.bitmovinPlayerView = new BitmovinPlayerView(context, playerConfiguration);
-        this.bitmovinPlayerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        this.player = bitmovinPlayerView.getPlayer();
-
+        // Create new PlayerView with our PlayerConfiguration
+        this.player = player;
+        playerView = new PlayerView(context, player);
+        playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setup();
     }
 
-    private void setup()
-    {
-        LayoutInflater.from(this.getContext()).inflate(R.layout.player_ui, this);
+    private void setup() {
+        LayoutInflater.from(getContext()).inflate(R.layout.player_ui, this);
 
-        this.controlView = findViewById(R.id.controls);
-        this.playButton = (ImageButton) this.controlView.findViewById(R.id.playback_button);
-        this.fullscreenButton = (ImageButton) this.controlView.findViewById(R.id.fullscreen_button);
-        this.playDrawable = ContextCompat.getDrawable(this.bitmovinPlayerView.getContext(), R.drawable.ic_play_arrow_black_24dp);
-        this.pauseDrawable = ContextCompat.getDrawable(this.bitmovinPlayerView.getContext(), R.drawable.ic_pause_black_24dp);
-        this.seekBar = (SeekBar) this.controlView.findViewById(R.id.seekbar);
-        this.positionView = (TextView) this.controlView.findViewById(R.id.position);
-        this.durationView = (TextView) this.controlView.findViewById(R.id.duration);
+        controlView = findViewById(R.id.controls);
+        playButton = (ImageButton) controlView.findViewById(R.id.playback_button);
+        fullscreenButton = (ImageButton) controlView.findViewById(R.id.fullscreen_button);
+        playDrawable = ContextCompat.getDrawable(playerView.getContext(), R.drawable.ic_play_arrow_black_24dp);
+        pauseDrawable = ContextCompat.getDrawable(playerView.getContext(), R.drawable.ic_pause_black_24dp);
+        seekBar = (SeekBar) controlView.findViewById(R.id.seekbar);
+        positionView = (TextView) controlView.findViewById(R.id.position);
+        durationView = (TextView) controlView.findViewById(R.id.duration);
 
-        this.seekBar.setOnSeekBarChangeListener(this.seekBarChangeListener);
-        this.playButton.setOnClickListener(this.onClickListener);
-        this.fullscreenButton.setOnClickListener(this.onClickListener);
-        this.playButton.setOnTouchListener(this.onTouchListener);
-        this.seekBar.setOnTouchListener(this.onTouchListener);
-        setOnTouchListener(this.onTouchListener);
+        seekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        playButton.setOnClickListener(onClickListener);
+        fullscreenButton.setOnClickListener(onClickListener);
+        playButton.setOnTouchListener(onTouchListener);
+        seekBar.setOnTouchListener(onTouchListener);
+        setOnTouchListener(onTouchListener);
 
-        // Add BitmovinPlayerView to the layout
-        this.addView(this.bitmovinPlayerView, 0);
+        // Add PlayerView to the layout
+        addView(playerView, 0);
 
         uiHideTimer = new Timer();
 
@@ -106,77 +91,63 @@ public class PlayerUI extends RelativeLayout
         updateUi();
     }
 
-    private void addPlayerListener()
-    {
-        this.player.addEventListener(onTimeChangedListener);
-        this.player.addEventListener(onSourceLoadedListener);
-        this.player.addEventListener(onPlayListener);
-        this.player.addEventListener(onPausedListener);
-        this.player.addEventListener(onStallEndedListener);
-        this.player.addEventListener(onSeekedListener);
-        this.player.addEventListener(onPlaybackFinishedListener);
+    private void addPlayerListener() {
+        player.on(PlayerEvent.TimeChanged.class, onTimeChangedListener);
+        player.on(PlayerEvent.Play.class, onPlayListener);
+        player.on(PlayerEvent.Paused.class, onPausedListener);
+        player.on(PlayerEvent.StallEnded.class, onStallEndedListener);
+        player.on(PlayerEvent.Seeked.class, onSeekedListener);
+        player.on(PlayerEvent.PlaybackFinished.class, onPlaybackFinishedListener);
+
+        player.on(SourceEvent.Loaded.class, onSourceLoadedListener);
     }
 
-    private void removePlayerListener()
-    {
-        this.player.removeEventListener(onTimeChangedListener);
-        this.player.removeEventListener(onSourceLoadedListener);
-        this.player.removeEventListener(onPlayListener);
-        this.player.removeEventListener(onPausedListener);
-        this.player.removeEventListener(onStallEndedListener);
-        this.player.removeEventListener(onSeekedListener);
-        this.player.removeEventListener(onPlaybackFinishedListener);
+    private void removePlayerListener() {
+        player.off(onTimeChangedListener);
+        player.off(onSourceLoadedListener);
+        player.off(onPlayListener);
+        player.off(onPausedListener);
+        player.off(onStallEndedListener);
+        player.off(onSeekedListener);
+        player.off(onPlaybackFinishedListener);
     }
 
-    private void startUiHiderTask()
-    {
+    private void startUiHiderTask() {
         stopUiHiderTask();
 
         // Create Task which hides the UI after a specified time (UI_HIDE_TIME)
-        this.uiHideTask = new TimerTask()
-        {
+        uiHideTask = new TimerTask() {
             @Override
-            public void run()
-            {
+            public void run() {
                 long timeSincelastUiInteraction = System.currentTimeMillis() - lastUiInteraction;
-                if (timeSincelastUiInteraction > UI_HIDE_TIME)
-                {
+                if (timeSincelastUiInteraction > UI_HIDE_TIME) {
                     setControlsVisible(false);
                 }
             }
         };
         // Schedule the hider task, so it checks the state every 100ms
-        this.uiHideTimer.scheduleAtFixedRate(this.uiHideTask, 0, 100);
+        uiHideTimer.scheduleAtFixedRate(uiHideTask, 0, 100);
     }
 
-    private void stopUiHiderTask()
-    {
-        if (this.uiHideTask != null)
-        {
-            this.uiHideTask.cancel();
-            this.uiHideTask = null;
+    private void stopUiHiderTask() {
+        if (uiHideTask != null) {
+            uiHideTask.cancel();
+            uiHideTask = null;
         }
     }
 
-    public void setVisible(boolean visible)
-    {
+    public void setVisible(boolean visible) {
         lastUiInteraction = System.currentTimeMillis();
         setControlsVisible(visible);
     }
 
-    private void setControlsVisible(final boolean visible)
-    {
-        post(new Runnable()
-        {
+    private void setControlsVisible(final boolean visible) {
+        post(new Runnable() {
             @Override
-            public void run()
-            {
-                if (visible)
-                {
+            public void run() {
+                if (visible) {
                     startUiHiderTask();
-                }
-                else
-                {
+                } else {
                     stopUiHiderTask();
                 }
 
@@ -186,128 +157,96 @@ public class PlayerUI extends RelativeLayout
         });
     }
 
-    public void setFullscreenHandler(FullscreenHandler fullscreenHandler)
-    {
-        this.bitmovinPlayerView.setFullscreenHandler(fullscreenHandler);
+    public void setFullscreenHandler(FullscreenHandler fullscreenHandler) {
+        playerView.setFullscreenHandler(fullscreenHandler);
     }
 
-    public void destroy()
-    {
+    public void destroy() {
         removePlayerListener();
         uiHideTimer.cancel();
     }
 
-    public void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    public void onStart() {
+        playerView.onStart();
     }
 
-    public void onResume()
-    {
-        this.bitmovinPlayerView.onResume();
+    public void onResume() {
+        playerView.onResume();
     }
 
-    public void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    public void onPause() {
+        playerView.onPause();
     }
 
-    public void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    public void onStop() {
+        playerView.onStop();
     }
 
-    public void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    public void onDestroy() {
+        playerView.onDestroy();
         destroy();
     }
 
     /**
      * UI Listeners
      */
-
     @Override
-    public boolean onTouchEvent(MotionEvent event)
-    {
+    public boolean onTouchEvent(MotionEvent event) {
         return true;
     }
 
-    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener()
-    {
+    private SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-        {
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
             // Only seek/timeShift when the user changes the progress (and not the TimeChangedEvent)
-            if (fromUser)
-            {
+            if (fromUser) {
                 // If the current stream is a live stream, we have to use the timeShift method
-                if (!player.isLive())
-                {
+                if (!player.isLive()) {
                     player.seek(progress / 1000d);
-                }
-                else
-                {
+                } else {
                     player.timeShift((progress - seekBar.getMax()) / 1000d);
                 }
             }
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar)
-        {
+        public void onStartTrackingTouch(SeekBar seekBar) {
         }
 
         @Override
-        public void onStopTrackingTouch(SeekBar seekBar)
-        {
+        public void onStopTrackingTouch(SeekBar seekBar) {
         }
     };
 
-    private OnClickListener onClickListener = new OnClickListener()
-    {
+    private final OnClickListener onClickListener = new OnClickListener() {
         @Override
-        public void onClick(View v)
-        {
-            if (v == playButton || v == PlayerUI.this)
-            {
-                if (player.isPlaying())
-                {
+        public void onClick(View v) {
+            if (v == playButton || v == PlayerUI.this) {
+                if (player.isPlaying()) {
                     player.pause();
-                }
-                else
-                {
+                } else {
                     player.play();
                 }
             }
-            if (v == fullscreenButton)
-            {
-                if (bitmovinPlayerView.isFullscreen())
-                {
-                    bitmovinPlayerView.exitFullscreen();
-                }
-                else
-                {
-                    bitmovinPlayerView.enterFullscreen();
+            if (v == fullscreenButton) {
+                if (playerView.isFullscreen()) {
+                    playerView.exitFullscreen();
+                } else {
+                    playerView.enterFullscreen();
                 }
             }
         }
     };
 
-    private OnTouchListener onTouchListener = new OnTouchListener()
-    {
+    private final OnTouchListener onTouchListener = new OnTouchListener() {
         @Override
-        public boolean onTouch(View v, MotionEvent event)
-        {
+        public boolean onTouch(View v, MotionEvent event) {
             lastUiInteraction = System.currentTimeMillis();
 
-            if (event.getAction() == MotionEvent.ACTION_UP)
-            {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
                 // Start the hider task, when the UI is not touched
                 startUiHiderTask();
-            }
-            else
-            {
+            } else {
                 // When the view is touched, the UI should be visible
                 setControlsVisible(true);
             }
@@ -318,108 +257,46 @@ public class PlayerUI extends RelativeLayout
     /**
      * Player Listeners
      */
+    private final EventListener<PlayerEvent.TimeChanged> onTimeChangedListener = timeChanged -> updateUi();
+    private final EventListener<PlayerEvent.PlaybackFinished> onPlaybackFinishedListener = playbackFinished -> updateUi();
+    private final EventListener<PlayerEvent.Paused> onPausedListener = paused -> updateUi();
+    private final EventListener<PlayerEvent.Play> onPlayListener = play -> updateUi();
+    private final EventListener<PlayerEvent.Seeked> onSeekedListener = seeked -> updateUi();
+    private final EventListener<PlayerEvent.StallEnded> onStallEndedListener = stallEnded -> updateUi();
 
-    private OnTimeChangedListener onTimeChangedListener = new OnTimeChangedListener()
-    {
-        @Override
-        public void onTimeChanged(TimeChangedEvent timeChangedEvent)
-        {
-            updateUi();
-        }
-    };
+    /**
+     * Source Listeners
+     */
+    private final EventListener<SourceEvent.Loaded> onSourceLoadedListener = sourceLoaded -> updateUi();
 
-    private OnSourceLoadedListener onSourceLoadedListener = new OnSourceLoadedListener()
-    {
-        @Override
-        public void onSourceLoaded(SourceLoadedEvent sourceLoadedEvent)
-        {
-            updateUi();
-        }
-    };
-
-    private OnPlaybackFinishedListener onPlaybackFinishedListener = new OnPlaybackFinishedListener()
-    {
-        @Override
-        public void onPlaybackFinished(PlaybackFinishedEvent playbackFinishedEvent)
-        {
-            updateUi();
-        }
-    };
-
-    private OnPausedListener onPausedListener = new OnPausedListener()
-    {
-        @Override
-        public void onPaused(PausedEvent pausedEvent)
-        {
-            updateUi();
-        }
-    };
-
-    private OnPlayListener onPlayListener = new OnPlayListener()
-    {
-        @Override
-        public void onPlay(PlayEvent playEvent)
-        {
-            updateUi();
-        }
-    };
-
-    private OnSeekedListener onSeekedListener = new OnSeekedListener()
-    {
-        @Override
-        public void onSeeked(SeekedEvent seekedEvent)
-        {
-            updateUi();
-        }
-    };
-
-    private OnStallEndedListener onStallEndedListener = new OnStallEndedListener()
-    {
-        @Override
-        public void onStallEnded(StallEndedEvent stallEndedEvent)
-        {
-            updateUi();
-        }
-    };
 
     /**
      * Methods for UI update
      */
-
-    private void updateUi()
-    {
-        this.seekBar.post(new Runnable()
-        {
+    private void updateUi() {
+        seekBar.post(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 int positionMs;
                 int durationMs;
 
                 // if the live state of the player changed, the UI should change it's mode
-                if (live != player.isLive())
-                {
+                if (live != player.isLive()) {
                     live = player.isLive();
-                    if (live)
-                    {
+                    if (live) {
                         positionView.setVisibility(GONE);
                         durationView.setText(LIVE);
-                    }
-                    else
-                    {
+                    } else {
                         positionView.setVisibility(VISIBLE);
                     }
                 }
 
-                if (live)
-                {
+                if (live) {
                     // The Seekbar does not support negative values
                     // so the seekable range is shifted to the positive
                     durationMs = (int) (-player.getMaxTimeShift() * 1000);
                     positionMs = (int) (durationMs + player.getTimeShift() * 1000);
-                }
-                else
-                {
+                } else {
                     // Converting to milliseconds
                     positionMs = (int) (player.getCurrentTime() * 1000);
                     durationMs = (int) (player.getDuration() * 1000);
@@ -434,30 +311,23 @@ public class PlayerUI extends RelativeLayout
                 seekBar.setMax(durationMs);
 
                 // Update the image of the playback button
-                if (player.isPlaying())
-                {
+                if (player.isPlaying()) {
                     playButton.setImageDrawable(pauseDrawable);
-                }
-                else
-                {
+                } else {
                     playButton.setImageDrawable(playDrawable);
                 }
             }
         });
     }
 
-    private String millisecondsToTimeString(int milliseconds)
-    {
+    private String millisecondsToTimeString(int milliseconds) {
         int second = (milliseconds / 1000) % 60;
         int minute = (milliseconds / (1000 * 60)) % 60;
         int hour = (milliseconds / (1000 * 60 * 60)) % 24;
 
-        if (hour > 0)
-        {
+        if (hour > 0) {
             return String.format("%02d:%02d:%02d", hour, minute, second);
-        }
-        else
-        {
+        } else {
             return String.format("%02d:%02d", minute, second);
         }
     }

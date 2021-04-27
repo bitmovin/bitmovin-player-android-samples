@@ -1,183 +1,80 @@
 package com.bitmovin.player.samples.playlist.basic;
 
 import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bitmovin.player.BitmovinPlayer;
-import com.bitmovin.player.BitmovinPlayerView;
-import com.bitmovin.player.api.event.data.PlayEvent;
-import com.bitmovin.player.api.event.data.PlaybackFinishedEvent;
-import com.bitmovin.player.api.event.data.ReadyEvent;
-import com.bitmovin.player.api.event.listener.OnPlayListener;
-import com.bitmovin.player.api.event.listener.OnPlaybackFinishedListener;
-import com.bitmovin.player.api.event.listener.OnReadyListener;
-import com.bitmovin.player.config.media.SourceItem;
+import com.bitmovin.player.PlayerView;
+import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.event.EventListener;
+import com.bitmovin.player.api.event.PlayerEvent;
+import com.bitmovin.player.api.playlist.PlaylistConfig;
+import com.bitmovin.player.api.playlist.PlaylistOptions;
+import com.bitmovin.player.api.source.Source;
+import com.bitmovin.player.api.source.SourceConfig;
 
-public class MainActivity extends AppCompatActivity
-{
-    private BitmovinPlayerView bitmovinPlayerView;
-    private BitmovinPlayer bitmovinPlayer;
+import java.util.Arrays;
+import java.util.List;
 
-    // Holds all items of the playlist
-    private PlaylistItem[] playlistItems;
-    // Stores the index of the next playlist item to be played
-    private int nextPlaylistItem = 0;
-    private boolean lastItemFinished = false;
-    private boolean playlistStarted = false;
+
+public class MainActivity extends AppCompatActivity {
+    private PlayerView playerView;
+    private Player player;
+
+    private final EventListener<PlayerEvent.PlaylistTransition> onReadyListener = event -> {
+        String text = "Transitioned from " + event.getFrom().getConfig().getTitle() + " to " + event.getTo().getConfig().getTitle();
+        Toast.makeText(MainActivity.this, text, Toast.LENGTH_SHORT).show();
+    };
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        this.bitmovinPlayerView = (BitmovinPlayerView) this.findViewById(R.id.bitmovinPlayerView);
-        this.bitmovinPlayer = this.bitmovinPlayerView.getPlayer();
-        this.playlistItems = new PlaylistItem[]{
-                new PlaylistItem("Art of Motion", "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8"),
-                new PlaylistItem("Sintel", "https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8")
-        };
+        this.playerView = this.findViewById(R.id.playerView);
+        this.player = this.playerView.getPlayer();
 
-        this.addListenersToPlayer();
+        SourceConfig sourceConfig1 = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8");
+        sourceConfig1.setTitle("Art of Motions");
+        SourceConfig sourceConfig2 = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8");
+        sourceConfig2.setTitle("Sintel");
 
-        // Start the playlist
-        this.playNextItem();
+        List<Source> sources = Arrays.asList(Source.create(sourceConfig1), Source.create(sourceConfig2));
+
+        this.player.on(PlayerEvent.PlaylistTransition.class, this.onReadyListener);
+
+        this.player.load(new PlaylistConfig(sources, new PlaylistOptions()));
     }
 
-    /**
-     * Plays the next playlist item in the playlist.
-     */
-    private void playNextItem()
-    {
-        // check if there are unplayed items in the playlist
-        if (nextPlaylistItem >= this.playlistItems.length)
-        {
-            return;
-        }
-        // fetch the next item to play from the playlist
-        PlaylistItem itemToPlay = this.playlistItems[nextPlaylistItem];
-        nextPlaylistItem += 1;
-
-        // Create a source item based on the playlist item and load it
-        SourceItem sourceItem = new SourceItem(itemToPlay.getUrl());
-        sourceItem.setTitle(itemToPlay.getTitle());
-
-        // load the new source item
-        this.bitmovinPlayer.load(sourceItem);
-    }
-
-    private OnPlayListener onPlayListener = new OnPlayListener()
-    {
-        @Override
-        public void onPlay(PlayEvent playEvent)
-        {
-            // Remember that the playlist was started by the user
-            playlistStarted = true;
-
-            // When the replay button in the UI was tapped or a player.play() API call was issued after the last
-            // playlist item has finished, we repeat the whole playlist instead of just repeating the last item
-            if (lastItemFinished)
-            {
-                // Unload the last played item and reset the playlist state
-                bitmovinPlayer.unload();
-                lastItemFinished = false;
-                nextPlaylistItem = 0;
-                // Restart playlist with first item in list
-                playNextItem();
-            }
-        }
-    };
-
-    private OnReadyListener onReadyListener = new OnReadyListener()
-    {
-        @Override
-        public void onReady(ReadyEvent readyEvent)
-        {
-            // Autoplay all playlist items after the initial playlist item was started by either tapping the
-            // play button or by issuing the player.play() API call.
-            if (playlistStarted)
-            {
-                bitmovinPlayer.play();
-            }
-        }
-    };
-
-    private OnPlaybackFinishedListener onPlaybackFinishedListener = new OnPlaybackFinishedListener()
-    {
-        @Override
-        public void onPlaybackFinished(PlaybackFinishedEvent playbackFinishedEvent)
-        {
-            // Automatically play next item in the playlist if there are still unplayed items left
-            lastItemFinished = nextPlaylistItem >= playlistItems.length;
-            if (!lastItemFinished)
-            {
-                playNextItem();
-            }
-        }
-    };
 
     @Override
-    protected void onStart()
-    {
-        this.bitmovinPlayerView.onStart();
+    protected void onStart() {
+        this.playerView.onStart();
         super.onStart();
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
-        this.bitmovinPlayerView.onResume();
+        this.playerView.onResume();
     }
 
     @Override
-    protected void onPause()
-    {
-        this.bitmovinPlayerView.onPause();
+    protected void onPause() {
+        this.playerView.onPause();
         super.onPause();
     }
 
     @Override
-    protected void onStop()
-    {
-        this.bitmovinPlayerView.onStop();
+    protected void onStop() {
+        this.playerView.onStop();
         super.onStop();
     }
 
     @Override
-    protected void onDestroy()
-    {
-        this.bitmovinPlayerView.onDestroy();
+    protected void onDestroy() {
+        this.playerView.onDestroy();
         super.onDestroy();
-    }
-
-    protected void addListenersToPlayer()
-    {
-        this.bitmovinPlayer.addEventListener(this.onReadyListener);
-        this.bitmovinPlayer.addEventListener(this.onPlayListener);
-        this.bitmovinPlayer.addEventListener(this.onPlaybackFinishedListener);
-    }
-
-    // A simple class defining a playlist item
-    private class PlaylistItem
-    {
-        private String title;
-        private String url;
-
-        public PlaylistItem(String title, String url)
-        {
-            this.title = title;
-            this.url = url;
-        }
-
-        public String getTitle()
-        {
-            return title;
-        }
-
-        public String getUrl()
-        {
-            return url;
-        }
     }
 }
