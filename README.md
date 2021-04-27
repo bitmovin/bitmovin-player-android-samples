@@ -216,9 +216,9 @@ The Bitmovin Player Android SDK logs against a logging facade (SLF4J). In order 
 
 ## Documentation & Release Notes
 
-+ **Java Documentation for your IDE** - Our release repository also holds a `.jar` containing the javadoc for the `playercore`. If AndroidStudio is used, the documentation should be downloaded and included automatically .
-+ **Android API Reference documentation** - You can find the latest one [here](https://bitmovin.com/android-sdk-documentation/)
-+ **Android SDK Release Notes** can be found [here]( https://bitmovin.com/release-notes-android-sdk/)
++ **Documentation for your IDE** - Our release repository also holds a `.jar` containing the javadoc for the `player`, as well as the source code of the api package. If AndroidStudio is used, the documentation and sources should be downloaded and included automatically .
++ **Android API Reference documentation** - You can find the latest one [here](https://cdn.bitmovin.com/player/android/3.0.0/docs/index.html)
++ **Android SDK Release Notes** can be found [here](https://bitmovin.com/release-notes-android-sdk/)
 
 ## Support
 If you have any questions or issues with this SDK or its examples, or you require other technical support for our services, please login to your Bitmovin Dashboard at https://bitmovin.com/dashboard and [create a new support case](https://bitmovin.com/dashboard/support/cases/create). Our team will get back to you as soon as possible :+1:
