@@ -5,17 +5,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.casting.BitmovinCastManager
-import kotlinx.android.synthetic.main.activity_player.*
+import com.bitmovin.player.samples.casting.basic.databinding.ActivityPlayerBinding
 
 const val SOURCE_URL = "SOURCE_URL"
 const val SOURCE_TITLE = "SOURCE_TITLE"
 
 class PlayerActivity : AppCompatActivity() {
     private lateinit var player: Player
+    private lateinit var binding: ActivityPlayerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         // Update the context the BitmovinCastManager is using
         // This should be done in every Activity's onCreate using the cast function
         BitmovinCastManager.getInstance().updateContext(this)
@@ -26,33 +28,33 @@ class PlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        player = bitmovinPlayerView.player!!
+        player = binding.bitmovinPlayerView.player!!
 
         initializePlayer(sourceUrl, sourceTitle)
     }
 
     override fun onStart() {
-        bitmovinPlayerView.onStart()
+        binding.bitmovinPlayerView.onStart()
         super.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        bitmovinPlayerView.onResume()
+        binding.bitmovinPlayerView.onResume()
     }
 
     override fun onPause() {
-        bitmovinPlayerView.onPause()
+        binding.bitmovinPlayerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        binding.bitmovinPlayerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        binding.bitmovinPlayerView.onDestroy()
         super.onDestroy()
     }
 

@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter
 import androidx.annotation.LayoutRes
 import com.bitmovin.player.api.offline.options.OfflineContentOptions
 import com.bitmovin.player.api.offline.options.OfflineOptionEntryState
-import kotlinx.android.synthetic.main.list_item.view.*
+import com.bitmovin.player.samples.offline.playback.databinding.ListItemBinding
 
 class ListAdapter(
         context: Context,
@@ -17,63 +17,67 @@ class ListAdapter(
         private val listItemActionListener: ListItemActionListener
 ) : ArrayAdapter<ListItem>(context, resource, objects) {
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        var view = convertView
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val binding = convertView?.let { ListItemBinding.bind(convertView) }
+            ?: ListItemBinding.inflate(LayoutInflater.from(context), parent, false)
 
-        if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
-        }
         val listItem = getItem(position)
 
         val sourceConfig = listItem?.sourceConfig
         val offlineContentOptions = listItem?.offlineContentOptions
-        view?.title?.text = sourceConfig?.title
+        binding.title.text = sourceConfig?.title
 
         if (offlineContentOptions != null) {
-            view?.btnDownload?.visibility = View.VISIBLE
-            view?.btnDownload?.setOnClickListener { listItemActionListener.showSelectionDialog(listItem) }
+            binding.btnDownload.visibility = View.VISIBLE
+            binding.btnDownload.setOnClickListener { listItemActionListener.showSelectionDialog(listItem) }
 
             // If any option is downloading, show a progress in the list
             when {
                 isDownloading(offlineContentOptions) -> {
-                    view?.state?.text = String.format("Downloading - %.0f %%", listItem.progress)
-                    view?.state?.visibility = View.VISIBLE
-                    view?.btnPauseResume?.setImageResource(R.drawable.ic_pause_black_24dp)
-                    view?.btnPauseResume?.visibility = View.VISIBLE
-                    view?.btnPauseResume?.setOnClickListener { listItemActionListener.suspend(listItem) }
+                    binding.apply {
+                        state.text = String.format("Downloading - %.0f %%", listItem.progress)
+                        state.visibility = View.VISIBLE
+                        btnPauseResume.setImageResource(R.drawable.ic_pause_black_24dp)
+                        btnPauseResume.visibility = View.VISIBLE
+                        btnPauseResume.setOnClickListener { listItemActionListener.suspend(listItem) }
+                    }
                 }
                 isSuspended(offlineContentOptions) -> {
-                    view?.btnPauseResume?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
-                    view?.btnPauseResume?.visibility = View.VISIBLE
-                    view?.btnPauseResume?.setOnClickListener { listItemActionListener.resume(listItem) }
+                    binding.btnPauseResume.apply {
+                        setImageResource(R.drawable.ic_play_arrow_black_24dp)
+                        visibility = View.VISIBLE
+                        setOnClickListener { listItemActionListener.resume(listItem) }
+                    }
                 }
                 hasFailed(offlineContentOptions) -> {
-                    view?.state?.text = String.format("Failed - %.0f %%", listItem.progress)
-                    view?.state?.visibility = View.VISIBLE
-                    view?.btnPauseResume?.setImageResource(R.drawable.ic_play_arrow_black_24dp)
-                    view?.btnPauseResume?.visibility = View.VISIBLE
-                    view?.btnPauseResume?.setOnClickListener { listItemActionListener.resume(listItem) }
+                    binding.apply {
+                        state.text = String.format("Failed - %.0f %%", listItem.progress)
+                        state.visibility = View.VISIBLE
+                        btnPauseResume.setImageResource(R.drawable.ic_play_arrow_black_24dp)
+                        btnPauseResume.visibility = View.VISIBLE
+                        btnPauseResume.setOnClickListener { listItemActionListener.resume(listItem) }
+                    }
                 }
                 else -> {
-                    view?.state?.visibility = View.INVISIBLE
-                    view?.btnPauseResume?.visibility = View.INVISIBLE
+                    binding.state.visibility = View.INVISIBLE
+                    binding.btnPauseResume.visibility = View.INVISIBLE
                 }
             }
             // If any option is downloaded, we show the delete button
             if (hasDownloaded(offlineContentOptions)) {
-                view?.btnDelete?.visibility = View.VISIBLE
-                view?.btnDelete?.setOnClickListener { listItemActionListener.delete(listItem) }
+                binding.btnDelete.visibility = View.VISIBLE
+                binding.btnDelete.setOnClickListener { listItemActionListener.delete(listItem) }
             } else {
-                view?.btnDelete?.visibility = View.GONE
+                binding.btnDelete.visibility = View.GONE
             }
 
         } else {
             // If no options are available, we hide the download and the delete button
-            view?.btnDelete?.visibility = View.GONE
-            view?.btnDownload?.visibility = View.GONE
+            binding.btnDelete.visibility = View.GONE
+            binding.btnDownload.visibility = View.GONE
         }
 
-        return view
+        return binding.root
     }
 
     /**

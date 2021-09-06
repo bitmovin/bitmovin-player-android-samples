@@ -11,19 +11,21 @@ import com.bitmovin.player.api.metadata.emsg.EventMessage
 import com.bitmovin.player.api.metadata.id3.Id3Frame
 import com.bitmovin.player.api.metadata.scte.ScteMessage
 import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.samples.metadata.basic.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var player: Player
     private val gson: Gson = Gson()
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        player = bitmovinPlayerView.player!!
+        player = binding.bitmovinPlayerView.player!!
 
         // Adding the metadata listener to the player
         player.on(::onMetadataParsed)
@@ -33,22 +35,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onStart() {
-        bitmovinPlayerView.onStart()
+        binding.bitmovinPlayerView.onStart()
         super.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        bitmovinPlayerView.onResume()
+        binding.bitmovinPlayerView.onResume()
     }
 
     override fun onPause() {
-        bitmovinPlayerView.onPause()
+        binding.bitmovinPlayerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        binding.bitmovinPlayerView.onStop()
         super.onStop()
     }
 
@@ -56,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         // Removing metadata listener from player
         player.off(::onMetadataParsed)
         player.off(::onMetadata)
-        bitmovinPlayerView.onDestroy()
+        binding.bitmovinPlayerView.onDestroy()
 
         super.onDestroy()
     }

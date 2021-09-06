@@ -1,7 +1,6 @@
 package com.bitmovin.player.samples.ads.companion
 
 import android.os.Bundle
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
@@ -9,17 +8,21 @@ import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.advertising.*
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.samples.ads.companion.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
     private lateinit var player: Player
+    private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        val companionAdContainerView = findViewById<FrameLayout>(R.id.companionAdContainer)
-        playerView = findViewById(R.id.bitmovinPlayerView)
+        val companionAdContainerView = binding.companionAdContainer
+        playerView = binding.bitmovinPlayerView
 
 
         // Setup companion ad container
@@ -63,4 +66,4 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-private const val AD_TAG = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=";
+private const val AD_TAG = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="

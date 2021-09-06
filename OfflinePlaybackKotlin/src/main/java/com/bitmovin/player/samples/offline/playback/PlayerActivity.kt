@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.offline.OfflineSourceConfig
 import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.samples.offline.playback.databinding.ActivityPlayerBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_player.*
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -17,9 +17,12 @@ class PlayerActivity : AppCompatActivity() {
 
     private var player: Player? = null
 
+    private lateinit var binding: ActivityPlayerBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_player)
+        binding = ActivityPlayerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val gson = Gson()
 
@@ -37,33 +40,33 @@ class PlayerActivity : AppCompatActivity() {
             }
         }
 
-        player = playerView.player
+        player = binding.playerView.player
 
         initializePlayer(sourceConfig)
     }
 
     override fun onStart() {
         super.onStart()
-        playerView.onStart()
+        binding.playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView.onResume()
+        binding.playerView.onResume()
     }
 
     override fun onPause() {
-        playerView.onPause()
+        binding.playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        playerView.onStop()
+        binding.playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        playerView.onDestroy()
+        binding.playerView.onDestroy()
         super.onDestroy()
     }
 

@@ -13,16 +13,18 @@ import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.playback.background.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
     private var player: Player? = null
     private var bound = false
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Create a PlayerView without a Player and add it to the View hierarchy
         playerView = PlayerView(this, null as Player?).apply {
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
                     ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
-        root.addView(playerView)
+        binding.root.addView(playerView)
     }
 
     override fun onStart() {

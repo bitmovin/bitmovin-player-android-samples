@@ -15,7 +15,7 @@ import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.api.ui.StyleConfig
 import com.bitmovin.player.samples.tv.playback.basic.R
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.tv.playback.basic.databinding.ActivityMainBinding
 
 private const val SEEKING_OFFSET = 10
 private val TAG = MainActivity::class.java.simpleName
@@ -23,13 +23,14 @@ private val TAG = MainActivity::class.java.simpleName
 
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Switch from splash screen to main theme when we are done loading
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         initializePlayer()
     }
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     private fun initializePlayer() {
         // Initialize PlayerView from layout and attach a new Player instance
         player = Player.create(this, createPlayerConfig()).also {
-            bitmovinPlayerView.player = it
+            binding.bitmovinPlayerView.player = it
         }
 
         // Create a new SourceConfig. In this case we are loading a DASH source.
@@ -49,29 +50,29 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        bitmovinPlayerView.onResume()
+        binding.bitmovinPlayerView.onResume()
         addEventListener()
         player.play()
     }
 
     override fun onStart() {
         super.onStart()
-        bitmovinPlayerView.onStart()
+        binding.bitmovinPlayerView.onStart()
     }
 
     override fun onPause() {
         removeEventListener()
-        bitmovinPlayerView.onPause()
+        binding.bitmovinPlayerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        bitmovinPlayerView.onStop()
+        binding.bitmovinPlayerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        binding.bitmovinPlayerView.onDestroy()
         super.onDestroy()
     }
 

@@ -13,22 +13,24 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.bitmovin.player.casting.BitmovinCastManager
+import com.bitmovin.player.samples.casting.basic.databinding.ActivityMainBinding
 import com.google.android.gms.cast.framework.CastButtonFactory
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         // Update the context the BitmovinCastManager is using
         // This should be done in every Activity's onCreate using the cast function
         BitmovinCastManager.getInstance().updateContext(this)
 
         //Setup ListView, ListAdapter and the ListItems
         val exampleListItems = getExampleListItems()
-        listview.adapter = ListAdapter(this, 0, exampleListItems)
-        listview.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+        binding.listview.adapter = ListAdapter(this, 0, exampleListItems)
+        binding.listview.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             onListItemClicked(parent.getItemAtPosition(position) as ListItem)
         }
     }

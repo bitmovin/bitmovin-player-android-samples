@@ -22,8 +22,8 @@ import com.bitmovin.player.api.offline.options.OfflineOptionEntryAction
 import com.bitmovin.player.api.offline.options.OfflineOptionEntryState
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.samples.offline.playback.databinding.ActivityMainBinding
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.IOException
 import java.util.*
@@ -36,9 +36,12 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
     private var retryOfflinePlayback = true
     private var listItemForRetry: ListItem? = null
 
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onStart() {
@@ -50,8 +53,8 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         // Creating the ListView containing 2 example streams, which can be downloaded using this app.
         listItems.addAll(getListItems())
         listAdapter = ListAdapter(this, 0, listItems, this)
-        listView.adapter = listAdapter
-        listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+        binding.listView.adapter = listAdapter
+        binding.listView.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
             onListItemClicked(parent.getItemAtPosition(position) as ListItem)
         }
     }
@@ -66,7 +69,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         listItems.map { it.offlineContentManager }.forEach(OfflineContentManager::release)
         listItems.clear()
         listAdapter = null
-        listView.onItemClickListener = null
+        binding.listView.onItemClickListener = null
     }
 
     private fun requestOfflineContentOptions(listItems: List<ListItem>) {

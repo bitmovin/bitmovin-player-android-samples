@@ -11,7 +11,7 @@ import com.bitmovin.player.api.advertising.AdItem
 import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.ads.basic.databinding.ActivityMainBinding
 
 // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
 private const val AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator="
@@ -21,10 +21,12 @@ private const val AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Create AdSources
         val firstAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_1)
@@ -58,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Add PlayerView to the layout
-        root.addView(playerView, 0)
+        binding.root.addView(playerView, 0)
     }
 
     override fun onStart() {

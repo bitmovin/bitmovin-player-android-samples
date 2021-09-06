@@ -17,7 +17,7 @@ import com.bitmovin.player.api.playlist.ReplayMode
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.playlist.basic.databinding.ActivityMainBinding
 
 private const val SintelHls = "https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
 private const val ArtOfMotionProgressive = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4"
@@ -26,13 +26,15 @@ private const val KronehitLiveHls = "https://bitcdn-kronehit.bitmovin.com/v2/hls
 
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         player = Player.create(this, PlayerConfig()).also {
-            playerView.player = it
+            binding.playerView.player = it
         }
 
         initializePlayer()
@@ -40,26 +42,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        playerView.onStart()
+        binding.playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView.onResume()
+        binding.playerView.onResume()
     }
 
     override fun onPause() {
-        playerView.onPause()
+        binding.playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        playerView.onStop()
+        binding.playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        playerView.onDestroy()
+        binding.playerView.onDestroy()
         player.off(::onPlaylistTransition)
         super.onDestroy()
     }
@@ -116,7 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onPlaylistTransition(event: PlayerEvent.PlaylistTransition) {
-        playerView.post {
+        binding.playerView.post {
             val text = "Transitioned from ${event.from.config.title} to ${event.to.config.title}."
             Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
         }

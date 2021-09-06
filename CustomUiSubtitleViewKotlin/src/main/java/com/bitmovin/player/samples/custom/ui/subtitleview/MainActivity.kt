@@ -10,16 +10,18 @@ import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.api.ui.StyleConfig
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.custom.ui.subtitleview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player
     private lateinit var playerView: PlayerView
     private lateinit var subtitleView: SubtitleView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Create new StyleConfig
         val styleConfig = StyleConfig()
@@ -42,13 +44,13 @@ class MainActivity : AppCompatActivity() {
         subtitleView.setPlayer(player)
 
         // Setup minimalistic controls for the player
-        playerControls.setPlayer(player)
+        binding.playerControls.setPlayer(player)
 
         // Add the SubtitleView to the layout
-        playerContainer.addView(subtitleView)
+        binding.playerContainer.addView(subtitleView)
 
         // Add the PlayerView to the layout as first position (so it is the behind the SubtitleView)
-        playerContainer.addView(playerView, 0)
+        binding.playerContainer.addView(playerView, 0)
     }
 
     override fun onStart() {

@@ -15,7 +15,7 @@ import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.event.Event
 import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.SourceEvent
-import kotlinx.android.synthetic.main.player_controls.view.*
+import com.bitmovin.player.samples.custom.ui.subtitleview.databinding.PlayerControlsBinding
 
 private const val LIVE = "LIVE"
 
@@ -27,6 +27,8 @@ class PlayerControls : LinearLayout {
 
     private var live: Boolean = false
 
+    private lateinit var binding: PlayerControlsBinding
+
     constructor(context: Context, attributeSet: AttributeSet) : super(context, attributeSet) {
         setup()
     }
@@ -36,14 +38,14 @@ class PlayerControls : LinearLayout {
     }
 
     private fun setup() {
-        LayoutInflater.from(context).inflate(R.layout.player_controls, this)
+        binding = PlayerControlsBinding.inflate(LayoutInflater.from(context), this, true)
 
         playDrawable = ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp)
         pauseDrawable = ContextCompat.getDrawable(context, R.drawable.ic_pause_black_24dp)
 
-        seekbar.setOnSeekBarChangeListener(seekBarChangeListener)
-        playButton.setOnClickListener(onClickListener)
-        subtitleButton.setOnClickListener(onClickListener)
+        binding.seekbar.setOnSeekBarChangeListener(seekBarChangeListener)
+        binding.playButton.setOnClickListener(onClickListener)
+        binding.subtitleButton.setOnClickListener(onClickListener)
     }
 
     fun setPlayer(player: Player) {
@@ -100,13 +102,13 @@ class PlayerControls : LinearLayout {
     }
 
     private val onClickListener = OnClickListener { view ->
-        if (view === playButton) {
+        if (view === binding.playButton) {
             if (player.isPlaying) {
                 player.pause()
             } else {
                 player.play()
             }
-        } else if (view === subtitleButton) {
+        } else if (view === binding.subtitleButton) {
             onSubtitleDialogButton()
         }
     }
@@ -116,7 +118,7 @@ class PlayerControls : LinearLayout {
      */
 
     private fun updateUi(event: Event? = null) {
-        seekbar.post {
+        binding.seekbar.post {
             val positionMs: Int
             val durationMs: Int
 
@@ -124,10 +126,10 @@ class PlayerControls : LinearLayout {
             if (live != player.isLive) {
                 live = player.isLive
                 if (live) {
-                    positionView.visibility = View.GONE
-                    durationView.text = LIVE
+                    binding.positionView.visibility = View.GONE
+                    binding.durationView.text = LIVE
                 } else {
-                    positionView.visibility = View.VISIBLE
+                    binding.positionView.visibility = View.VISIBLE
                 }
             }
 
@@ -142,19 +144,19 @@ class PlayerControls : LinearLayout {
                 durationMs = (player.duration * 1000).toInt()
 
                 // Update the TextViews displaying the current position and duration
-                positionView.text = millisecondsToTimeString(positionMs)
-                durationView.text = millisecondsToTimeString(durationMs)
+                binding.positionView.text = millisecondsToTimeString(positionMs)
+                binding.durationView.text = millisecondsToTimeString(durationMs)
             }
 
             // Update the values of the Seekbar
-            seekbar.progress = positionMs
-            seekbar.max = durationMs
+            binding.seekbar.progress = positionMs
+            binding.seekbar.max = durationMs
 
             // Update the image of the playback button
             if (player.isPlaying) {
-                playButton.setImageDrawable(pauseDrawable)
+                binding.playButton.setImageDrawable(pauseDrawable)
             } else {
-                playButton.setImageDrawable(playDrawable)
+                binding.playButton.setImageDrawable(playDrawable)
             }
         }
     }

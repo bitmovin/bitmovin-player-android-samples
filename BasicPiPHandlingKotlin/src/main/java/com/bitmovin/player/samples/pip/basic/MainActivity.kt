@@ -8,29 +8,31 @@ import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.on
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.samples.pip.basic.databinding.ActivityMainBinding
 import com.bitmovin.player.ui.DefaultPictureInPictureHandler
-import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var bitmovinPlayer: Player
     private var playerShouldPause = true
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        bitmovinPlayer = bitmovinPlayerView.player!!
+        bitmovinPlayer = binding.bitmovinPlayerView.player!!
 
         // Create a PictureInPictureHandler and set it on the BitmovinPlayerView
         val pictureInPictureHandler = DefaultPictureInPictureHandler(this, bitmovinPlayer)
-        bitmovinPlayerView.setPictureInPictureHandler(pictureInPictureHandler)
+        binding.bitmovinPlayerView.setPictureInPictureHandler(pictureInPictureHandler)
 
         initializePlayer()
     }
 
     override fun onStart() {
-        bitmovinPlayerView.onStart()
+        binding.bitmovinPlayerView.onStart()
         super.onStart()
     }
 
@@ -38,24 +40,24 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         // Add the PictureInPictureEnterListener to the PlayerView
-        bitmovinPlayerView.on(::onPipEnter)
+        binding.bitmovinPlayerView.on(::onPipEnter)
 
-        bitmovinPlayerView.onResume()
+        binding.bitmovinPlayerView.onResume()
     }
 
     override fun onPause() {
         if (playerShouldPause) {
-            bitmovinPlayerView.onPause()
+            binding.bitmovinPlayerView.onPause()
         }
         playerShouldPause = true
 
-        bitmovinPlayerView.off(::onPipEnter)
+        binding.bitmovinPlayerView.off(::onPipEnter)
 
         super.onPause()
     }
 
     override fun onDestroy() {
-        bitmovinPlayerView.onDestroy()
+        binding.bitmovinPlayerView.onDestroy()
         super.onDestroy()
     }
 
@@ -78,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         } else {
             supportActionBar?.show()
         }
-        bitmovinPlayerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
+        binding.bitmovinPlayerView.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }
 
     private fun onPipEnter(event: PlayerEvent.PictureInPictureEnter) {

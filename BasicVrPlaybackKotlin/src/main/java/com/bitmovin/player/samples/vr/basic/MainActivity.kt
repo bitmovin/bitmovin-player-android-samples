@@ -7,17 +7,20 @@ import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.api.vr.VrConfig
 import com.bitmovin.player.api.vr.VrContentType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.vr.basic.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var player: Player
+    private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        player = playerView.player!!
+        player = binding.playerView.player!!
 
         // Enabling the gyroscopic controlling for the 360° video
         player.vr.isGyroscopeEnabled = true
@@ -26,26 +29,26 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        playerView.onStart()
+        binding.playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView.onResume()
+        binding.playerView.onResume()
     }
 
     override fun onPause() {
-        playerView.onPause()
+        binding.playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        playerView.onStop()
+        binding.playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        playerView.onDestroy()
+        binding.playerView.onDestroy()
         super.onDestroy()
     }
 

@@ -5,41 +5,43 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.drm.WidevineConfig
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.drm.basic.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private var player: Player? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        player = playerView.player
+        player = binding.playerView.player
         initializePlayer()
     }
 
     override fun onStart() {
-        playerView.onStart()
+        binding.playerView.onStart()
         super.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView.onResume()
+        binding.playerView.onResume()
     }
 
     override fun onPause() {
-        playerView.onPause()
+        binding.playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        playerView.onStop()
+        binding.playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        playerView.onDestroy()
+        binding.playerView.onDestroy()
         super.onDestroy()
     }
 

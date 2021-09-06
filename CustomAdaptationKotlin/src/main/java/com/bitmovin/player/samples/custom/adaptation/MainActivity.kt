@@ -10,15 +10,17 @@ import com.bitmovin.player.api.media.AdaptationConfig
 import com.bitmovin.player.api.media.video.quality.VideoAdaptation
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.custom.adaptation.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player
     private lateinit var playerView: PlayerView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         player = Player.create(this, createPlayerConfig())
         playerView = PlayerView(this, player)
@@ -26,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
 
         playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        root.addView(playerView, 0)
+        binding.root.addView(playerView, 0)
     }
 
     override fun onStart() {

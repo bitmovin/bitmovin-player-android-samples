@@ -9,15 +9,17 @@ import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.ui.StyleConfig
+import com.bitmovin.player.samples.custom.ui.html.databinding.ActivityPlaybackBinding
 import com.bitmovin.player.ui.CustomMessageHandler
-import kotlinx.android.synthetic.main.activity_playback.*
 
 class PlaybackActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
+    private lateinit var binding: ActivityPlaybackBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_playback)
+        binding = ActivityPlaybackBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
         // Creating a new PlayerConfig with a StyleConfig
@@ -55,9 +57,9 @@ class PlaybackActivity : AppCompatActivity() {
         player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add PlayerView to the layout as first child
-        playerRootLayout.addView(playerView, 0)
+        binding.playerRootLayout.addView(playerView, 0)
 
-        toggleCloseButtonStateButton.setOnClickListener {
+        binding.toggleCloseButtonStateButton.setOnClickListener {
             customMessageHandler.sendMessage("toggleCloseButton", null)
         }
     }

@@ -4,49 +4,51 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.fullscreen.basic.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private var player: Player? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
 
-        player = playerView.player
+        player = binding.playerView.player
 
         // Instantiate a custom FullscreenHandler
-        val customFullscreenHandler = CustomFullscreenHandler(this, playerView, toolbar)
+        val customFullscreenHandler = CustomFullscreenHandler(this, binding.playerView, binding.toolbar)
         // Set the FullscreenHandler to the PlayerView
-        playerView.setFullscreenHandler(customFullscreenHandler)
+        binding.playerView.setFullscreenHandler(customFullscreenHandler)
 
         initializePlayer()
     }
 
     override fun onStart() {
         super.onStart()
-        playerView.onStart()
+        binding.playerView.onStart()
     }
 
     override fun onResume() {
         super.onResume()
-        playerView.onResume()
+        binding.playerView.onResume()
     }
 
     override fun onPause() {
-        playerView.onPause()
+        binding.playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        playerView.onStop()
+        binding.playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        playerView.onDestroy()
+        binding.playerView.onDestroy()
         super.onDestroy()
     }
 

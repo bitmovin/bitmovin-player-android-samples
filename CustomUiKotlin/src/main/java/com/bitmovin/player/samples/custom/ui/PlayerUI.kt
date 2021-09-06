@@ -18,7 +18,7 @@ import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.event.*
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.ui.FullscreenHandler
-import kotlinx.android.synthetic.main.player_ui.view.*
+import com.bitmovin.player.samples.custom.ui.databinding.PlayerUiBinding
 import java.util.*
 
 private const val LIVE = "Live"
@@ -30,6 +30,9 @@ class PlayerUI(
 ) : RelativeLayout(context) {
     // Create new Player with our PlayerConfig
     private val player: Player = Player.create(context, playerConfig)
+    private var binding: PlayerUiBinding = PlayerUiBinding.inflate(
+        LayoutInflater.from(context), this, true
+    )
 
     // Create new PlayerView with our Player
     private val playerView: PlayerView = PlayerView(context, player).apply {
@@ -59,8 +62,8 @@ class PlayerUI(
 
     private val onClickListener = OnClickListener { view ->
         when {
-            view === playButton || view === this@PlayerUI -> player.togglePlayback()
-            (view === fullscreenButton) -> playerView.toggleFullscreen()
+            view === binding.playButton || view === this@PlayerUI -> player.togglePlayback()
+            (view === binding.fullscreenButton) -> playerView.toggleFullscreen()
         }
     }
 
@@ -79,16 +82,17 @@ class PlayerUI(
     }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.player_ui, this)
 
         playDrawable = ContextCompat.getDrawable(context, R.drawable.ic_play_arrow_black_24dp)
         pauseDrawable = ContextCompat.getDrawable(context, R.drawable.ic_pause_black_24dp)
 
-        seekbar.setOnSeekBarChangeListener(seekBarChangeListener)
-        playButton.setOnClickListener(onClickListener)
-        fullscreenButton.setOnClickListener(onClickListener)
-        playButton.setOnTouchListener(onTouchListener)
-        seekbar.setOnTouchListener(onTouchListener)
+        binding.apply {
+            seekbar.setOnSeekBarChangeListener(seekBarChangeListener)
+            playButton.setOnClickListener(onClickListener)
+            fullscreenButton.setOnClickListener(onClickListener)
+            playButton.setOnTouchListener(onTouchListener)
+            seekbar.setOnTouchListener(onTouchListener)
+        }
         setOnTouchListener(onTouchListener)
 
         // Add PlayerView to the layout
@@ -152,7 +156,7 @@ class PlayerUI(
             }
 
             val visibility = if (visible) View.VISIBLE else View.INVISIBLE
-            controlView.visibility = visibility
+            binding.controlView.visibility = visibility
         }
     }
 
@@ -189,7 +193,7 @@ class PlayerUI(
      * Methods for UI update
      */
     private fun updateUi(event: Event? = null) {
-        seekbar.post {
+        binding.seekbar.post {
             // if the live state of the player changed, the UI should change it's mode
             val positionMs: Int
             val durationMs: Int
@@ -197,10 +201,10 @@ class PlayerUI(
             if (live != player.isLive) {
                 live = player.isLive
                 if (live) {
-                    positionView.visibility = View.GONE
-                    durationView.text = LIVE
+                    binding.positionView.visibility = View.GONE
+                    binding.durationView.text = LIVE
                 } else {
-                    positionView.visibility = View.VISIBLE
+                    binding.positionView.visibility = View.VISIBLE
                 }
             }
 
@@ -215,19 +219,19 @@ class PlayerUI(
                 durationMs = (player.duration * 1000).toInt()
 
                 // Update the TextViews displaying the current position and duration
-                positionView.text = millisecondsToTimeString(positionMs)
-                durationView.text = millisecondsToTimeString(durationMs)
+                binding.positionView.text = millisecondsToTimeString(positionMs)
+                binding.durationView.text = millisecondsToTimeString(durationMs)
             }
 
             // Update the values of the Seekbar
-            seekbar.progress = positionMs
-            seekbar.max = durationMs
+            binding.seekbar.progress = positionMs
+            binding.seekbar.max = durationMs
 
             // Update the image of the playback button
             if (player.isPlaying) {
-                playButton.setImageDrawable(pauseDrawable)
+                binding.playButton.setImageDrawable(pauseDrawable)
             } else {
-                playButton.setImageDrawable(playDrawable)
+                binding.playButton.setImageDrawable(playDrawable)
             }
         }
     }

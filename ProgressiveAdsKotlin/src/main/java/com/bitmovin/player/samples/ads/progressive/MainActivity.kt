@@ -12,17 +12,19 @@ import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
-import kotlinx.android.synthetic.main.activity_main.*
+import com.bitmovin.player.samples.ads.progressive.databinding.ActivityMainBinding
 
 private const val AD_SOURCE_1 = "https://bitmovin-a.akamaihd.net/content/testing/ads/testad2s.mp4"
 private const val AD_SOURCE_2 = "file:///android_asset/testad2s.mp4"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         // Create AdSources
         val firstAdSource = AdSource(AdSourceType.Progressive, AD_SOURCE_1)
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         playerView.player?.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
 
         // Add PlayerView to the layout
-        root.addView(playerView, 0)
+        binding.root.addView(playerView, 0)
     }
 
     override fun onStart() {
