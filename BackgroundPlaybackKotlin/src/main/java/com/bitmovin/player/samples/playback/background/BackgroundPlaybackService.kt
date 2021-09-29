@@ -2,18 +2,13 @@ package com.bitmovin.player.samples.playback.background
 
 import android.app.Notification
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
-import androidx.core.app.NotificationCompat
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.ui.notification.CustomActionReceiver
 import com.bitmovin.player.api.ui.notification.NotificationListener
 import com.bitmovin.player.ui.notification.DefaultMediaDescriptor
 import com.bitmovin.player.ui.notification.PlayerNotificationManager
-
-import com.google.android.exoplayer2.util.NotificationUtil
 
 private const val NOTIFICATION_CHANNEL_ID = "com.bitmovin.player"
 private const val NOTIFICATION_ID = 1
@@ -21,7 +16,6 @@ private const val NOTIFICATION_ID = 1
 class BackgroundPlaybackService : Service() {
     // Binder given to clients
     private val binder = BackgroundBinder()
-    private var bound = 0
 
     private var player: Player? = null
     private lateinit var playerNotificationManager: PlayerNotificationManager
@@ -41,17 +35,18 @@ class BackgroundPlaybackService : Service() {
 
         // Create a PlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.
-        NotificationUtil.createNotificationChannel(this, NOTIFICATION_CHANNEL_ID, R.string.control_notification_channel, NotificationUtil.IMPORTANCE_LOW)
-
-        playerNotificationManager = PlayerNotificationManager(
+        playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
             this,
             NOTIFICATION_CHANNEL_ID,
+            R.string.control_notification_channel,
             NOTIFICATION_ID,
-            DefaultMediaDescriptor(assets),
-            customActionReceiver
+            DefaultMediaDescriptor(assets)
         ).apply {
             setNotificationListener(object : NotificationListener {
-                override fun onNotificationStarted(notificationId: Int, notification: Notification) {
+                override fun onNotificationStarted(
+                    notificationId: Int,
+                    notification: Notification
+                ) {
                     startForeground(notificationId, notification)
                 }
 
@@ -74,30 +69,12 @@ class BackgroundPlaybackService : Service() {
     }
 
     override fun onBind(intent: Intent): IBinder {
-        bound++
         return binder
     }
 
     override fun onUnbind(intent: Intent): Boolean {
-        bound--
         return super.onUnbind(intent)
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int) = START_STICKY
-
-    private val customActionReceiver = object : CustomActionReceiver {
-        override fun createCustomActions(context: Context): Map<String, NotificationCompat.Action> = emptyMap()
-
-        override fun getCustomActions(player: Player) = if (!player.isPlaying && bound == 0) {
-            listOf(PlayerNotificationManager.ACTION_STOP)
-        } else {
-            emptyList()
-        }
-
-        override fun onCustomAction(player: Player, action: String, intent: Intent) {
-            when (action) {
-                PlayerNotificationManager.ACTION_STOP -> stopSelf()
-            }
-        }
-    }
 }

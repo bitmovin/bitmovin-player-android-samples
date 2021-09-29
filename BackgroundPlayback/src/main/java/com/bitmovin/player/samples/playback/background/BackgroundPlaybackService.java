@@ -28,7 +28,6 @@ public class BackgroundPlaybackService extends Service {
 
     // Binder given to clients
     private final IBinder binder = new BackgroundBinder();
-    private int bound = 0;
 
     private Player player;
     private PlayerNotificationManager playerNotificationManager;
@@ -51,15 +50,13 @@ public class BackgroundPlaybackService extends Service {
 
         // Create a PlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.
-        NotificationUtil.createNotificationChannel(this, NOTIFICATION_CHANNEL_ID, R.string.control_notification_channel, NotificationUtil.IMPORTANCE_LOW);
-
-        playerNotificationManager = new PlayerNotificationManager(
-            this,
-            NOTIFICATION_CHANNEL_ID,
-            NOTIFICATION_ID,
-            new DefaultMediaDescriptor(getAssets()),
-            customActionReceiver
-        );
+        this.playerNotificationManager = PlayerNotificationManager.createWithNotificationChannel(
+                this,
+                NOTIFICATION_CHANNEL_ID,
+                R.string.control_notification_channel,
+                NOTIFICATION_ID,
+                new DefaultMediaDescriptor(this.getAssets())
+            );
 
         playerNotificationManager.setNotificationListener(new NotificationListener() {
             @Override
@@ -89,13 +86,11 @@ public class BackgroundPlaybackService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        bound++;
         return binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        bound--;
         return super.onUnbind(intent);
     }
 
@@ -103,29 +98,4 @@ public class BackgroundPlaybackService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         return START_STICKY;
     }
-
-    private final CustomActionReceiver customActionReceiver = new CustomActionReceiver() {
-        @Override
-        public Map<String, NotificationCompat.Action> createCustomActions(Context context) {
-            return new HashMap<>();
-        }
-
-        @Override
-        public List<String> getCustomActions(Player player) {
-            List<String> actions = new ArrayList<>();
-
-            if (!player.isPlaying() && bound == 0) {
-                actions.add(PlayerNotificationManager.ACTION_STOP);
-            }
-
-            return actions;
-        }
-
-        @Override
-        public void onCustomAction(Player player, String action, Intent intent) {
-            if (PlayerNotificationManager.ACTION_STOP.equals(action)) {
-                stopSelf();
-            }
-        }
-    };
 }
