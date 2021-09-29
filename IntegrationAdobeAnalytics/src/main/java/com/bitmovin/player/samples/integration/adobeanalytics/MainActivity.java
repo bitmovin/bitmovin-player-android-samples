@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
         // Assign created SourceItem to the PlayerConfiguration
         playerConfiguration.setSourceItem(sourceItem);
-        // Assing the AdvertisingConfiguration to the PlayerConfiguration
+        // Assign the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
 

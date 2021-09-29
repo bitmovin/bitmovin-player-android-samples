@@ -28,7 +28,6 @@ public class BackgroundPlaybackService extends Service
 
     // Binder given to clients
     private final IBinder binder = new BackgroundBinder();
-    private int bound = 0;
 
     private BitmovinPlayer player;
     private BitmovinPlayerNotificationManager playerNotificationManager;
@@ -56,9 +55,14 @@ public class BackgroundPlaybackService extends Service
 
         // Create a BitmovinPlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.
-        NotificationUtil.createNotificationChannel(context, NOTIFICATION_CHANNEL_ID, R.string.control_notification_channel, NotificationUtil.IMPORTANCE_LOW);
-        this.playerNotificationManager = new BitmovinPlayerNotificationManager(
-                this, NOTIFICATION_CHANNEL_ID, NOTIFICATION_ID, new DefaultMediaDescriptor(this.getAssets()), this.customActionReceiver);
+        this.playerNotificationManager =
+            BitmovinPlayerNotificationManager.createWithNotificationChannel(
+                this,
+                NOTIFICATION_CHANNEL_ID,
+                R.string.control_notification_channel,
+                NOTIFICATION_ID,
+                new DefaultMediaDescriptor(this.getAssets())
+            );
 
         this.playerNotificationManager.setNotificationListener(new NotificationListener()
         {
@@ -93,14 +97,12 @@ public class BackgroundPlaybackService extends Service
     @Override
     public IBinder onBind(Intent intent)
     {
-        this.bound++;
         return this.binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent)
     {
-        this.bound--;
         return super.onUnbind(intent);
     }
 
@@ -109,33 +111,4 @@ public class BackgroundPlaybackService extends Service
     {
         return START_STICKY;
     }
-
-    private CustomActionReceiver customActionReceiver = new CustomActionReceiver()
-    {
-        @Override
-        public Map<String, NotificationCompat.Action> createCustomActions(Context context)
-        {
-            return new HashMap<>();
-        }
-
-        @Override
-        public List<String> getCustomActions(BitmovinPlayer player)
-        {
-            List<String> actions = new ArrayList<>();
-            if (!player.isPlaying() && bound == 0)
-            {
-                actions.add(BitmovinPlayerNotificationManager.ACTION_STOP);
-            }
-            return actions;
-        }
-
-        @Override
-        public void onCustomAction(BitmovinPlayer player, String action, Intent intent)
-        {
-            if (BitmovinPlayerNotificationManager.ACTION_STOP.equals(action))
-            {
-                stopSelf();
-            }
-        }
-    };
 }

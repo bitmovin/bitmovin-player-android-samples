@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         // Creating a new PlayerConfiguration
         PlayerConfiguration playerConfiguration = new PlayerConfiguration();
-        // Assing the AdvertisingConfiguration to the PlayerConfiguration
+        // Assign the AdvertisingConfiguration to the PlayerConfiguration
         // All ads in the AdvertisingConfiguration will be scheduled automatically
         playerConfiguration.setAdvertisingConfiguration(advertisingConfiguration);
 
