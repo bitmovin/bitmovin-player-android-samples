@@ -119,7 +119,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     allprojects {
         repositories {
             google()
-            jcenter()
+            mavenCentral()
 
             maven {
                 url 'https://artifacts.bitmovin.com/artifactory/public-releases'
