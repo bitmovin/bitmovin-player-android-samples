@@ -26,6 +26,7 @@ class PlayerActivity : AppCompatActivity() {
         val sourceTitle = intent.getStringExtra(SOURCE_TITLE)
         if (sourceUrl == null || sourceTitle == null) {
             finish()
+            return
         }
 
         player = binding.bitmovinPlayerView.player!!

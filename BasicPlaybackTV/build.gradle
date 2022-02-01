@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.tv.playback.basic"
@@ -27,7 +26,6 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.leanback:leanback:1.0.0'
 
     implementation supportDependencies.appCompat

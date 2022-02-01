@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.bitmovin.player.samples.tv.playback.basic">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.bitmovin.player.samples.tv.playback.basic">
 
     <uses-feature
-            android:name="android.hardware.touchscreen"
-            android:required="false" />
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
     <uses-feature
-            android:name="android.software.leanback"
-            android:required="false" />
+        android:name="android.software.leanback"
+        android:required="false" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-            android:icon="@mipmap/ic_launcher"
-            android:label= "@string/app_name"
-            android:theme="@style/AppTheme"
-            android:banner="@drawable/banner"
-            tools:ignore="GoogleAppIndexingWarning">
+        android:banner="@drawable/banner"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning"
+        tools:targetApi="lollipop">
         <activity
-                android:name="com.bitmovin.samples.tv.playback.basic.MainActivity"
-                android:windowSoftInputMode="adjustPan|stateHidden"
-                android:theme="@style/AppTheme.BrandedLaunch"
-                android:screenOrientation="landscape">
+            android:name="com.bitmovin.samples.tv.playback.basic.MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.BrandedLaunch"
+            android:windowSoftInputMode="adjustPan|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
@@ -31,8 +33,8 @@
         </activity>
 
         <meta-data
-                android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-                android:value="--Your-Key--"/>
+            android:name="BITMOVIN_PLAYER_LICENSE_KEY"
+            android:value="--Your-Key--" />
     </application>
 
 </manifest>

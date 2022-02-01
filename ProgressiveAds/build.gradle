@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -29,9 +28,7 @@ android {
 dependencies {
     implementation supportDependencies.appCompat
     implementation bitmovinPlayerDependencies.bitmovinPlayer
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion" // only needed if ads are used
-    implementation "com.google.android.gms:play-services-ads:$playServicesAdsVersion" // only needed if ads are used
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0' // only needed if ads are used
+    implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion" // only needed if ads are used
 }

@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -32,5 +31,4 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-cast-framework:$playServicesCastVersion" //only needed if Chromecast is used
     implementation 'androidx.mediarouter:mediarouter:1.0.0'  //only needed if Chromecast is used
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'  //only needed if Chromecast is used
 }

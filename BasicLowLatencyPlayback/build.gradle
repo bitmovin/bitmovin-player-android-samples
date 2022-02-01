@@ -2,7 +2,6 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -29,7 +28,6 @@ android {
 dependencies {
     implementation supportDependencies.appCompat
     implementation bitmovinPlayerDependencies.bitmovinPlayer
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     // added for layout purpose only
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

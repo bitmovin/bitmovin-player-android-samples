@@ -1,19 +1,18 @@
 ext {
     // Versions
-    supportLibraryVersion = '27.1.1'
-    playServicesAdsVersion = '19.3.0'
-    imaSdkVersion = '3.19.4'
-    playServicesCastVersion = '19.0.0'
-    bitmovinPlayerVersion = '3.12.0'
+    playServicesAdsIdentifierVersion = '18.0.1'
+    imaSdkVersion = '3.26.0'
+    playServicesCastVersion = '21.0.1'
+    bitmovinPlayerVersion = '3.13.0'
 
     // Library dependencies
     supportDependencies = [
-            appCompat            : 'androidx.appcompat:appcompat:1.2.0',
+            appCompat: 'androidx.appcompat:appcompat:1.2.0',
             localbroadcastmanager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0',
-            gson                 : 'com.google.code.gson:gson:2.8.2'
+            gson: 'com.google.code.gson:gson:2.8.2'
     ]
 
     bitmovinPlayerDependencies = [
-            bitmovinPlayer   :         "com.bitmovin.player:player:${bitmovinPlayerVersion}"
+            bitmovinPlayer: "com.bitmovin.player:player:${bitmovinPlayerVersion}"
     ]
 }

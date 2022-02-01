@@ -3,7 +3,6 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion rootProject.compileSdkVersion
-    buildToolsVersion rootProject.buildToolsVersion
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -35,5 +34,5 @@ dependencies {
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion" // only needed if ads are used
-    implementation "com.google.android.gms:play-services-ads:$playServicesAdsVersion" // only needed if ads are used
+    implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion" // only needed if ads are used
 }

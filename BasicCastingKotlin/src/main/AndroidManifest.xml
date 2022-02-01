@@ -12,7 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -20,33 +22,34 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".PlayerActivity" />
+        <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
 
         <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-            android:value="--Your-Key--"/>
+            android:value="--Your-Key--" />
 
         <!-- Following lines are needed for the usage of cast -->
 
         <activity
             android:name="com.bitmovin.player.casting.ExpandedControllerActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:launchMode="singleTask"
-            android:theme="@style/Theme.CastVideosTheme"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.CastVideosTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bitmovin.player.samples.casting.basic.MainActivity"/>
+                android:value="com.bitmovin.player.samples.casting.basic.MainActivity" />
         </activity>
 
         <meta-data
-            android:name=
-                "com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="com.bitmovin.player.casting.BitmovinCastOptionsProvider"
-            />
+            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="com.bitmovin.player.casting.BitmovinCastOptionsProvider" />
 
     </application>
 
