@@ -1,7 +1,10 @@
 # bitmovin-player-android-samples
-This repository contains sample apps using the Bitmovin Player Android SDK.
+This repository contains sample apps using the Bitmovin Player Android SDK Version 2 (Unsupported).
 
-**Table of Content**
+| :warning:  As of May 1, 2022, Version 2 of Bitmovin's Android/AndroidTV & iOS/tvOS Player SDKs is unsupported (see [Bitmovin Player Lifecycle Policy](https://bitmovin.com/docs/player/articles/bitmovin-player-lifecycle-policy) for more details).<br>To make use of the latest features, please upgrade to Version 3 of our Player SDKs using our Migration Guides for [iOS](https://bitmovin.com/docs/player/tutorials/migration-guide-ios-tvos-sdk-v2-to-v3) and [Android](https://bitmovin.com/docs/player/tutorials/migration-guide-android-sdk-v2-to-v3). |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+
+**Table of Contents**
 
 * [Available Sample Apps](#available-sample-apps)
 * [Sample Apps Setup Instructions](#sample-apps-setup-instructions)
