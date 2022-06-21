@@ -333,7 +333,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"
         OfflineContentManager artOfMotionDrmOfflineContentManager = OfflineContentManager.getOfflineContentManager(artOfMotionDrm, rootFolder.getPath(), "artOfMotionDrm", this, this);
 
-        // Create a ListItem from the SourceConfig and the OfflienContentManager
+        // Create a ListItem from the SourceConfig and the OfflineContentManager
         ListItem artOfMotionDrmListItem = new ListItem(artOfMotionDrm, artOfMotionDrmOfflineContentManager);
 
         // Add the ListItem to the List
