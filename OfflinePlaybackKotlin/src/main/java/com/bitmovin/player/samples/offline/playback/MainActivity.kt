@@ -276,7 +276,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         // Initialize a SourceConfig with a DRM configuration
         val artOfMotionDrm = SourceConfig("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash)
-        artOfMotionDrm.drmConfig = WidevineConfig("https://widevine-proxy.appspot.com/proxy")
+        artOfMotionDrm.drmConfig = WidevineConfig("https://cwip-shaka-proxy.appspot.com/no_auth")
         artOfMotionDrm.title = "Art of Motion with DRM"
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"

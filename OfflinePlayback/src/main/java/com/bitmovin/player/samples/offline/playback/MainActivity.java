@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
 
         // Initialize a SourceConfig with a DRM configuration
         SourceConfig artOfMotionDrm = new SourceConfig("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash);
-        artOfMotionDrm.setDrmConfig(new WidevineConfig("https://widevine-proxy.appspot.com/proxy"));
+        artOfMotionDrm.setDrmConfig(new WidevineConfig("https://cwip-shaka-proxy.appspot.com/no_auth"));
         artOfMotionDrm.setTitle("Art of Motion with DRM");
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotionDrm"
