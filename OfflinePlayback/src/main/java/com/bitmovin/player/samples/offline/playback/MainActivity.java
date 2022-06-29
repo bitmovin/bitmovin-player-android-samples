@@ -9,16 +9,13 @@
 package com.bitmovin.player.samples.offline.playback;
 
 import android.content.ContextWrapper;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.api.deficiency.ErrorEvent;
 import com.bitmovin.player.api.deficiency.exception.DrmLicenseKeyExpiredException;
@@ -35,7 +32,6 @@ import com.bitmovin.player.api.offline.options.OfflineOptionEntryAction;
 import com.bitmovin.player.api.offline.options.OfflineOptionEntryState;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +43,6 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     private List<ListItem> listItems;
     private ListView listView;
     private ListAdapter listAdapter;
-    private Gson gson;
 
     private boolean retryOfflinePlayback = true;
     private ListItem listItemForRetry = null;
@@ -61,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     @Override
     protected void onStart() {
         super.onStart();
-        gson = new Gson();
         listView = (ListView) findViewById(R.id.listview);
 
         // Get the folder into which the downloaded offline content will be stored.
@@ -72,12 +66,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         listItems = getListItems();
         listAdapter = new ListAdapter(this, 0, listItems, this);
         listView.setAdapter(listAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                onListItemClicked((ListItem) parent.getItemAtPosition(position));
-            }
-        });
+        listView.setOnItemClickListener((parent, view, position, id) -> onListItemClicked((ListItem) parent.getItemAtPosition(position)));
     }
 
     @Override
@@ -114,17 +103,14 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         try {
             // First we try to get an OfflineSourceConfig from the OfflineContentManager, as we prefer offline content
             sourceConfig = listItem.getOfflineContentManager().getOfflineSourceConfig();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             // If it fails to load needed files
-        }
-        catch (DrmLicenseKeyExpiredException e) {
+        } catch (DrmLicenseKeyExpiredException e) {
             try {
                 listItemForRetry = listItem;
                 retryOfflinePlayback = true;
                 listItem.getOfflineContentManager().renewOfflineLicense();
-            }
-            catch (NoConnectionException e1) {
+            } catch (NoConnectionException e1) {
                 Toast.makeText(this, "The DRM license expired, but there is no network connection", Toast.LENGTH_LONG).show();
             }
         }
@@ -141,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
 
         // Add the SourceConfig to the Intent
         String extraName = sourceConfig instanceof OfflineSourceConfig ? PlayerActivity.OFFLINE_SOURCE_ITEM : PlayerActivity.SOURCE_ITEM;
-        playerActivityIntent.putExtra(extraName, gson.toJson(sourceConfig));
+        playerActivityIntent.putExtra(extraName, sourceConfig);
 
         //Start the PlayerActivity
         startActivity(playerActivityIntent);
@@ -207,18 +193,17 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
 
     @Override
     public void onSuspended(SourceConfig sourceConfig) {
-        Toast.makeText(this, "Suspended: " + sourceConfig.getTitle(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Suspended: " + sourceConfig.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onResumed(SourceConfig sourceConfig) {
-        Toast.makeText(this, "Resumed: " + sourceConfig.getTitle(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Resumed: " + sourceConfig.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
     /*
      * Listener methods for the two buttons every ListItem has
      */
-
     @Override
     public void showSelectionDialog(ListItem listItem) {
         OfflineContentOptions offlineContentOptions = listItem.getOfflineContentOptions();
@@ -232,8 +217,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
             try {
                 // Resetting the Action if set
                 oh.setAction(null);
-            }
-            catch (IllegalOperationException e) {
+            } catch (IllegalOperationException e) {
                 // Won't happen
             }
             entriesAsText[i] = oh.getId() + "-" + oh.getMimeType();
@@ -253,14 +237,12 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     }
 
     @Override
-    public void suspend(ListItem listItem)
-    {
+    public void suspend(ListItem listItem) {
         listItem.getOfflineContentManager().suspend();
     }
 
     @Override
-    public void resume(ListItem listItem)
-    {
+    public void resume(ListItem listItem) {
         listItem.getOfflineContentManager().resume();
     }
 
@@ -273,25 +255,21 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         try {
             // Passing the OfflineContentOptions with set OfflineOptionEntryActions to the OfflineContentManager
             offlineContentManager.process(listItem.getOfflineContentOptions());
-        }
-        catch (NoConnectionException e) {
+        } catch (NoConnectionException e) {
             e.printStackTrace();
         }
     }
 
     private AlertDialog.Builder generateAlertDialogBuilder(final ListItem listItem, final List<OfflineOptionEntry> entries, String[] entriesAsText, boolean[] entryCheckList) {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this).setMultiChoiceItems(entriesAsText, entryCheckList, new DialogInterface.OnMultiChoiceClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                try {
-                    // Set an Download/Delete action, if the user changes the checked state
-                    OfflineOptionEntry offlineOptionEntry = entries.get(which);
-                    offlineOptionEntry.setAction(isChecked ? OfflineOptionEntryAction.Download : OfflineOptionEntryAction.Delete);
-                }
-                catch (IllegalOperationException e) {
-                }
-
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this).setMultiChoiceItems(entriesAsText, entryCheckList, (dialog, which, isChecked) -> {
+            try {
+                // Set an Download/Delete action, if the user changes the checked state
+                OfflineOptionEntry offlineOptionEntry = entries.get(which);
+                offlineOptionEntry.setAction(isChecked ? OfflineOptionEntryAction.Download : OfflineOptionEntryAction.Delete);
+            } catch (IllegalOperationException e) {
+                e.printStackTrace();
             }
+
         });
         dialogBuilder.setPositiveButton(android.R.string.ok, (dialog, which) -> download(listItem));
         dialogBuilder.setNegativeButton(android.R.string.cancel, null);

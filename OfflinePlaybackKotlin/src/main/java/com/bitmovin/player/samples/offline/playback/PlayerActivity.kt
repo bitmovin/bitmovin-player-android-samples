@@ -3,10 +3,8 @@ package com.bitmovin.player.samples.offline.playback
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.offline.OfflineSourceConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.offline.playback.databinding.ActivityPlayerBinding
-import com.google.gson.Gson
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -24,15 +22,12 @@ class PlayerActivity : AppCompatActivity() {
         binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val gson = Gson()
-
-        val sourceConfig: SourceConfig
-        when {
+        val sourceConfig: SourceConfig = when {
             intent.hasExtra(SOURCE_CONFIG) -> {
-                sourceConfig = gson.fromJson(intent.getStringExtra(SOURCE_CONFIG), SourceConfig::class.java)
+                intent.getParcelableExtra(SOURCE_CONFIG)!!
             }
             intent.hasExtra(OFFLINE_SOURCE_CONFIG) -> {
-                sourceConfig = gson.fromJson(intent.getStringExtra(OFFLINE_SOURCE_CONFIG), OfflineSourceConfig::class.java)
+                intent.getParcelableExtra(OFFLINE_SOURCE_CONFIG)!!
             }
             else -> {
                 finish()

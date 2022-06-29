@@ -8,14 +8,14 @@
 
 package com.bitmovin.player.samples.offline.playback;
 
+import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
-import com.bitmovin.player.api.offline.OfflineSourceConfig;
 import com.bitmovin.player.api.source.SourceConfig;
-import com.google.gson.Gson;
 
 public class PlayerActivity extends AppCompatActivity {
 
@@ -24,21 +24,20 @@ public class PlayerActivity extends AppCompatActivity {
 
     private PlayerView playerView;
     private Player player;
-    private Gson gson = new Gson();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        Intent intent = getIntent();
+
         SourceConfig sourceConfig;
-        if (getIntent().hasExtra(SOURCE_ITEM)) {
-            sourceConfig = gson.fromJson(getIntent().getStringExtra(SOURCE_ITEM), SourceConfig.class);
-        }
-        else if (getIntent().hasExtra(OFFLINE_SOURCE_ITEM)) {
-            sourceConfig = gson.fromJson(getIntent().getStringExtra(OFFLINE_SOURCE_ITEM), OfflineSourceConfig.class);
-        }
-        else {
+        if (intent.hasExtra(SOURCE_ITEM)) {
+            sourceConfig = intent.getParcelableExtra(SOURCE_ITEM);
+        } else if (intent.hasExtra(OFFLINE_SOURCE_ITEM)) {
+            sourceConfig = intent.getParcelableExtra(OFFLINE_SOURCE_ITEM);
+        } else {
             finish();
             return;
         }
