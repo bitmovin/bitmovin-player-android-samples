@@ -1,7 +1,16 @@
 package com.bitmovin.player.samples.notification.basic;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
@@ -46,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         playerView.onStart();
         super.onStart();
+        requestMissingPermissions();
     }
 
     @Override
@@ -80,5 +90,19 @@ public class MainActivity extends AppCompatActivity {
         sourceConfig.setPosterSource("https://bitmovin-a.akamaihd.net/content/sintel/poster.png");
 
         player.load(sourceConfig);
+    }
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> { /* Do nothing */ }
+    );
+
+    private void requestMissingPermissions() {
+        if (Build.VERSION.SDK_INT < 33) return;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
     }
 }

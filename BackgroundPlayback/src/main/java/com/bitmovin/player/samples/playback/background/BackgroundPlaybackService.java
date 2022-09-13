@@ -15,7 +15,6 @@ import com.bitmovin.player.api.ui.notification.CustomActionReceiver;
 import com.bitmovin.player.api.ui.notification.NotificationListener;
 import com.bitmovin.player.ui.notification.DefaultMediaDescriptor;
 import com.bitmovin.player.ui.notification.PlayerNotificationManager;
-import com.google.android.exoplayer2.util.NotificationUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;

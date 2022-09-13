@@ -1,14 +1,19 @@
 package com.bitmovin.player.samples.playback.background
 
+import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
@@ -39,6 +44,7 @@ class MainActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         playerView.onStart()
+        requestMissingPermissions()
 
         // Bind and start the BackgroundPlaybackService
         val intent = Intent(this, BackgroundPlaybackService::class.java)
@@ -110,6 +116,19 @@ class MainActivity : AppCompatActivity() {
 
         override fun onServiceDisconnected(arg0: ComponentName) {
             bound = false
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(RequestPermission()) {
+        // Do nothing
+    }
+
+    private fun requestMissingPermissions() {
+        if (Build.VERSION.SDK_INT < 33) return
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }

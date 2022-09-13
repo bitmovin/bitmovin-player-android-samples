@@ -190,12 +190,21 @@ When you want to develop an own Android application using the Bitmovin Player An
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     ```
 
-    In addition, also add the permission for checking the network state
+    In addition, also add the permission for checking the network state. If targeting Android SDK version 33+ the permission for posting notifications has to be added as well:
 
     ```
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     ```
+    
+1. **Player Notification** - Beginning with Android 13, a permission is needed for posting notification. This means that if the `PlayerNotificationManager` is used, like in the **Background Playback** sample,the post notification permission has to be added when targeting SDK version 33+:
 
+    ```
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    ```
+   
+    Additionally the permission also has to be requested at runtime. This is explained in the [official Android docs](https://developer.android.com/training/permissions/requesting).
+    
 ## Proguard Configuration
 
 When using `Proguard`, we recommend doing no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`.

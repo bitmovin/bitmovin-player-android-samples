@@ -8,14 +8,22 @@
 
 package com.bitmovin.player.samples.offline.playback;
 
+import android.Manifest;
 import android.content.ContextWrapper;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.bitmovin.player.api.deficiency.ErrorEvent;
 import com.bitmovin.player.api.deficiency.exception.DrmLicenseKeyExpiredException;
@@ -57,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
     protected void onStart() {
         super.onStart();
         listView = (ListView) findViewById(R.id.listview);
+        requestMissingPermissions();
 
         // Get the folder into which the downloaded offline content will be stored.
         // There can be multiple of such root folders and every can contain several offline contents.
@@ -319,5 +328,19 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
 
 
         return listItems;
+    }
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> { /* Do nothing */ }
+    );
+
+    private void requestMissingPermissions() {
+        if (Build.VERSION.SDK_INT < 33) return;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
     }
 }

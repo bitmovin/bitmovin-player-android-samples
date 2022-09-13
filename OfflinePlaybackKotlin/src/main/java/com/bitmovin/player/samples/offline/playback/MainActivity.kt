@@ -1,12 +1,19 @@
 package com.bitmovin.player.samples.offline.playback
 
+import android.Manifest
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.bitmovin.player.api.deficiency.ErrorEvent
 import com.bitmovin.player.api.deficiency.exception.DrmLicenseKeyExpiredException
 import com.bitmovin.player.api.deficiency.exception.IllegalOperationException
@@ -44,6 +51,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
     override fun onStart() {
         super.onStart()
+        requestMissingPermissions()
         // Get the folder into which the downloaded offline content will be stored.
         // There can be multiple of such root folders and every can contain several offline contents.
         rootFolder = getDir("offline", ContextWrapper.MODE_PRIVATE)
@@ -320,5 +328,18 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
         listItems.add(artOfMotionDrmListItem)
 
         return listItems
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) {
+        // Do nothing
+    }
+
+    private fun requestMissingPermissions() {
+        if (Build.VERSION.SDK_INT < 33) return
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
     }
 }

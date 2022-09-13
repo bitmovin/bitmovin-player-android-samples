@@ -4,12 +4,17 @@ ext {
     imaSdkVersion = '3.26.0'
     playServicesCastVersion = '21.0.1'
     bitmovinPlayerVersion = '3.24.0'
+    appcompat_version = "1.5.1"
+    activity_version = "1.5.1"
+    fragment_version = "1.5.1"
 
     // Library dependencies
     supportDependencies = [
-            appCompat: 'androidx.appcompat:appcompat:1.2.0',
+            appCompat: "androidx.appcompat:appcompat:$appcompat_version",
             localbroadcastmanager: 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0',
-            gson: 'com.google.code.gson:gson:2.8.2'
+            gson: 'com.google.code.gson:gson:2.8.2',
+            androidx_activity_ktx: "androidx.activity:activity-ktx:$activity_version",
+            androidx_fragment_ktx: "androidx.fragment:fragment-ktx:$fragment_version"
     ]
 
     bitmovinPlayerDependencies = [

@@ -1,12 +1,22 @@
 package com.bitmovin.player.samples.playback.background;
 
+import android.Manifest;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -41,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         playerView.onStart();
+        requestMissingPermissions();
 
         // Bind and start the BackgroundPlaybackService
         Intent intent = new Intent(this, BackgroundPlaybackService.class);
@@ -120,4 +131,18 @@ public class MainActivity extends AppCompatActivity {
             bound = false;
         }
     };
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            isGranted -> { /* Do nothing */ }
+    );
+
+    private void requestMissingPermissions() {
+        if (Build.VERSION.SDK_INT < 33) return;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
+    }
 }

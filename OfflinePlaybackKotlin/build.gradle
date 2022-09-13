@@ -31,6 +31,8 @@ android {
 
 dependencies {
     implementation supportDependencies.appCompat
+    implementation supportDependencies.androidx_activity_ktx
+    implementation supportDependencies.androidx_fragment_ktx
     implementation supportDependencies.localbroadcastmanager
     implementation supportDependencies.gson
     implementation bitmovinPlayerDependencies.bitmovinPlayer
