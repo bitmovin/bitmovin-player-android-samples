@@ -24,6 +24,7 @@ private val TAG = MainActivity::class.java.simpleName
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player
     private lateinit var binding: ActivityMainBinding
+    private var pendingSeekTarget: Double? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         // Switch from splash screen to main theme when we are done loading
@@ -90,53 +91,70 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleUserInput(keycode: Int): Boolean {
         Log.d(TAG, "Keycode $keycode")
-        when (keycode) {
+        return when (keycode) {
             KeyEvent.KEYCODE_DPAD_CENTER,
             KeyEvent.KEYCODE_ENTER,
             KeyEvent.KEYCODE_NUMPAD_ENTER,
             KeyEvent.KEYCODE_SPACE,
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> {
                 player.togglePlay()
-                return true
+                true
             }
             KeyEvent.KEYCODE_MEDIA_PLAY -> {
                 player.play()
-                return true
+                true
             }
             KeyEvent.KEYCODE_MEDIA_PAUSE -> {
                 player.pause()
-                return true
+                true
             }
             KeyEvent.KEYCODE_MEDIA_STOP -> {
                 player.stopPlayback()
-                return true
+                true
             }
             KeyEvent.KEYCODE_DPAD_RIGHT,
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD -> {
                 player.seekForward()
-                return true
+                true
             }
             KeyEvent.KEYCODE_DPAD_LEFT,
             KeyEvent.KEYCODE_MEDIA_REWIND -> {
                 player.seekBackward()
-                return true
+                true
             }
+            else -> return false
         }
-
-        return false
     }
 
     private fun addEventListener() {
         player.on<PlayerEvent.Error>(::onErrorEvent)
         player.on<SourceEvent.Error>(::onErrorEvent)
+        player.on(::onSeeked)
     }
 
     private fun removeEventListener() {
         player.off(::onErrorEvent)
+        player.off(::onSeeked)
     }
 
     private fun onErrorEvent(errorEvent: ErrorEvent) {
         Log.e(TAG, "An Error occurred (${errorEvent.code}): ${errorEvent.message}")
+    }
+
+    private fun onSeeked(event: PlayerEvent.Seeked) {
+        pendingSeekTarget = null
+    }
+
+    private fun Player.seekForward() {
+        val seekTarget = (pendingSeekTarget ?: currentTime) + SEEKING_OFFSET
+        pendingSeekTarget = seekTarget
+        seek(seekTarget)
+    }
+
+    private fun Player.seekBackward() {
+        val seekTarget = (pendingSeekTarget ?: currentTime) - SEEKING_OFFSET
+        pendingSeekTarget = seekTarget
+        seek(seekTarget)
     }
 }
 
@@ -146,10 +164,6 @@ private fun Player.stopPlayback() {
     pause()
     seek(0.0)
 }
-
-private fun Player.seekForward() = seek(this.currentTime + SEEKING_OFFSET)
-
-private fun Player.seekBackward() = seek(currentTime - SEEKING_OFFSET)
 
 private fun createPlayerConfig() = PlayerConfig(
         // Here a custom bitmovinplayer-ui.js is loaded which utilizes the Cast-UI as this

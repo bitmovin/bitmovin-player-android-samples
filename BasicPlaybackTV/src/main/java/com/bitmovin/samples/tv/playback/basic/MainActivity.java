@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private PlayerView playerView;
     private Player player;
+    private Double pendingSeekTarget;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,15 +139,14 @@ public class MainActivity extends AppCompatActivity {
             case KeyEvent.KEYCODE_DPAD_RIGHT:
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
                 seekForward();
-                break;
+                return true;
             case KeyEvent.KEYCODE_DPAD_LEFT:
             case KeyEvent.KEYCODE_MEDIA_REWIND:
                 seekBackward();
-                break;
+                return true;
             default:
+                return false;
         }
-
-        return false;
     }
 
     private void togglePlay() {
@@ -163,11 +163,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void seekForward() {
-        player.seek(player.getCurrentTime() + SEEKING_OFFSET);
+        seekRelative(SEEKING_OFFSET);
     }
 
     private void seekBackward() {
-        player.seek(player.getCurrentTime() - SEEKING_OFFSET);
+        seekRelative(-SEEKING_OFFSET);
+    }
+
+    private void seekRelative(double seekAmount) {
+        double seekStart = pendingSeekTarget == null ? player.getCurrentTime() : pendingSeekTarget;
+        double seekTarget = seekStart + seekAmount;
+        pendingSeekTarget = seekTarget;
+        player.seek(seekTarget);
     }
 
 
@@ -176,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
         player.on(PlayerEvent.Error.class, onPlayerError);
         player.on(SourceEvent.Error.class, onSourceError);
+        player.on(PlayerEvent.Seeked.class, onSeeked);
     }
 
     private void removeEventListener() {
@@ -183,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         player.off(onPlayerError);
         player.off(onSourceError);
+        player.off(onSeeked);
     }
 
     private final EventListener<PlayerEvent.Error> onPlayerError = errorEvent ->
@@ -190,5 +199,7 @@ public class MainActivity extends AppCompatActivity {
 
     private final EventListener<SourceEvent.Error> onSourceError = errorEvent ->
             Log.e(TAG, "A source error occurred (" + errorEvent.getCode() + "): " + errorEvent.getMessage());
+
+    private final EventListener<PlayerEvent.Seeked> onSeeked = event -> pendingSeekTarget = null;
 
 }
