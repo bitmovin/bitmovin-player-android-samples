@@ -32,13 +32,14 @@ Every example is available in `Java` and `Kotlin` :+1:
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download DRM-protected and unprotected content for offline playback.
 
 ### Playback & Casting
-+   **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
-+   **BackgroundPlayback** Shows how background playback can be implemented for the Bitmovin Player.
-+   **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
-+   **BasicPiPHandling** Shows how the `BitmovinPlayerView` can be configured to allow the Picture in Picture mode.
-+   **BasicControlNotification** Shows how the `BitmovinPlayerNotificationManager` can be used to show playback control notifications.
-+   **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
-+   **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
++ **BasicCasting** Shows how the ChromeCast support of the Bitmovin Player can be setup and configured.
++ **BackgroundPlayback** Shows how background playback can be implemented for the Bitmovin Player.
++ **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
++ **BasicPiPHandling** Shows how the `BitmovinPlayerView` can be configured to allow the Picture in Picture mode.
++ **BasicControlNotification** Shows how the `BitmovinPlayerNotificationManager` can be used to show playback control notifications.
++ **BasicMediaControl** Shows how the `BitmovinPlayerNotificationManager` can be used to connect to Android's system media controls.
++ **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
++ **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
 
 ### Advertising
 +   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.
@@ -131,7 +132,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.25.0'
+    implementation 'com.bitmovin.player:player:3.25.1'
     ```
 
 #### Additional SDK dependencies
