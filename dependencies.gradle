@@ -3,7 +3,7 @@ ext {
     playServicesAdsIdentifierVersion = '18.0.1'
     imaSdkVersion = '3.26.0'
     playServicesCastVersion = '21.0.1'
-    bitmovinPlayerVersion = '3.25.2'
+    bitmovinPlayerVersion = '3.26.0'
     appcompat_version = "1.5.1"
     activity_version = "1.5.1"
     fragment_version = "1.5.1"
