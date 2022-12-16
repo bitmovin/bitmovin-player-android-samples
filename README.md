@@ -22,8 +22,8 @@ Every example is available in `Java` and `Kotlin` :+1:
 +   **BasicPlayback:** Shows how the Bitmovin Player can be setup for basic playback of DASH, HLS or progressive streams.
 +   **BasicPlaylist:** Shows how to play back multiple sources / playlists.
 +   **BasicMetadataHandling** Shows how the Bitmovin Player can be setup and configured for playback of content which contains metadata.
-+   **BasicPlayerFragment** Shows how the `BitmovinPlayerFragment` can be used to setup playback.
 +   **BasicPlaybackTV** Shows how the Bitmovin Player can be setup for basic playback in an Android TV application.
++   **Logging** Shows how logging can be enabled in different Bitmovin Player components individually.
 
 ### DRM
 +   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevine protected content.
@@ -75,14 +75,14 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.fullscreen.basic
     com.bitmovin.player.samples.custom.ui.html
     com.bitmovin.player.samples.offline.playback
-    com.bitmovin.player.samples.playerfragment.basic
     com.bitmovin.player.samples.pip.basic
     com.bitmovin.player.samples.notification.basic
+    com.bitmovin.player.samples.mediacontrol.basic
     com.bitmovin.player.samples.playback.background
     com.bitmovin.player.samples.tv.playback.basic
     com.bitmovin.player.samples.playback.lowlatency
     com.bitmovin.player.samples.custom.adaptation
-    com.bitmovin.player.samples.integration.adobeanalytics
+    com.bitmovin.player.samples.logging
     ```
 
 ## How to integrate the Bitmovin Player Android SDK
@@ -209,7 +209,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 ## Proguard Configuration
 
 When using `Proguard`, we recommend doing no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`.
-This can be achieved by adding following `Progurad` rules to your project.
+This can be achieved by adding following `Proguard` rules to your project.
 
 ```proguard
 #### Bitmovin
