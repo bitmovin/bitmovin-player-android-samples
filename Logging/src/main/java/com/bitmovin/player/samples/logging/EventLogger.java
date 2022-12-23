@@ -48,33 +48,23 @@ public class EventLogger<T extends Event> {
         this.eventEmitterReference = new WeakReference<>(eventEmitter);
 
         for (Class<? extends T> event : loggerConfig.getErrorEvents()) {
-            emitEvent(eventEmitter, event, errorListener);
+            eventEmitter.on(event, errorListener);
         }
         if (loggerConfig.getLogLevel() == Level.Error) return;
 
         for (Class<? extends T> event : loggerConfig.getWarningEvents()) {
-            emitEvent(eventEmitter, event, warningListener);
+            eventEmitter.on(event, warningListener);
         }
         if (loggerConfig.getLogLevel() == Level.Warning) return;
 
         for (Class<? extends T> event : loggerConfig.getInfoEvents()) {
-            emitEvent(eventEmitter, event, infoListener);
+            eventEmitter.on(event, infoListener);
         }
         if (loggerConfig.getLogLevel() == Level.Info) return;
 
         for (Class<? extends T> event : loggerConfig.getDebugEvents()) {
-            emitEvent(eventEmitter, event, debugListener);
+            eventEmitter.on(event, debugListener);
         }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E extends T> void emitEvent(
-            EventEmitter<T> eventEmitter,
-            Class<E> event,
-            EventListener<T> listener) {
-        // EventListener is a functional interface where T is an input parameter.
-        // As such it should be covariant but is not currently declared as such.
-        eventEmitter.on(event, (EventListener<E>) listener);
     }
 
     public void detach() {
