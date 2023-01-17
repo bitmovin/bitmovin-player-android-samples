@@ -29,6 +29,17 @@ dependencies {
     implementation supportDependencies.appCompat
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 
-    implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion" // only needed if ads are used
-    implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion" // only needed if ads are used
+    // Only needed if ads are used
+    implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion"
+    // Only needed if ads are used
+    // IMA SDK depends on lifecycle-viewmodel-ktx, which if resolved to version lower than 2.5.1
+    // duplicates some classes from appcompat v1.5.1 and thus breaks the build.
+    // Issue: https://github.com/googleads/googleads-ima-android/issues/111
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx") {
+        version {
+            require "2.5.1"
+        }
+    }
+    // Only needed if ads are used
+    implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion"
 }

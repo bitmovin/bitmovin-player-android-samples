@@ -140,9 +140,9 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  **Chromecast Support** - If you want to use the Chromecast feature, add the following dependencies to your project:
 
     ```
-    implementation 'com.google.android.gms:play-services-cast-framework:21.0.1'
-    implementation 'androidx.mediarouter:mediarouter:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
+    implementation 'androidx.mediarouter:mediarouter:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.5.1'
     ```
 
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`.
@@ -165,7 +165,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  **Advertising Support** - If advertising support should be enabled, also add the following dependencies to your project:
 
     ``` 
-    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.26.0'
+    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.29.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
      ```
 

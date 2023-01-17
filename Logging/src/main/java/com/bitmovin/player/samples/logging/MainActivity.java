@@ -1,6 +1,7 @@
 package com.bitmovin.player.samples.logging;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,7 +11,6 @@ import com.bitmovin.player.api.event.Event;
 import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.source.Source;
 import com.bitmovin.player.api.source.SourceConfig;
-import com.google.android.exoplayer2.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
