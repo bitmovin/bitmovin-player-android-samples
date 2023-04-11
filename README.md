@@ -132,7 +132,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.35.1'
+    implementation 'com.bitmovin.player:player:3.35.2'
     ```
 
 #### Additional SDK dependencies
