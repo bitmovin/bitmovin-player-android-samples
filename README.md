@@ -27,7 +27,7 @@ Every example is available in `Java` and `Kotlin` :+1:
 
 ### DRM
 +   **BasicDRMPlayback:** Shows how the Bitmovin Player can be setup and configured for playback of Widevine protected content.
-    
+
 ### Offline Playback
 +   **OfflinePlayback** Shows how the Bitmovin Android SDK can be used to download DRM-protected and unprotected content for offline playback.
 
@@ -44,23 +44,28 @@ Every example is available in `Java` and `Kotlin` :+1:
 ### Advertising
 +   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.
 +   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads.
-    
+
 ### UI & Subtitles
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
-+   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI. In addition this sample includes how to communication between the javascript UI and the native code.
++   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
+                     In addition this sample includes how to communication between the javascript UI and the native code.
 +   **BasicFullscreenHandling** Shows how a simple FullscreenHandler can be implemented and configured on the Bitmovin Player
 
 ## Sample Apps Setup Instructions
-1) **Add your Bitmovin Player License Key** - In each sample app you have to add your Bitmovin Player license key inside the `application` tag in the manifest file as shown below. `YOUR_LICENSE_KEY` has to be replaced by your own license key.
+1) **Add your Bitmovin Player License Key** -
+   In each sample app you have to add your Bitmovin Player license key inside the `application` tag in
+   the manifest file as shown below. `<PLAYER_LICENSE_KEY>` has to be replaced by your own license key.
 
     ```
    <meta-data
        android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-       android:value="YOUR_LICENSE_KEY" />
+       android:value="<PLAYER_LICENSE_KEY>" />
    ```
 
-2) **Allow-list your package names for your player license** - In addition to that you have to log in to [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard) where you have to add the following package names of the sample applications as allowed domains under `Player -> Licenses`:
+2) **Allow-list your package names for your player license** -
+   In addition to that you have to log in to [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard)
+   where you have to add the following package names of the sample applications as allowed domains under `Player -> Licenses`:
    ```
     com.bitmovin.player.samples.playback.basic
     com.bitmovin.player.samples.playlist.basic
@@ -88,7 +93,8 @@ Every example is available in `Java` and `Kotlin` :+1:
 ## How to integrate the Bitmovin Player Android SDK
 
 ### Project Requirements
-Starting with version `2.16.0` our SDK is using Java 8, so your application must enable Java 8 support. This can be done by adding following code to your applications build gradle:
+Starting with version `2.16.0` our SDK is using Java 8, so your application must enable Java 8 support.
+This can be done by adding following code to your applications build gradle:
 
     ```
     compileOptions {
@@ -100,21 +106,27 @@ Starting with version `2.16.0` our SDK is using Java 8, so your application must
 ### Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
 
-1.  In the manifest file of your application also provide your Bitmovin Player license key by adding a `meta-data` tag inside the `application` tag. `YOUR_LICENSE_KEY` has to be replaced by your own license key. Your player license key can be found when logging in into [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard) and navigating to `Player -> Licenses`. There you also have to add the package name of the Android application which is using the SDK as an allow-listed domain. The package name is defined in the manifest file of your Android application.
+1.  In the manifest file of your application also provide your Bitmovin Player license key by adding
+    a `meta-data` tag inside the `application` tag. `<PLAYER_LICENSE_KEY>` has to be replaced by your own license key.
+    Your player license key can be found when logging in into [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard)
+    and navigating to `Player -> Licenses`.
+    There you also have to add the package name of the Android application which is using the SDK as an allow-listed domain.
+    The package name is defined in the manifest file of your Android application.
 
     ```
     <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-            android:value="YOUR_LICENSE_KEY" />
+            android:value="<PLAYER_LICENSE_KEY>" />
     ```
 
-1.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
+2.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
 
     ```
     <uses-permission android:name="android.permission.INTERNET" />
     ```
 
-1.  Add a link to our release repository to your applications `build.gradle` file. In addition to that, the google maven repository must be added.
+3.  Add a link to our release repository to your applications `build.gradle` file.
+    In addition to that, the google maven repository must be added.
 
     ```
     allprojects {
@@ -129,15 +141,17 @@ When you want to develop an own Android application using the Bitmovin Player An
     }
     ```
 
-1.  Add the Bitmovin Player Android SDK as a dependency to your project. It is recommended to reference a specific version as you can see below:
+4.  Add the Bitmovin Player Android SDK as a dependency to your project.
+    It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.39.0'
+    implementation 'com.bitmovin.player:player:3.39.1'
     ```
 
 #### Additional SDK dependencies
 
-1.  **Chromecast Support** - If you want to use the Chromecast feature, add the following dependencies to your project:
+1. **Chromecast Support** -
+    If you want to use the Chromecast feature, add the following dependencies to your project:
 
     ```
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
@@ -145,8 +159,8 @@ When you want to develop an own Android application using the Bitmovin Player An
     implementation 'androidx.appcompat:appcompat:1.5.1'
     ```
 
-    Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the `<application>` tag of the `AndroidManifest.xml`.
-    For more details see the  `BasicCasting` sample application.
+    Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the
+    `<application>` tag of the `AndroidManifest.xml`. For more details see the  `BasicCasting` sample application.
 
     ```
      <activity
@@ -162,9 +176,10 @@ When you want to develop an own Android application using the Bitmovin Player An
              />
      ```
 
-1.  **Advertising Support** - If advertising support should be enabled, also add the following dependencies to your project:
+2. **Advertising Support** -
+    If advertising support should be enabled, also add the following dependencies to your project:
 
-    ``` 
+    ```
     implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.29.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
      ```
@@ -177,39 +192,45 @@ When you want to develop an own Android application using the Bitmovin Player An
             android:value="true"/>
     ```
 
-    Alternatively, you can use an AdMob App ID <meta-data> tag, as shown below:
+    Alternatively, you can use an AdMob App ID `<meta-data>` tag, as shown below:
 
      ```
      <meta-data
              android:name="com.google.android.gms.ads.APPLICATION_ID"
-             android:value="--Your-AdMob-Id--"/>
+             android:value="<ADMOB_LICENSE_KEY>"/>
      ```
 
-1.  **Offline Playback Support** - If the Bitmovin Android SDK is used to download content for offline playback, the following dependency has to be added:
+3. **Offline Playback Support** -
+    If the Bitmovin Android SDK is used to download content for offline playback, the following dependency has to be added:
 
-    ``` 
+    ```
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     ```
 
-    In addition, also add the permission for checking the network state. If targeting Android SDK version 33+ the permission for posting notifications has to be added as well:
+    In addition, also add the permission for checking the network state.
+    If targeting Android SDK version 33+ the permission for posting notifications has to be added as well:
 
     ```
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     ```
-    
-1. **Player Notification** - Beginning with Android 13, a permission is needed for posting notification. This means that if the `PlayerNotificationManager` is used, like in the **Background Playback** sample,the post notification permission has to be added when targeting SDK version 33+:
+
+4. **Player Notification** -
+    Beginning with Android 13, a permission is needed for posting notification.
+    This means that if the `PlayerNotificationManager` is used, like in the **Background Playback** sample,
+    the post notification permission has to be added when targeting SDK version 33+:
 
     ```
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     ```
-   
-    Additionally the permission also has to be requested at runtime. This is explained in the [official Android docs](https://developer.android.com/training/permissions/requesting).
-    
+
+    Additionally the permission also has to be requested at runtime.
+    This is explained in the [official Android docs](https://developer.android.com/training/permissions/requesting).
+
 ## Proguard Configuration
 
-When using `Proguard`, we recommend doing no further optimization nor code obfuscation for symbols contained in the package `com.bitmovin.player`.
-This can be achieved by adding following `Proguard` rules to your project.
+When using `Proguard`, we recommend doing no further optimization nor code obfuscation for symbols contained in
+the package `com.bitmovin.player`. This can be achieved by adding following `Proguard` rules to your project.
 
 ```proguard
 #### Bitmovin
@@ -217,16 +238,20 @@ This can be achieved by adding following `Proguard` rules to your project.
 -keep interface com.bitmovin.player.** { *; }
 ```
 
-The Bitmovin Player Android SDK logs against a logging facade (SLF4J). In order to be able to compile successfully with proguard enabled, the following line must be added to the proguard file:
+The Bitmovin Player Android SDK logs against a logging facade (SLF4J).
+In order to be able to compile successfully with proguard enabled, the following line must be added to the proguard file:
 ```
 -dontwarn org.slf4j.**
 ```
 
 ## Documentation & Release Notes
 
-+ **Documentation for your IDE** - Our release repository also holds a `.jar` containing the javadoc for the `player`, as well as the source code of the api package. If AndroidStudio is used, the documentation and sources should be downloaded and included automatically .
++ **Documentation for your IDE** - Our release repository also holds a `.jar` containing the javadoc for the `player`, as well as the source code of the api package.
+                                   If AndroidStudio is used, the documentation and sources should be downloaded and included automatically .
 + **Android API Reference documentation** - You can find the latest one [here](https://cdn.bitmovin.com/player/android/3/docs/index.html)
 + **Android SDK Release Notes** can be found [here](https://bitmovin.com/release-notes-android-sdk/)
 
 ## Support
-If you have any questions or issues with this SDK or its examples, or you require other technical support for our services, please login to your Bitmovin Dashboard at https://bitmovin.com/dashboard and [create a new support case](https://bitmovin.com/dashboard/support/cases/create). Our team will get back to you as soon as possible :+1:
+If you have any questions or issues with this SDK or its examples, or you require other technical support for our services,
+please login to your Bitmovin Dashboard at https://bitmovin.com/dashboard and [create a new support case](https://bitmovin.com/dashboard/support/cases/create).
+Our team will get back to you as soon as possible :+1:
