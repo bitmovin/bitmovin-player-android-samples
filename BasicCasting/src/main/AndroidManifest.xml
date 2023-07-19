@@ -28,7 +28,7 @@
 
         <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-            android:value="<PLAYER_LICENSE_KEY>" />
+            android:value="{PLAYER_LICENSE_KEY}" />
 
         <!-- Following lines are needed for the usage of cast -->
 

@@ -107,7 +107,7 @@ This can be done by adding following code to your applications build gradle:
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
 
 1.  In the manifest file of your application also provide your Bitmovin Player license key by adding
-    a `meta-data` tag inside the `application` tag. `<PLAYER_LICENSE_KEY>` has to be replaced by your own license key.
+    a `meta-data` tag inside the `application` tag. `{PLAYER_LICENSE_KEY}` has to be replaced by your own license key.
     Your player license key can be found when logging in into [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard)
     and navigating to `Player -> Licenses`.
     There you also have to add the package name of the Android application which is using the SDK as an allow-listed domain.
@@ -116,7 +116,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     ```
     <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-            android:value="<PLAYER_LICENSE_KEY>" />
+            android:value="{PLAYER_LICENSE_KEY}" />
     ```
 
 2.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.39.1'
+    implementation 'com.bitmovin.player:player:3.40.0'
     ```
 
 #### Additional SDK dependencies
