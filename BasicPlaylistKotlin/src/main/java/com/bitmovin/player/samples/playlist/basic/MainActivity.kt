@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.SourceEvent
 import com.bitmovin.player.api.event.next
@@ -33,7 +35,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        player = Player.create(this, PlayerConfig()).also {
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey)).also {
             binding.playerView.player = it
         }
 

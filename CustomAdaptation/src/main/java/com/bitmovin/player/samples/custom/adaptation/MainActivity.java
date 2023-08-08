@@ -6,9 +6,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.media.AdaptationConfig;
 import com.bitmovin.player.api.media.video.quality.VideoAdaptation;
 import com.bitmovin.player.api.media.video.quality.VideoAdaptationData;
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        player = Player.create(this, createPlayerConfig());
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        player = PlayerFactory.create(this, createPlayerConfig(), new AnalyticsConfig(key));
         playerView = new PlayerView(this, player);
 
         player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));

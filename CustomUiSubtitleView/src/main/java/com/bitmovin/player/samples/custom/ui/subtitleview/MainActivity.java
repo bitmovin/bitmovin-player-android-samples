@@ -6,10 +6,12 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.SubtitleView;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.StyleConfig;
@@ -37,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
         RelativeLayout playerContainer = findViewById(R.id.player_container);
 
         // Creating a PlayerView and get it's Player instance.
-        playerView = new PlayerView(this, Player.create(this, playerConfig));
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        Player player = PlayerFactory.create(this, new PlayerConfig(), new AnalyticsConfig(key));
+        playerView = new PlayerView(this, player);
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        player = playerView.getPlayer();
         player.load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
 
         // Creating a SubtitleView and assign the current player instance.

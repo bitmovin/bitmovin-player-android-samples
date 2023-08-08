@@ -3,9 +3,11 @@ package com.bitmovin.player.samples.custom.adaptation
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.media.AdaptationConfig
 import com.bitmovin.player.api.media.video.quality.VideoAdaptation
 import com.bitmovin.player.api.source.SourceConfig
@@ -22,7 +24,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        player = Player.create(this, createPlayerConfig())
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        player = Player.create(this, createPlayerConfig(), AnalyticsConfig(analyticsKey))
         playerView = PlayerView(this, player)
 
         player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))

@@ -2,10 +2,12 @@ package com.bitmovin.player.samples.ads.companion
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.advertising.*
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.ads.companion.databinding.ActivityMainBinding
@@ -33,7 +35,8 @@ class MainActivity : AppCompatActivity() {
                 )
         )
 
-        player = Player.create(this, playerConfig).also {
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey)).also {
             playerView.player = it
         }
 

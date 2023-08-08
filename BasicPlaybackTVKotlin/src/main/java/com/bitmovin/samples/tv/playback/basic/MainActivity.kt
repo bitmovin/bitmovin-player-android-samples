@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.PlaybackConfig
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.deficiency.ErrorEvent
 import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.SourceEvent
@@ -38,7 +40,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         // Initialize PlayerView from layout and attach a new Player instance
-        player = Player.create(this, createPlayerConfig()).also {
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        val playerConfig = createPlayerConfig()
+        player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey)).also {
             binding.bitmovinPlayerView.player = it
         }
 

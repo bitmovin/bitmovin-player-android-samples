@@ -7,10 +7,12 @@ import android.view.KeyEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.PlaybackConfig;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.event.EventListener;
 import com.bitmovin.player.api.event.PlayerEvent;
 import com.bitmovin.player.api.event.SourceEvent;
@@ -42,7 +44,8 @@ public class MainActivity extends AppCompatActivity {
         // Initialize BitmovinPlayerView from layout
         playerView = findViewById(R.id.bitmovin_player_view);
 
-        player = Player.create(this, createPlayerConfig());
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        player = PlayerFactory.create(this, createPlayerConfig(), new AnalyticsConfig(key));
 
         playerView.setPlayer(player);
 

@@ -7,7 +7,10 @@ import android.content.Intent
 import android.os.Binder
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.ui.notification.CustomActionReceiver
 import com.bitmovin.player.api.ui.notification.NotificationListener
 import com.bitmovin.player.ui.notification.DefaultMediaDescriptor
@@ -51,7 +54,8 @@ class BackgroundPlaybackService : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        player = Player.create(this)
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey))
 
         // Create a PlayerNotificationManager with the static create method
         // By passing null for the mediaDescriptionAdapter, a DefaultMediaDescriptionAdapter will be used internally.

@@ -15,9 +15,11 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.StyleConfig;
@@ -58,7 +60,8 @@ public class PlaybackActivity extends AppCompatActivity {
         CustomMessageHandler customMessageHandler = new CustomMessageHandler(javascriptInterface);
 
         // Create new Player with our PlayerConfig
-        Player player = Player.create(this, playerConfig);
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
         // Create a PlayerView with our Player
         playerView = new PlayerView(this, player);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

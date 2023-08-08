@@ -14,8 +14,10 @@ import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.FullscreenHandler;
@@ -41,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
         playerConfig.setStyleConfig(styleConfig);
         // Assign a SourceItem to the PlayerConfig
 
-        Player player = Player.create(this, playerConfig);
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
         playerUi = new PlayerUI(this, player);
         fullscreenHandler = new CustomFullscreenHandler(this, playerUi);
 

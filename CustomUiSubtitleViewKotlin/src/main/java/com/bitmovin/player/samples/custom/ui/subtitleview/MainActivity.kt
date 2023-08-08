@@ -3,17 +3,18 @@ package com.bitmovin.player.samples.custom.ui.subtitleview
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.SubtitleView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.api.ui.StyleConfig
 import com.bitmovin.player.samples.custom.ui.subtitleview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var player: Player
     private lateinit var playerView: PlayerView
     private lateinit var subtitleView: SubtitleView
     private lateinit var binding: ActivityMainBinding
@@ -33,10 +34,11 @@ class MainActivity : AppCompatActivity() {
         val playerConfig = PlayerConfig(styleConfig = styleConfig)
 
         // Creating a PlayerView and get it's Player instance.
-        playerView = PlayerView(this, Player.create(this, playerConfig)).apply {
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        playerView = PlayerView(this, player).apply {
             layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         }
-        player = playerView.player!!
         player.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
 
         // Creating a SubtitleView and assign the current player instance.

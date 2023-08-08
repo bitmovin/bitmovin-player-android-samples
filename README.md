@@ -55,12 +55,12 @@ Every example is available in `Java` and `Kotlin` :+1:
 ## Sample Apps Setup Instructions
 1) **Add your Bitmovin Player License Key** -
    In each sample app you have to add your Bitmovin Player license key inside the `application` tag in
-   the manifest file as shown below. `<PLAYER_LICENSE_KEY>` has to be replaced by your own license key.
+   the manifest file as shown below. `{PLAYER_LICENSE_KEY}` has to be replaced by your own license key.
 
     ```
    <meta-data
        android:name="BITMOVIN_PLAYER_LICENSE_KEY"
-       android:value="<PLAYER_LICENSE_KEY>" />
+       android:value="{PLAYER_LICENSE_KEY}" />
    ```
 
 2) **Allow-list your package names for your player license** -
@@ -107,7 +107,7 @@ This can be done by adding following code to your applications build gradle:
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
 
 1.  In the manifest file of your application also provide your Bitmovin Player license key by adding
-    a `meta-data` tag inside the `application` tag. `{PLAYER_LICENSE_KEY}` has to be replaced by your own license key.
+    a `meta-data` tag inside the `application` tag. `{PLAYER_LICENSE_KEY}` has to be replaced by your own license key. 
     Your player license key can be found when logging in into [https://bitmovin.com/dashboard](https://bitmovin.com/dashboard)
     and navigating to `Player -> Licenses`.
     There you also have to add the package name of the Android application which is using the SDK as an allow-listed domain.
@@ -197,10 +197,10 @@ When you want to develop an own Android application using the Bitmovin Player An
      ```
      <meta-data
              android:name="com.google.android.gms.ads.APPLICATION_ID"
-             android:value="<ADMOB_LICENSE_KEY>"/>
+             android:value="{ADMOB_LICENSE_KEY}"/>
      ```
 
-3. **Offline Playback Support** -
+3. **Offline Playback Support** - 
     If the Bitmovin Android SDK is used to download content for offline playback, the following dependency has to be added:
 
     ```
@@ -216,7 +216,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     ```
 
 4. **Player Notification** -
-    Beginning with Android 13, a permission is needed for posting notification.
+    Beginning with Android 13, a permission is needed for posting notification. 
     This means that if the `PlayerNotificationManager` is used, like in the **Background Playback** sample,
     the post notification permission has to be added when targeting SDK version 33+:
 

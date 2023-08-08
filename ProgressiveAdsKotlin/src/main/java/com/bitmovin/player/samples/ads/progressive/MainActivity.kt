@@ -3,6 +3,7 @@ package com.bitmovin.player.samples.ads.progressive
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
@@ -10,6 +11,7 @@ import com.bitmovin.player.api.advertising.AdItem
 import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.ads.progressive.databinding.ActivityMainBinding
@@ -43,7 +45,9 @@ class MainActivity : AppCompatActivity() {
         val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)
 
         // Create a new Player instance with a PlayerConfig used to instantiate the PlayerView
-        playerView = PlayerView(this, Player.create(this, playerConfig)).apply {
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        playerView = PlayerView(this, player).apply {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         }
         // Load the SourceItem

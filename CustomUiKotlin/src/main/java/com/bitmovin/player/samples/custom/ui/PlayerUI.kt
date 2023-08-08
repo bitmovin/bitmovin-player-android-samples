@@ -12,9 +12,11 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import android.widget.SeekBar
 import androidx.core.content.ContextCompat
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.event.*
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.ui.FullscreenHandler
@@ -29,7 +31,8 @@ class PlayerUI(
     playerConfig: PlayerConfig
 ) : RelativeLayout(context) {
     // Create new Player with our PlayerConfig
-    private val player: Player = Player.create(context, playerConfig)
+    private val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+    private val player = Player.create(context, playerConfig, AnalyticsConfig(analyticsKey))
     private var binding: PlayerUiBinding = PlayerUiBinding.inflate(
         LayoutInflater.from(context), this, true
     )

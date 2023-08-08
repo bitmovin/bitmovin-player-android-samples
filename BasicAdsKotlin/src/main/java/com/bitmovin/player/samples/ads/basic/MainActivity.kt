@@ -3,6 +3,7 @@ package com.bitmovin.player.samples.ads.basic
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
@@ -11,6 +12,7 @@ import com.bitmovin.player.api.advertising.AdItem
 import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
+import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.samples.ads.basic.databinding.ActivityMainBinding
 
 // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
@@ -50,14 +52,16 @@ class MainActivity : AppCompatActivity() {
         // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
         val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)
 
-        // Create new PlayerView with our PlayerConfig
-        playerView = PlayerView(this, Player.create(this, playerConfig)).apply {
+        // Create new Player with our PlayerConfig
+        val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
+        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        playerView = PlayerView(this, player).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
             )
-            player?.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
         }
+        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add PlayerView to the layout
         binding.root.addView(playerView, 0)

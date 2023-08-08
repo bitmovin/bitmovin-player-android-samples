@@ -5,8 +5,11 @@ import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerConfig;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.event.Event;
 import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.source.Source;
@@ -59,7 +62,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializePlayer() {
-        player = Player.create(this);
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        player = PlayerFactory.create(this, new PlayerConfig(), new AnalyticsConfig(key));
         Source source = Source.create(
                 SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
         );

@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerConfig;
@@ -13,6 +14,7 @@ import com.bitmovin.player.api.advertising.AdSource;
 import com.bitmovin.player.api.advertising.AdSourceType;
 import com.bitmovin.player.api.advertising.AdvertisingConfig;
 import com.bitmovin.player.api.advertising.CompanionAdContainer;
+import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 
@@ -45,7 +47,8 @@ public class MainActivity extends AppCompatActivity {
         PlayerConfig playerConfig = new PlayerConfig();
         playerConfig.setAdvertisingConfig(advertisingConfig);
 
-        Player bitmovinPlayer = Player.create(this, playerConfig);
+        String key = "{ANALYTICS_LICENSE_KEY}";
+        Player bitmovinPlayer = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
         bitmovinPlayerView.setPlayer(bitmovinPlayer);
 
 
