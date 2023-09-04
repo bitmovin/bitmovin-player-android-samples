@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.40.0'
+    implementation 'com.bitmovin.player:player:3.43.0'
     ```
 
 #### Additional SDK dependencies
@@ -156,7 +156,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     ```
     implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
     implementation 'androidx.mediarouter:mediarouter:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
     ```
 
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the
