@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.43.0'
+    implementation 'com.bitmovin.player:player:3.44.0'
     ```
 
 #### Additional SDK dependencies
@@ -154,7 +154,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     If you want to use the Chromecast feature, add the following dependencies to your project:
 
     ```
-    implementation 'com.google.android.gms:play-services-cast-framework:21.2.0'
+    implementation 'com.google.android.gms:play-services-cast-framework:21.3.0'
     implementation 'androidx.mediarouter:mediarouter:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     ```
@@ -180,7 +180,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     If advertising support should be enabled, also add the following dependencies to your project:
 
     ```
-    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.29.0'
+    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.31.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
      ```
 
