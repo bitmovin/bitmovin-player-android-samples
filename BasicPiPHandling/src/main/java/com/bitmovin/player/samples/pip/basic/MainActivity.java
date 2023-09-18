@@ -62,6 +62,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        playerView.onStop();
+        super.onStop();
+    }
+
+    @Override
     protected void onDestroy() {
         playerView.onDestroy();
         super.onDestroy();

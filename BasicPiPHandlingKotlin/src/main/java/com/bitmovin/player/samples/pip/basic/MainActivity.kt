@@ -56,6 +56,11 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
     }
 
+    override fun onStop() {
+        binding.bitmovinPlayerView.onStop()
+        super.onStop()
+    }
+
     override fun onDestroy() {
         binding.bitmovinPlayerView.onDestroy()
         super.onDestroy()
