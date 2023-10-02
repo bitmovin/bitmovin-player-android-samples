@@ -17,13 +17,12 @@ buildscript {
 ext {
     // SDK and tools
     minSdkVersion = 16
-    targetSdkVersion = 33
-    compileSdkVersion = 33
+    targetSdkVersion = 34
+    compileSdkVersion = 34
 }
 
 // Load dependencies
 apply from: 'dependencies.gradle'
-
 allprojects {
     repositories {
         google()
