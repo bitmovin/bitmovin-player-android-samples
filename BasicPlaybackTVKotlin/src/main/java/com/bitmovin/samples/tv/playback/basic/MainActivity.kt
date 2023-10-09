@@ -3,8 +3,10 @@ package com.bitmovin.samples.tv.playback.basic
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
+import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.analytics.api.AnalyticsConfig
+import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.PlaybackConfig
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
@@ -15,7 +17,8 @@ import com.bitmovin.player.api.event.SourceEvent
 import com.bitmovin.player.api.event.on
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
-import com.bitmovin.player.api.ui.StyleConfig
+import com.bitmovin.player.api.ui.PlayerViewConfig
+import com.bitmovin.player.api.ui.UiConfig
 import com.bitmovin.player.samples.tv.playback.basic.R
 import com.bitmovin.player.samples.tv.playback.basic.databinding.ActivityMainBinding
 
@@ -24,6 +27,7 @@ private val TAG = MainActivity::class.java.simpleName
 
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var playerView: PlayerView
     private lateinit var player: Player
     private lateinit var binding: ActivityMainBinding
     private var pendingSeekTarget: Double? = null
@@ -41,10 +45,33 @@ class MainActivity : AppCompatActivity() {
     private fun initializePlayer() {
         // Initialize PlayerView from layout and attach a new Player instance
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val playerConfig = createPlayerConfig()
-        player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey)).also {
-            binding.bitmovinPlayerView.player = it
-        }
+
+        player = Player.create(
+            this,
+            PlayerConfig(
+                playbackConfig = PlaybackConfig(isAutoplayEnabled = true)
+            ),
+            AnalyticsConfig(analyticsKey)
+        )
+
+        playerView = PlayerView(
+            this,
+            player,
+            // Here a custom bitmovinplayer-ui.js is loaded which utilizes the Cast-UI as this
+            // matches our needs here perfectly.
+            // I.e. UI controls get shown / hidden whenever the Player API is called.
+            // This is needed due to the fact that on Android TV no touch events are received
+            PlayerViewConfig(
+                uiConfig = UiConfig.WebUi(
+                    jsLocation = "file:///android_asset/bitmovinplayer-ui.js",
+                )
+            )
+        )
+        playerView.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        binding.playerRootLayout.addView(playerView, 0)
 
         // Create a new SourceConfig. In this case we are loading a DASH source.
         val sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
@@ -55,29 +82,29 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
-        binding.bitmovinPlayerView.onResume()
+        playerView.onResume()
         addEventListener()
         player.play()
     }
 
     override fun onStart() {
         super.onStart()
-        binding.bitmovinPlayerView.onStart()
+        playerView.onStart()
     }
 
     override fun onPause() {
         removeEventListener()
-        binding.bitmovinPlayerView.onPause()
+        playerView.onPause()
         super.onPause()
     }
 
     override fun onStop() {
-        binding.bitmovinPlayerView.onStop()
+        playerView.onStop()
         super.onStop()
     }
 
     override fun onDestroy() {
-        binding.bitmovinPlayerView.onDestroy()
+        playerView.onDestroy()
         super.onDestroy()
     }
 
@@ -168,12 +195,3 @@ private fun Player.stopPlayback() {
     pause()
     seek(0.0)
 }
-
-private fun createPlayerConfig() = PlayerConfig(
-        // Here a custom bitmovinplayer-ui.js is loaded which utilizes the Cast-UI as this
-        // matches our needs here perfectly.
-        // I.e. UI controls get shown / hidden whenever the Player API is called.
-        // This is needed due to the fact that on Android TV no touch events are received
-        styleConfig = StyleConfig(playerUiJs = "file:///android_asset/bitmovinplayer-ui.js"),
-        playbackConfig = PlaybackConfig(isAutoplayEnabled = true)
-)

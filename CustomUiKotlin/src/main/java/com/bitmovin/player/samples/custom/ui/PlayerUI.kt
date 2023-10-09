@@ -20,6 +20,8 @@ import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.event.*
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.ui.FullscreenHandler
+import com.bitmovin.player.api.ui.PlayerViewConfig
+import com.bitmovin.player.api.ui.UiConfig
 import com.bitmovin.player.samples.custom.ui.databinding.PlayerUiBinding
 import java.util.*
 
@@ -37,8 +39,13 @@ class PlayerUI(
         LayoutInflater.from(context), this, true
     )
 
+    /**
+     * Create a new PlayerViewConfig with a disabled UI
+     */
+    private val viewConfig = PlayerViewConfig(uiConfig = UiConfig.Disabled)
+
     // Create new PlayerView with our Player
-    private val playerView: PlayerView = PlayerView(context, player).apply {
+    private val playerView: PlayerView = PlayerView(context, player, viewConfig).apply {
         layoutParams = ViewGroup.LayoutParams(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT

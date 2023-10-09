@@ -18,10 +18,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Create a new PlayerConfig containing a StyleConfig with disabled UI
-        val playerConfig = PlayerConfig(styleConfig = StyleConfig(isUiEnabled = false))
-
-        playerUi = PlayerUI(this, playerConfig)
+        playerUi = PlayerUI(this, PlayerConfig())
         val fullscreenHandler = CustomFullscreenHandler(this, playerUi)
 
         // Set the FullscreenHandler of the PlayerUI

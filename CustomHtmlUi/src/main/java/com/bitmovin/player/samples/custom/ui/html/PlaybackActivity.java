@@ -22,7 +22,9 @@ import com.bitmovin.player.api.PlayerConfig;
 import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
-import com.bitmovin.player.api.ui.StyleConfig;
+import com.bitmovin.player.api.ui.PlayerViewConfig;
+import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.UiConfig;
 import com.bitmovin.player.ui.CustomMessageHandler;
 
 public class PlaybackActivity extends AppCompatActivity {
@@ -33,19 +35,18 @@ public class PlaybackActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playback);
 
-        // Create new StyleConfig
-        StyleConfig styleConfig = new StyleConfig();
         /*
          * Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
          */
-        // Set URLs for the JavaScript and the CSS
-        styleConfig.setPlayerUiJs("file:///android_asset/custom-bitmovinplayer-ui.min.js");
-        styleConfig.setPlayerUiCss("file:///android_asset/custom-bitmovinplayer-ui.min.css");
-
-        // Creating a new PlayerConfig
-        PlayerConfig playerConfig = new PlayerConfig();
-        // Assign created StyleConfig to the PlayerConfig
-        playerConfig.setStyleConfig(styleConfig);
+        PlayerViewConfig viewConfig = new PlayerViewConfig(
+                new UiConfig.WebUi(
+                        "file:///android_asset/custom-bitmovinplayer-ui.min.css",
+                        null,
+                        "file:///android_asset/custom-bitmovinplayer-ui.min.js"
+                ),
+                false,
+                ScalingMode.Fit
+        );
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         Object javascriptInterface = new Object() {
@@ -61,9 +62,14 @@ public class PlaybackActivity extends AppCompatActivity {
 
         // Create new Player with our PlayerConfig
         String key = "{ANALYTICS_LICENSE_KEY}";
-        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
-        // Create a PlayerView with our Player
-        playerView = new PlayerView(this, player);
+        Player player = PlayerFactory.create(
+                this,
+                new PlayerConfig(),
+                new AnalyticsConfig(key)
+        );
+
+        // Create a PlayerView with our Player and PlayerViewConfig
+        playerView = new PlayerView(this, player, viewConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
 
         // Set the CustomMessageHandler to the playerView

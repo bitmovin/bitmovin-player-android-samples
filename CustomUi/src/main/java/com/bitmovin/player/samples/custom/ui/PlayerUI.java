@@ -27,6 +27,9 @@ import com.bitmovin.player.api.event.EventListener;
 import com.bitmovin.player.api.event.PlayerEvent;
 import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.ui.FullscreenHandler;
+import com.bitmovin.player.api.ui.PlayerViewConfig;
+import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.UiConfig;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -58,7 +61,14 @@ public class PlayerUI extends RelativeLayout {
         super(context);
         // Create new PlayerView with our PlayerConfiguration
         this.player = player;
-        playerView = new PlayerView(context, player);
+
+         // Create a PlayerViewConfig with a disabled UI
+        PlayerViewConfig viewConfig = new PlayerViewConfig(
+                UiConfig.Disabled.INSTANCE,
+                false,
+                ScalingMode.Fit
+        );
+        playerView = new PlayerView(context, player, viewConfig);
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         setup();
     }

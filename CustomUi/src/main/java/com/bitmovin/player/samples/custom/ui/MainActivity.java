@@ -32,16 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create new StyleConfig
-        StyleConfig styleConfig = new StyleConfig();
-        // Disable UI
-        styleConfig.setUiEnabled(false);
-
         // Creating a new PlayerConfig
         PlayerConfig playerConfig = new PlayerConfig();
-        // Assign created StyleConfig to the PlayerConfig
-        playerConfig.setStyleConfig(styleConfig);
-        // Assign a SourceItem to the PlayerConfig
 
         String key = "{ANALYTICS_LICENSE_KEY}";
         Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));

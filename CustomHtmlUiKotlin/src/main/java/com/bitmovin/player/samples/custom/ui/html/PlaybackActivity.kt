@@ -10,7 +10,8 @@ import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.source.SourceConfig
-import com.bitmovin.player.api.ui.StyleConfig
+import com.bitmovin.player.api.ui.PlayerViewConfig
+import com.bitmovin.player.api.ui.UiConfig
 import com.bitmovin.player.samples.custom.ui.html.databinding.ActivityPlaybackBinding
 import com.bitmovin.player.ui.CustomMessageHandler
 
@@ -24,21 +25,21 @@ class PlaybackActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
-        // Creating a new PlayerConfig with a StyleConfig
-        val playerConfig = PlayerConfig(
-            styleConfig = StyleConfig(
+        // Creating a new PlayerViewConfig
+        val viewConfig = PlayerViewConfig(
+            uiConfig = UiConfig.WebUi(
                 // Set URLs for the JavaScript and the CSS
-                playerUiJs = "file:///android_asset/custom-bitmovinplayer-ui.min.js",
-                playerUiCss = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
+                jsLocation = "file:///android_asset/custom-bitmovinplayer-ui.min.js",
+                cssLocation = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
             )
         )
 
         // Create a Player with our PlayerConfig
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        val player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey))
 
         // Create new PlayerView with our Player
-        playerView = PlayerView(this, player)
+        playerView = PlayerView(this, player, viewConfig)
         playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls

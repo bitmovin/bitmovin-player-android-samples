@@ -11,7 +11,9 @@ import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.analytics.create
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.api.ui.PlayerViewConfig
 import com.bitmovin.player.api.ui.StyleConfig
+import com.bitmovin.player.api.ui.UiConfig
 import com.bitmovin.player.samples.custom.ui.subtitleview.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -24,21 +26,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Create new StyleConfig
-        val styleConfig = StyleConfig()
-        // Disable default Bitmovin UI
-        styleConfig.isUiEnabled = false
-
-        // Creating a new PlayerConfig
-        // Assign created StyleConfig to the PlayerConfig
-        val playerConfig = PlayerConfig(styleConfig = styleConfig)
-
         // Creating a PlayerView and get it's Player instance.
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
-        playerView = PlayerView(this, player).apply {
-            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-        }
+        val player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey))
+
+        // Disable default Bitmovin UI
+        val viewConfig = PlayerViewConfig(uiConfig = UiConfig.Disabled)
+        playerView = PlayerView(this, player, viewConfig)
+            .apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
         player.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
 
         // Creating a SubtitleView and assign the current player instance.

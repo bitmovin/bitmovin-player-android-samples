@@ -4,6 +4,7 @@ package com.bitmovin.samples.tv.playback.basic;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,7 +19,9 @@ import com.bitmovin.player.api.event.PlayerEvent;
 import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
-import com.bitmovin.player.api.ui.StyleConfig;
+import com.bitmovin.player.api.ui.PlayerViewConfig;
+import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.UiConfig;
 import com.bitmovin.player.samples.tv.playback.basic.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,13 +44,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializePlayer() {
-        // Initialize BitmovinPlayerView from layout
-        playerView = findViewById(R.id.bitmovin_player_view);
-
         String key = "{ANALYTICS_LICENSE_KEY}";
         player = PlayerFactory.create(this, createPlayerConfig(), new AnalyticsConfig(key));
 
-        playerView.setPlayer(player);
+        // Here a custom bitmovinplayer-ui.js is loaded which utilizes the cast-UI as this matches our needs here perfectly.
+        // I.e. UI controls get shown / hidden whenever the Player API is called. This is needed due to the fact that on Android TV no touch events are received
+        PlayerViewConfig viewConfig = new PlayerViewConfig(
+                new UiConfig.WebUi(
+                        "file:///android_asset/bitmovinplayer-ui.css",
+                        null,
+                        "file:///android_asset/bitmovinplayer-ui.js"
+                ),
+                false,
+                ScalingMode.Fit
+        );
+
+        playerView = new PlayerView(this, player, viewConfig);
+
+        playerView.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        ));
+
+        LinearLayout layout = findViewById(R.id.playerRootLayout);
+        layout.addView(playerView, 0);
 
         // Create a new SourceItem. In this case we are loading a DASH source.
         String sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
@@ -59,12 +79,6 @@ public class MainActivity extends AppCompatActivity {
     private PlayerConfig createPlayerConfig() {
         // Creating a new PlayerConfig
         PlayerConfig playerConfig = new PlayerConfig();
-
-        // Here a custom bitmovinplayer-ui.js is loaded which utilizes the cast-UI as this matches our needs here perfectly.
-        // I.e. UI controls get shown / hidden whenever the Player API is called. This is needed due to the fact that on Android TV no touch events are received
-        StyleConfig styleConfig = new StyleConfig();
-        styleConfig.setPlayerUiJs("file:///android_asset/bitmovinplayer-ui.js");
-        playerConfig.setStyleConfig(styleConfig);
 
         PlaybackConfig playbackConfig = new PlaybackConfig();
         playbackConfig.setAutoplayEnabled(true);

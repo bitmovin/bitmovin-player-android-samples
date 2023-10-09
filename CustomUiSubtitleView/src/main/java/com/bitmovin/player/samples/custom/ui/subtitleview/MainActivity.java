@@ -14,7 +14,10 @@ import com.bitmovin.player.api.PlayerConfig;
 import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
+import com.bitmovin.player.api.ui.PlayerViewConfig;
+import com.bitmovin.player.api.ui.ScalingMode;
 import com.bitmovin.player.api.ui.StyleConfig;
+import com.bitmovin.player.api.ui.UiConfig;
 
 public class MainActivity extends AppCompatActivity {
     private Player player;
@@ -26,22 +29,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Create new StyleConfig
-        StyleConfig styleConfig = new StyleConfig();
-        // Disable default Player UI
-        styleConfig.setUiEnabled(false);
-
-        // Creating a new PlayerConfig
-        PlayerConfig playerConfig = new PlayerConfig();
-        // Assign created StyleConfig to the PlayerConfig
-        playerConfig.setStyleConfig(styleConfig);
-
         RelativeLayout playerContainer = findViewById(R.id.player_container);
 
         // Creating a PlayerView and get it's Player instance.
         String key = "{ANALYTICS_LICENSE_KEY}";
         Player player = PlayerFactory.create(this, new PlayerConfig(), new AnalyticsConfig(key));
-        playerView = new PlayerView(this, player);
+        PlayerViewConfig viewConfig = new PlayerViewConfig(
+                // Disable default Player UI
+                UiConfig.Disabled.INSTANCE,
+                false,
+                ScalingMode.Fit
+        );
+        playerView = new PlayerView(this,
+                player,
+                viewConfig
+        );
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         player.load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
 
