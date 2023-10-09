@@ -23,6 +23,7 @@ ext {
 
 // Load dependencies
 apply from: 'dependencies.gradle'
+
 allprojects {
     repositories {
         google()
