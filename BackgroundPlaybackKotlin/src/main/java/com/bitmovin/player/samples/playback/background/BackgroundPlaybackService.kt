@@ -104,5 +104,5 @@ class BackgroundPlaybackService : Service() {
         return super.onUnbind(intent)
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int) = START_STICKY
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int) = START_STICKY
 }

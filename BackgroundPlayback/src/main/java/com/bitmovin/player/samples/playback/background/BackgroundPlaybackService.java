@@ -11,7 +11,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.api.Player;
-
 import com.bitmovin.player.api.PlayerConfig;
 import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.ui.notification.CustomActionReceiver;
@@ -63,7 +62,7 @@ public class BackgroundPlaybackService extends Service {
                 NOTIFICATION_ID,
                 new DefaultMediaDescriptor(this.getAssets()),
                 customActionReceiver
-            );
+        );
 
         playerNotificationManager.setNotificationListener(new NotificationListener() {
             @Override
@@ -104,7 +103,7 @@ public class BackgroundPlaybackService extends Service {
     }
 
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
+    public int onStartCommand(@Nullable Intent intent, int flags, int startId) {
         return START_STICKY;
     }
 

@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
@@ -21,7 +22,9 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".BackgroundPlaybackService" />
+        <service
+            android:name=".BackgroundPlaybackService"
+            android:foregroundServiceType="mediaPlayback" />
 
         <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
