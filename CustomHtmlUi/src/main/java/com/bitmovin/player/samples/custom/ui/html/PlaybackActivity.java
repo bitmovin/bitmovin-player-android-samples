@@ -42,7 +42,8 @@ public class PlaybackActivity extends AppCompatActivity {
                 new UiConfig.WebUi(
                         "file:///android_asset/custom-bitmovinplayer-ui.min.css",
                         null,
-                        "file:///android_asset/custom-bitmovinplayer-ui.min.js"
+                        "file:///android_asset/custom-bitmovinplayer-ui.min.js",
+                        true
                 ),
                 false,
                 ScalingMode.Fit
@@ -71,6 +72,7 @@ public class PlaybackActivity extends AppCompatActivity {
         // Create a PlayerView with our Player and PlayerViewConfig
         playerView = new PlayerView(this, player, viewConfig);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        playerView.setKeepScreenOn(true);
 
         // Set the CustomMessageHandler to the playerView
         playerView.setCustomMessageHandler(customMessageHandler);

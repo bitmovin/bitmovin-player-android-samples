@@ -61,6 +61,7 @@ class MainActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT
             )
         }
+        playerView.keepScreenOn = true
         player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
 
         // Add PlayerView to the layout

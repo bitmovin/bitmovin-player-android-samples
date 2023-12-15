@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
         );
+        playerView.setKeepScreenOn(true);
         rootLayout.addView(playerView);
     }
 

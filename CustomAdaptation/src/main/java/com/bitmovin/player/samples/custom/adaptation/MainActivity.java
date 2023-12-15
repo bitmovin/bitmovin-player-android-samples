@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         LinearLayout rootView = findViewById(R.id.root);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        playerView.setKeepScreenOn(true);
         rootView.addView(playerView, 0);
     }
 

@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
         player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
 
         playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        playerView.keepScreenOn = true
         binding.root.addView(playerView, 0)
     }
 

@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.53.0'
+    implementation 'com.bitmovin.player:player:3.54.0'
     ```
 
 #### Additional SDK dependencies
@@ -207,11 +207,14 @@ When you want to develop an own Android application using the Bitmovin Player An
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     ```
 
-    In addition, also add the permission for checking the network state.
-    If targeting Android SDK version 33+ the permission for posting notifications has to be added as well:
+    In addition, also add the permission for checking the network state and starting a foreground service.
+    If targeting Android SDK version 33+ the permission for posting notifications has to be added as well.
+    When targeting Android SDK 34+, the `FOREGROUND_SERVICE_DATA_SYNC` permission is also required:
 
     ```
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     ```
 

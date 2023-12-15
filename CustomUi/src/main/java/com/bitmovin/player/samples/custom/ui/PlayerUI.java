@@ -70,6 +70,7 @@ public class PlayerUI extends RelativeLayout {
         );
         playerView = new PlayerView(context, player, viewConfig);
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        playerView.setKeepScreenOn(true);
         setup();
     }
 

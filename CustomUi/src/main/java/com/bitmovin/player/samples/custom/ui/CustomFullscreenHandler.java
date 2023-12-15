@@ -60,7 +60,6 @@ public class CustomFullscreenHandler implements FullscreenHandler {
     private void doLayoutChanges(final boolean fullscreen) {
         ActionBar actionBar = ((AppCompatActivity) this.activity).getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setShowHideAnimationEnabled(false);
             if (fullscreen) {
                 actionBar.hide();
             } else {

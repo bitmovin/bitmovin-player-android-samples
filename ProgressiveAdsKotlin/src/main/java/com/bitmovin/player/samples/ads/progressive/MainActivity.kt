@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
         playerView = PlayerView(this, player).apply {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+            keepScreenOn = true
         }
         // Load the SourceItem
         playerView.player?.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))

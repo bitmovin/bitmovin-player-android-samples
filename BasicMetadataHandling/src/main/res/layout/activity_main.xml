@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.bitmovin.player.samples.metadata.basic.MainActivity">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.bitmovin.player.samples.metadata.basic.MainActivity">
 
     <com.bitmovin.player.PlayerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/bitmovinPlayerView"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+        android:id="@+id/bitmovinPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:keepScreenOn="true">
 
     </com.bitmovin.player.PlayerView>
 

@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.MATCH_PARENT
         )
+        playerView.keepScreenOn = true
         binding.playerRootLayout.addView(playerView, 0)
 
         // Create a new SourceConfig. In this case we are loading a DASH source.

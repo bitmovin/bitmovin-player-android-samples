@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                 new UiConfig.WebUi(
                         "file:///android_asset/bitmovinplayer-ui.css",
                         null,
-                        "file:///android_asset/bitmovinplayer-ui.js"
+                        "file:///android_asset/bitmovinplayer-ui.js",
+                        true
                 ),
                 false,
                 ScalingMode.Fit
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT
         ));
+        playerView.setKeepScreenOn(true);
 
         LinearLayout layout = findViewById(R.id.playerRootLayout);
         layout.addView(playerView, 0);

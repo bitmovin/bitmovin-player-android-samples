@@ -32,7 +32,6 @@ class CustomFullscreenHandler(private val activity: Activity, private val player
 
     private fun doLayoutChanges(fullscreen: Boolean) {
         val actionBar = (activity as? AppCompatActivity)?.supportActionBar
-        actionBar?.setShowHideAnimationEnabled(false)
         if (fullscreen) actionBar?.hide() else actionBar?.show()
 
         if (playerUI.parent is ViewGroup) {

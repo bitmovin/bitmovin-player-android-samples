@@ -117,6 +117,7 @@ public class PlayerActivity extends AppCompatActivity {
         Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
         this.bitmovinPlayerView = new PlayerView(this, player);
         this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        this.bitmovinPlayerView.setKeepScreenOn(true);
 
         playerContainer.addView(bitmovinPlayerView);
 

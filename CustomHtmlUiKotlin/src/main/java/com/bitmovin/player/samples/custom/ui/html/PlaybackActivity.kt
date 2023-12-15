@@ -41,6 +41,7 @@ class PlaybackActivity : AppCompatActivity() {
         // Create new PlayerView with our Player
         playerView = PlayerView(this, player, viewConfig)
         playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        playerView.keepScreenOn = true
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         val javascriptInterface = object : Any() {

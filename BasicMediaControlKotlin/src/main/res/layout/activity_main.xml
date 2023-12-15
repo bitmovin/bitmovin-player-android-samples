@@ -6,12 +6,13 @@
     tools:context="com.bitmovin.player.samples.mediacontrol.basic.MainActivity">
 
     <com.bitmovin.player.PlayerView
+        android:id="@+id/playerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/playerView"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentTop="true"
+        android:keepScreenOn="true">
 
     </com.bitmovin.player.PlayerView>
 

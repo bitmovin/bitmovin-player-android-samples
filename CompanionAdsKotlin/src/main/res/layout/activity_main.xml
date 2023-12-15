@@ -4,22 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
     android:orientation="vertical"
-    android:weightSum="2">
+    android:weightSum="2"
+    tools:context=".MainActivity">
 
     <com.bitmovin.player.PlayerView
+        android:id="@+id/bitmovinPlayerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:id="@+id/bitmovinPlayerView"
         android:layout_weight="1"
-        app:initialize_player="false"/>
+        android:keepScreenOn="true"
+        app:initialize_player="false" />
 
     <FrameLayout
         android:id="@+id/companionAdContainer"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_weight="1" />
 
 </LinearLayout>

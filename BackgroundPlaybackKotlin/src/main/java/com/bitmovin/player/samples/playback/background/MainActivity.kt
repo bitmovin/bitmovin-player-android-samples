@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
                     ViewGroup.LayoutParams.MATCH_PARENT
             )
         }
+        playerView.keepScreenOn = true
         binding.root.addView(playerView)
     }
 

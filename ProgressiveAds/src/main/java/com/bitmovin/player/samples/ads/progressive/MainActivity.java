@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
         playerView = new PlayerView(this, player);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        playerView.setKeepScreenOn(true);
 
         // Load the SourceItem
         playerView.getPlayer().load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));

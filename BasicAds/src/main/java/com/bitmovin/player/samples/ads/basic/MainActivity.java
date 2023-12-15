@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                         LinearLayout.LayoutParams.MATCH_PARENT
                 )
         );
-
+        playerView.setKeepScreenOn(true);
         playerView.getPlayer().load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
 
         LinearLayout rootView = findViewById(R.id.activity_main);
