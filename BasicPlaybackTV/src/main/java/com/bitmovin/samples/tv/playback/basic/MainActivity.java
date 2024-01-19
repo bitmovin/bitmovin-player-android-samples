@@ -12,8 +12,8 @@ import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.PlaybackConfig;
 import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.PlayerConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.event.EventListener;
 import com.bitmovin.player.api.event.PlayerEvent;
 import com.bitmovin.player.api.event.SourceEvent;
@@ -45,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializePlayer() {
         String key = "{ANALYTICS_LICENSE_KEY}";
-        player = PlayerFactory.create(this, createPlayerConfig(), new AnalyticsConfig(key));
+        player = new PlayerBuilder(this)
+                .setPlayerConfig(createPlayerConfig())
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
 
         // Here a custom bitmovinplayer-ui.js is loaded which utilizes the cast-UI as this matches our needs here perfectly.
         // I.e. UI controls get shown / hidden whenever the Player API is called. This is needed due to the fact that on Android TV no touch events are received

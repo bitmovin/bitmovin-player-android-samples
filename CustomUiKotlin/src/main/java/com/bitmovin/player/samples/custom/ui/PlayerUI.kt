@@ -16,7 +16,7 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.event.*
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.ui.FullscreenHandler
@@ -34,7 +34,11 @@ class PlayerUI(
 ) : RelativeLayout(context) {
     // Create new Player with our PlayerConfig
     private val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-    private val player = Player.create(context, playerConfig, AnalyticsConfig(analyticsKey))
+    private val player = Player(
+        context,
+        playerConfig,
+        AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey))
+    )
     private var binding: PlayerUiBinding = PlayerUiBinding.inflate(
         LayoutInflater.from(context), this, true
     )

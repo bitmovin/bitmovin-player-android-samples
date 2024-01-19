@@ -6,9 +6,8 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.analytics.api.CustomData
 import com.bitmovin.analytics.api.SourceMetadata
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.AnalyticsApi.Companion.analytics
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
+import com.bitmovin.player.api.analytics.AnalyticsSourceConfig
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.analytics.databinding.ActivityMainBinding
@@ -61,7 +60,10 @@ class MainActivity : AppCompatActivity() {
             randomizeUserId = true,
         )
         // create a player with analytics config
-        player = Player.create(this, PlayerConfig(), analyticsConfig).also {
+        player = Player(
+            context = this,
+            analyticsConfig = AnalyticsPlayerConfig.Enabled(analyticsConfig),
+        ).also {
             binding.playerView.player = it
         }
 
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             )
         )
         // load the source with custom metadata
-        val source = Source.create(sourceConfig, sourceMetadata)
+        val source = Source(sourceConfig, AnalyticsSourceConfig.Enabled(sourceMetadata))
 
         player.load(source)
     }

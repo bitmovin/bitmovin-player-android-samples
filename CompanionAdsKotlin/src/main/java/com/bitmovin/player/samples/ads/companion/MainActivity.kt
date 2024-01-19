@@ -6,8 +6,12 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.advertising.*
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.advertising.AdItem
+import com.bitmovin.player.api.advertising.AdSource
+import com.bitmovin.player.api.advertising.AdSourceType
+import com.bitmovin.player.api.advertising.AdvertisingConfig
+import com.bitmovin.player.api.advertising.CompanionAdContainer
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.ads.companion.databinding.ActivityMainBinding
@@ -36,11 +40,20 @@ class MainActivity : AppCompatActivity() {
         )
 
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey)).also {
+        player = Player(
+            this,
+            playerConfig,
+            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        ).also {
             playerView.player = it
         }
 
-        player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
+        player.load(
+            SourceConfig(
+                "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd",
+                SourceType.Dash
+            )
+        )
     }
 
     override fun onStart() {

@@ -7,12 +7,10 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.SubtitleView
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.api.ui.PlayerViewConfig
-import com.bitmovin.player.api.ui.StyleConfig
 import com.bitmovin.player.api.ui.UiConfig
 import com.bitmovin.player.samples.custom.ui.subtitleview.databinding.ActivityMainBinding
 
@@ -28,7 +26,10 @@ class MainActivity : AppCompatActivity() {
 
         // Creating a PlayerView and get it's Player instance.
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey))
+        val player = Player(
+            context = this,
+            analyticsConfig = AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        )
 
         // Disable default Bitmovin UI
         val viewConfig = PlayerViewConfig(uiConfig = UiConfig.Disabled)

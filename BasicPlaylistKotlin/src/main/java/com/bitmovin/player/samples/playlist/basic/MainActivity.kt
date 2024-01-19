@@ -6,8 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.SourceEvent
 import com.bitmovin.player.api.event.next
@@ -36,7 +35,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey)).also {
+        player = Player(
+            context = this,
+            analyticsConfig = AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        ).also {
             binding.playerView.player = it
         }
 
@@ -71,32 +73,32 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         val sources = listOf(
-                Source.create(
+                Source(
                         SourceConfig(
                                 url = SintelHls,
                                 type = SourceType.Hls,
-                                title = "(1/4) Sintel HLS"
+                                title = "(1/4) Sintel HLS",
                         )
                 ),
-                Source.create(
+                Source(
                         SourceConfig(
                                 url = ArtOfMotionProgressive,
                                 type = SourceType.Progressive,
-                                title = "(2/4) Art of Motion Progressive"
+                                title = "(2/4) Art of Motion Progressive",
                         )
                 ),
-                Source.create(
+                Source(
                         SourceConfig(
                                 url = SintelDash,
                                 type = SourceType.Dash,
-                                title = "(3/4) Sintel DASH"
+                                title = "(3/4) Sintel DASH",
                         )
                 ),
-                Source.create(
+                Source(
                         SourceConfig(
                                 url = KronehitLiveHls,
                                 type = SourceType.Hls,
-                                title = "(4/4) Kronehit Live HLS"
+                                title = "(4/4) Kronehit Live HLS",
                         )
                 )
         )

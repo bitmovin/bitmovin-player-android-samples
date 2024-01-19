@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.player.api.PlayerConfig
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
-import com.bitmovin.player.api.ui.StyleConfig
 import com.bitmovin.player.samples.custom.ui.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         playerUi.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
 
         // Load the Source into the player
-        playerUi.load(Source.create(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")))
+        playerUi.load(Source(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")))
 
         binding.rootView.addView(playerUi)
     }

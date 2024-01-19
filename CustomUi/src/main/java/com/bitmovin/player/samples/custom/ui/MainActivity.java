@@ -16,12 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.api.Player;
-import com.bitmovin.player.api.PlayerConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.FullscreenHandler;
-import com.bitmovin.player.api.ui.StyleConfig;
 
 public class MainActivity extends AppCompatActivity {
     private PlayerUI playerUi;
@@ -32,11 +30,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Creating a new PlayerConfig
-        PlayerConfig playerConfig = new PlayerConfig();
-
         String key = "{ANALYTICS_LICENSE_KEY}";
-        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
+        Player player = new PlayerBuilder(this)
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
         playerUi = new PlayerUI(this, player);
         fullscreenHandler = new CustomFullscreenHandler(this, playerUi);
 

@@ -12,6 +12,7 @@ import com.bitmovin.player.api.event.PlayerEvent;
 import com.bitmovin.player.api.playlist.PlaylistConfig;
 import com.bitmovin.player.api.playlist.PlaylistOptions;
 import com.bitmovin.player.api.source.Source;
+import com.bitmovin.player.api.source.SourceBuilder;
 import com.bitmovin.player.api.source.SourceConfig;
 
 import java.util.Arrays;
@@ -40,7 +41,10 @@ public class MainActivity extends AppCompatActivity {
         SourceConfig sourceConfig2 = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8");
         sourceConfig2.setTitle("Sintel");
 
-        List<Source> sources = Arrays.asList(Source.create(sourceConfig1), Source.create(sourceConfig2));
+        List<Source> sources = Arrays.asList(
+                new SourceBuilder(sourceConfig1).build(),
+                new SourceBuilder(sourceConfig2).build()
+        );
 
         this.player.on(PlayerEvent.PlaylistTransition.class, this.onReadyListener);
 

@@ -11,7 +11,7 @@ import com.bitmovin.player.api.advertising.AdItem
 import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.ads.progressive.databinding.ActivityMainBinding
@@ -46,7 +46,11 @@ class MainActivity : AppCompatActivity() {
 
         // Create a new Player instance with a PlayerConfig used to instantiate the PlayerView
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        val player = Player(
+            this,
+            playerConfig,
+            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        )
         playerView = PlayerView(this, player).apply {
             layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
             keepScreenOn = true

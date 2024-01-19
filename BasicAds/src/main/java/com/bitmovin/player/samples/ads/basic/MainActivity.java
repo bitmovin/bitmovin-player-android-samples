@@ -8,12 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.PlayerConfig;
 import com.bitmovin.player.api.advertising.AdItem;
 import com.bitmovin.player.api.advertising.AdSource;
 import com.bitmovin.player.api.advertising.AdSourceType;
 import com.bitmovin.player.api.advertising.AdvertisingConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.source.SourceConfig;
 
 public class MainActivity extends AppCompatActivity {
@@ -57,7 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         // Create new BitmovinPlayerView with our PlayerConfiguration and AnalyticsConfiguration
         String key = "{ANALYTICS_LICENSE_KEY}";
-        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
+        Player player = new PlayerBuilder(this)
+                .setPlayerConfig(playerConfig)
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
         playerView = new PlayerView(this, player);
         playerView.setLayoutParams(
                 new LinearLayout.LayoutParams(

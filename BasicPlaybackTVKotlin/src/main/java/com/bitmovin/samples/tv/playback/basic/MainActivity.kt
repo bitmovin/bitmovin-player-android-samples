@@ -10,7 +10,7 @@ import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.PlaybackConfig
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.deficiency.ErrorEvent
 import com.bitmovin.player.api.event.PlayerEvent
 import com.bitmovin.player.api.event.SourceEvent
@@ -46,12 +46,12 @@ class MainActivity : AppCompatActivity() {
         // Initialize PlayerView from layout and attach a new Player instance
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
 
-        player = Player.create(
+        player = Player(
             this,
             PlayerConfig(
                 playbackConfig = PlaybackConfig(isAutoplayEnabled = true)
             ),
-            AnalyticsConfig(analyticsKey)
+            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
         )
 
         playerView = PlayerView(

@@ -8,11 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
-import com.bitmovin.player.api.PlayerConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.event.Event;
 import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.source.Source;
+import com.bitmovin.player.api.source.SourceBuilder;
 import com.bitmovin.player.api.source.SourceConfig;
 
 
@@ -63,10 +63,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initializePlayer() {
         String key = "{ANALYTICS_LICENSE_KEY}";
-        player = PlayerFactory.create(this, new PlayerConfig(), new AnalyticsConfig(key));
-        Source source = Source.create(
+        player = new PlayerBuilder(this)
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
+        Source source = new SourceBuilder(
                 SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
-        );
+        ).build();
 
         viewLogger.attach(playerView);
         playerLogger.attach(player);

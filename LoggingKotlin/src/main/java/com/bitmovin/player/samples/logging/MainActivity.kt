@@ -4,8 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.logging.databinding.ActivityMainBinding
@@ -31,10 +30,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey)).also {
+        player = Player(
+            context = this,
+            analyticsConfig = AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        ).also {
             binding.playerView.player = it
         }
-        val source = Source.create(SourceConfig.fromUrl(ART_OF_MOTION))
+        val source = Source(SourceConfig.fromUrl(ART_OF_MOTION))
 
         // Attach all loggers to their respective components
         playerLogger.attach(player)

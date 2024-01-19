@@ -18,8 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
-import com.bitmovin.player.api.PlayerConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.PlayerViewConfig;
@@ -63,11 +62,9 @@ public class PlaybackActivity extends AppCompatActivity {
 
         // Create new Player with our PlayerConfig
         String key = "{ANALYTICS_LICENSE_KEY}";
-        Player player = PlayerFactory.create(
-                this,
-                new PlayerConfig(),
-                new AnalyticsConfig(key)
-        );
+        Player player = new PlayerBuilder(this)
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
 
         // Create a PlayerView with our Player and PlayerViewConfig
         playerView = new PlayerView(this, player, viewConfig);

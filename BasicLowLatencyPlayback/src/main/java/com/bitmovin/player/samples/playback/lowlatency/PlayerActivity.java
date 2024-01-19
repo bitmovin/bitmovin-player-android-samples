@@ -23,8 +23,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bitmovin.analytics.api.AnalyticsConfig;
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.Player;
+import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.PlayerConfig;
-import com.bitmovin.player.api.analytics.PlayerFactory;
 import com.bitmovin.player.api.buffer.BufferType;
 import com.bitmovin.player.api.drm.WidevineConfig;
 import com.bitmovin.player.api.event.EventListener;
@@ -114,7 +114,10 @@ public class PlayerActivity extends AppCompatActivity {
         playerConfig.setLiveConfig(liveConfig);
 
         String key = "{ANALYTICS_LICENSE_KEY}";
-        Player player = PlayerFactory.create(this, playerConfig, new AnalyticsConfig(key));
+        Player player = new PlayerBuilder(this)
+                .setPlayerConfig(playerConfig)
+                .configureAnalytics(new AnalyticsConfig(key))
+                .build();
         this.bitmovinPlayerView = new PlayerView(this, player);
         this.bitmovinPlayerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
         this.bitmovinPlayerView.setKeepScreenOn(true);

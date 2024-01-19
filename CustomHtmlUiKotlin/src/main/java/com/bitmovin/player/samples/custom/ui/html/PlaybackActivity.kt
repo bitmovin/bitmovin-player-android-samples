@@ -7,8 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.ui.PlayerViewConfig
 import com.bitmovin.player.api.ui.UiConfig
@@ -36,7 +35,10 @@ class PlaybackActivity : AppCompatActivity() {
 
         // Create a Player with our PlayerConfig
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, PlayerConfig(), AnalyticsConfig(analyticsKey))
+        val player = Player(
+            context = this,
+            analyticsConfig = AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        )
 
         // Create new PlayerView with our Player
         playerView = PlayerView(this, player, viewConfig)

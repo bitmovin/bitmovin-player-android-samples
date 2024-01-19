@@ -7,7 +7,7 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.media.AdaptationConfig
 import com.bitmovin.player.api.media.video.quality.VideoAdaptation
 import com.bitmovin.player.api.source.SourceConfig
@@ -25,7 +25,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        player = Player.create(this, createPlayerConfig(), AnalyticsConfig(analyticsKey))
+        player = Player(
+            this,
+            createPlayerConfig(),
+            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        )
         playerView = PlayerView(this, player)
 
         player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))

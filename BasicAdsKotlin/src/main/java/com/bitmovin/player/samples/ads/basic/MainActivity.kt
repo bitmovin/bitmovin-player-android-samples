@@ -7,12 +7,12 @@ import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.advertising.AdItem
 import com.bitmovin.player.api.advertising.AdSource
 import com.bitmovin.player.api.advertising.AdSourceType
 import com.bitmovin.player.api.advertising.AdvertisingConfig
-import com.bitmovin.player.api.analytics.create
+import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
+import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.ads.basic.databinding.ActivityMainBinding
 
 // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
@@ -54,7 +54,11 @@ class MainActivity : AppCompatActivity() {
 
         // Create new Player with our PlayerConfig
         val analyticsKey = "{ANALYTICS_LICENSE_KEY}"
-        val player = Player.create(this, playerConfig, AnalyticsConfig(analyticsKey))
+        val player = Player(
+            this,
+            playerConfig,
+            AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
+        )
         playerView = PlayerView(this, player).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
