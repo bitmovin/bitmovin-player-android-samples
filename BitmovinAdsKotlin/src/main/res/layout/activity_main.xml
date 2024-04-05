@@ -5,6 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    tools:context="com.bitmovin.player.samples.ads.progressive.MainActivity">
+    tools:context="com.bitmovin.player.samples.ads.bitmovin.MainActivity">
 
 </LinearLayout>

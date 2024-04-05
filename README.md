@@ -42,8 +42,9 @@ Every example is available in `Java` and `Kotlin` :+1:
 + **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
 
 ### Advertising
-+   **BasicAds** Shows how the Bitmovin Player can be setup and configured for playback of ads.
-+   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads.
++   **ImaAds** Shows how the Bitmovin Player can be setup and configured for playback of ads using IMA SDK.
++   **BitmovinAds** Shows how the Bitmovin Player can be setup and configured for playback of ads using Bitmovin Advertising Module.
++   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads using IMA SDK.
 
 ### UI & Subtitles
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
@@ -71,7 +72,8 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.playlist.basic
     com.bitmovin.player.samples.drm.basic
     com.bitmovin.player.samples.metadata.basic
-    com.bitmovin.player.samples.ads.basic
+    com.bitmovin.player.samples.ads.ima
+    com.bitmovin.player.samples.ads.bitmovin
     com.bitmovin.player.samples.ads.companion
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.vr.basic
@@ -176,7 +178,7 @@ When you want to develop an own Android application using the Bitmovin Player An
              />
      ```
 
-2. **Advertising Support** -
+2. **Advertising with IMA SDK** -
     If advertising support should be enabled, also add the following dependencies to your project:
 
     ```
