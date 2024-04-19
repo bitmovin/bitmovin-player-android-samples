@@ -16,8 +16,8 @@ import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.ads.bitmovin.databinding.ActivityMainBinding
 
 private const val BITMOVIN_AD = "https://cdn.bitmovin.com/content/player/advertising/bitmovin-ad.xml"
+private const val NO_RESPONSE_AD = "https://this-url-doesnt-exist/ad.xml"
 // These are Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
-private const val SINGLE_REDIRECT_ERROR_AD = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator="
 private const val SINGLE_REDIRECT_LINEAR_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dredirectlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator="
 private const val SINGLE_SKIPPABLE_INLINE_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator="
 
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         // Create AdSources
         val bitmovinAd = AdSource(AdSourceType.Bitmovin, BITMOVIN_AD)
-        val redirectErrorAd = AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_ERROR_AD)
+        val noResponseAd = AdSource(AdSourceType.Bitmovin, NO_RESPONSE_AD)
         val redirectLinearAd = AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_LINEAR_AD)
         val skippableInlineAd = AdSource(AdSourceType.Bitmovin, SINGLE_SKIPPABLE_INLINE_AD)
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         // Set up a mid-roll waterfalling ad at 10% of the content duration
         // NOTE: AdItems containing more than one AdSource, will be executed as waterfalling ad
-        val midRoll = AdItem("10%", redirectErrorAd, bitmovinAd)
+        val midRoll = AdItem("10%", noResponseAd, bitmovinAd)
 
         // Set up a post-roll ad
         val postRoll = AdItem("post", redirectLinearAd)

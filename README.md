@@ -44,6 +44,7 @@ Every example is available in `Java` and `Kotlin` :+1:
 ### Advertising
 +   **ImaAds** Shows how the Bitmovin Player can be setup and configured for playback of ads using IMA SDK.
 +   **BitmovinAds** Shows how the Bitmovin Player can be setup and configured for playback of ads using Bitmovin Advertising Module.
++   **BitmovinCustomAdsUi** Shows how the Bitmovin Player can be setup and configured to use a custom UI for ads.
 +   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads using IMA SDK.
 
 ### UI & Subtitles

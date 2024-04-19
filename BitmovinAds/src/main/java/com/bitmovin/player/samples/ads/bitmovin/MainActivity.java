@@ -18,8 +18,8 @@ import com.bitmovin.player.api.source.SourceConfig;
 
 public class MainActivity extends AppCompatActivity {
     private static final String BITMOVIN_AD = "https://cdn.bitmovin.com/content/player/advertising/bitmovin-ad.xml";
+    private static final String NO_RESPONSE_AD = "https://this-url-doesnt-exist/ad.xml";
     // These are Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
-    private static final String SINGLE_REDIRECT_ERROR_AD = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator=";
     private static final String SINGLE_REDIRECT_LINEAR_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dredirectlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=";
     private static final String SINGLE_SKIPPABLE_INLINE_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=";
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Create AdSources
         AdSource bitmovinAd = new AdSource(AdSourceType.Bitmovin, BITMOVIN_AD);
-        AdSource redirectErrorAd = new AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_ERROR_AD);
+        AdSource noResponseAd = new AdSource(AdSourceType.Bitmovin, NO_RESPONSE_AD);
         AdSource redirectLinearAd = new AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_LINEAR_AD);
         AdSource skippableInlineAd = new AdSource(AdSourceType.Bitmovin, SINGLE_SKIPPABLE_INLINE_AD);
 
@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Set up a mid-roll waterfalling ad at 10% of the content duration
         // NOTE: AdItems containing more than one AdSource will be executed as waterfalling ad
-        AdItem midRoll = new AdItem("10%", redirectErrorAd, bitmovinAd);
+        AdItem midRoll = new AdItem("10%", noResponseAd, bitmovinAd);
 
         // Set up a post-roll ad
         AdItem postRoll = new AdItem("post", redirectLinearAd);

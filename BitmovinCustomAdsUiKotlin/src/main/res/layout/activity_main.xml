@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.bitmovin.player.samples.ads.ui.MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/ads_ui_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="5dp"
+        android:visibility="gone"
+        tools:ignore="UselessParent">
+
+        <TextView
+            android:id="@+id/ad_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentBottom="true"
+            android:textColor="@android:color/white" />
+
+        <Button
+            android:id="@+id/skip_ad"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/border_button_background"
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:id="@+id/visit_advertiser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:text="Visit advertiser"
+            android:textColor="@android:color/white"
+            tools:ignore="HardcodedText" />
+    </RelativeLayout>
+</RelativeLayout>
