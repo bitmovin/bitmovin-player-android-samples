@@ -5,7 +5,7 @@ android {
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.tv.playback.basic"
-        minSdkVersion 17 // leanback uses 17 as min so we can't go below that for this sample
+        minSdkVersion rootProject.minSdkVersion
         targetSdkVersion rootProject.targetSdkVersion
         versionCode 1
         versionName "1.0"

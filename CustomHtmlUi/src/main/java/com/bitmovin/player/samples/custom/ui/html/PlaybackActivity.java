@@ -42,7 +42,8 @@ public class PlaybackActivity extends AppCompatActivity {
                         "file:///android_asset/custom-bitmovinplayer-ui.min.css",
                         null,
                         "file:///android_asset/custom-bitmovinplayer-ui.min.js",
-                        true
+                        true,
+                        false
                 ),
                 false,
                 ScalingMode.Fit
