@@ -148,7 +148,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.79.0'
+    implementation 'com.bitmovin.player:player:3.80.0'
     ```
 
 #### Additional SDK dependencies
