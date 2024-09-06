@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         // Creating a SubtitleView and assign the current player instance.
         subtitleView = SubtitleView(this)
+        subtitleView.setUserDefaultStyle()
+        subtitleView.setUserDefaultTextSize()
         subtitleView.setPlayer(player)
 
         // Setup minimalistic controls for the player
