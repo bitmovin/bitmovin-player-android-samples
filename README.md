@@ -148,7 +148,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.82.0'
+    implementation 'com.bitmovin.player:player:3.84.0'
     ```
 
 #### Additional SDK dependencies
@@ -183,7 +183,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     If advertising support should be enabled, also add the following dependencies to your project:
 
     ```
-    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.31.0'
+    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.33.0'
     implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
      ```
 
