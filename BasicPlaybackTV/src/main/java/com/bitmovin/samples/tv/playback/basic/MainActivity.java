@@ -58,7 +58,8 @@ public class MainActivity extends AppCompatActivity {
                         null,
                         "file:///android_asset/bitmovinplayer-ui.js",
                         true,
-                        false
+                        false,
+                        null
                 ),
                 false,
                 ScalingMode.Fit
