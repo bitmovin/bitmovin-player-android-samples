@@ -6,7 +6,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.2'
+        classpath 'com.android.tools.build:gradle:8.7.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -17,8 +17,8 @@ buildscript {
 ext {
     // SDK and tools
     minSdkVersion = 19
-    targetSdkVersion = 34
-    compileSdkVersion = 34
+    targetSdkVersion = 35
+    compileSdk = 35
 }
 
 // Load dependencies
@@ -34,6 +34,6 @@ allprojects {
     }
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+tasks.register('clean', Delete) {
+    delete rootProject.layout.buildDirectory
 }

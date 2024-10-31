@@ -1,12 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdk
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.ads.companion"
         minSdkVersion rootProject.minSdkVersion
@@ -23,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.bitmovin.player.samples.ads.companion'
 }
 
 dependencies {
@@ -33,4 +30,10 @@ dependencies {
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion"
     // Only needed if ads are used
     implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

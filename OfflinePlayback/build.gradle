@@ -1,12 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdk
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.offline.playback"
         minSdkVersion rootProject.minSdkVersion
@@ -23,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.bitmovin.player.samples.offline.playback'
 }
 
 dependencies {
@@ -30,4 +27,10 @@ dependencies {
     implementation supportDependencies.localbroadcastmanager
     implementation supportDependencies.gson
     implementation bitmovinPlayerDependencies.bitmovinPlayer
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

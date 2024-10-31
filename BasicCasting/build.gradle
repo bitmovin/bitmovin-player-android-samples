@@ -1,12 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdk
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.casting.basic"
         minSdkVersion 19
@@ -23,6 +19,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    namespace 'com.bitmovin.player.samples.casting.basic'
 }
 
 dependencies {
@@ -31,4 +28,10 @@ dependencies {
 
     implementation "com.google.android.gms:play-services-cast-framework:$playServicesCastVersion" //only needed if Chromecast is used
     implementation 'androidx.mediarouter:mediarouter:1.3.1'  //only needed if Chromecast is used
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

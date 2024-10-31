@@ -2,12 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdk
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.ads.ima"
         minSdkVersion rootProject.minSdkVersion
@@ -28,9 +24,7 @@ android {
         viewBinding = true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
+    namespace 'com.bitmovin.player.samples.ads.ima'
 }
 
 dependencies {
@@ -41,4 +35,10 @@ dependencies {
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion"
     // Only needed if ads are used
     implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion"
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }

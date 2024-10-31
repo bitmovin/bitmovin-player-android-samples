@@ -2,12 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion rootProject.compileSdkVersion
+    compileSdk rootProject.compileSdk
 
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
     defaultConfig {
         applicationId "com.bitmovin.player.samples.playback.background"
         minSdkVersion rootProject.minSdkVersion
@@ -27,6 +23,7 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    namespace 'com.bitmovin.player.samples.playback.background'
 }
 
 dependencies {
@@ -34,4 +31,10 @@ dependencies {
     implementation supportDependencies.androidx_activity_ktx
     implementation supportDependencies.androidx_fragment_ktx
     implementation bitmovinPlayerDependencies.bitmovinPlayer
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
