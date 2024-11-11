@@ -36,8 +36,7 @@ Every example is available in `Java` and `Kotlin` :+1:
 + **BackgroundPlayback** Shows how background playback can be implemented for the Bitmovin Player.
 + **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
 + **BasicPiPHandling** Shows how the `BitmovinPlayerView` can be configured to allow the Picture in Picture mode.
-+ **BasicControlNotification** Shows how the `BitmovinPlayerNotificationManager` can be used to show playback control notifications.
-+ **BasicMediaControl** Shows how the `BitmovinPlayerNotificationManager` can be used to connect to Android's system media controls.
++ **MediaSession** Shows how the media session integration can be used to connect to Android's system media controls and do background playback.
 + **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
 + **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
 
@@ -84,9 +83,7 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.custom.ui.html
     com.bitmovin.player.samples.offline.playback
     com.bitmovin.player.samples.pip.basic
-    com.bitmovin.player.samples.notification.basic
-    com.bitmovin.player.samples.mediacontrol.basic
-    com.bitmovin.player.samples.playback.background
+    com.bitmovin.player.samples.media.session
     com.bitmovin.player.samples.tv.playback.basic
     com.bitmovin.player.samples.playback.lowlatency
     com.bitmovin.player.samples.custom.adaptation
@@ -148,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.91.0'
+    implementation 'com.bitmovin.player:player:3.92.0'
     ```
 
 #### Additional SDK dependencies
