@@ -44,10 +44,13 @@ public class PlaybackActivity extends AppCompatActivity {
                         "file:///android_asset/custom-bitmovinplayer-ui.min.js",
                         true,
                         false,
-                        null
+                        null,
+                        UiConfig.WebUi.Variant.SmallScreenUi.INSTANCE,
+                        false
                 ),
                 false,
-                ScalingMode.Fit
+                ScalingMode.Fit,
+                false
         );
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls

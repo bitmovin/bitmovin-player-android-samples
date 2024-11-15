@@ -38,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
                 // Disable default Player UI
                 UiConfig.Disabled.INSTANCE,
                 false,
-                ScalingMode.Fit
+                ScalingMode.Fit,
+                false
         );
         playerView = new PlayerView(this,
                 player,
