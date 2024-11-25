@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```
-    implementation 'com.bitmovin.player:player:3.93.0'
+    implementation 'com.bitmovin.player:player:3.94.0'
     ```
 
 #### Additional SDK dependencies
@@ -239,12 +239,6 @@ the package `com.bitmovin.player`. This can be achieved by adding following `Pro
 #### Bitmovin
 -keep class com.bitmovin.player.** { *; }
 -keep interface com.bitmovin.player.** { *; }
-```
-
-The Bitmovin Player Android SDK logs against a logging facade (SLF4J).
-In order to be able to compile successfully with proguard enabled, the following line must be added to the proguard file:
-```
--dontwarn org.slf4j.**
 ```
 
 ## Documentation & Release Notes
