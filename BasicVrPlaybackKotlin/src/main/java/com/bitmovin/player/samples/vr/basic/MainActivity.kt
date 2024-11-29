@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
     private fun initializePlayer() {
         // Create a new SourceItem
         val vrSourceItem = SourceConfig(
-                url = "https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd",
+                url = "https://cdn.bitmovin.com/content/assets/playhouse-vr/mpds/105560.mpd",
                 type = SourceType.Dash,
                 vrConfig = VrConfig(
                         vrContentType = VrContentType.Single,

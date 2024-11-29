@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity
     protected void initializePlayer()
     {
         // Create a new SourceItem
-        SourceConfig vrSourceItem = new SourceConfig("https://bitmovin-a.akamaihd.net/content/playhouse-vr/mpds/105560.mpd", SourceType.Dash);
+        SourceConfig vrSourceItem = new SourceConfig("https://cdn.bitmovin.com/content/assets/playhouse-vr/mpds/105560.mpd", SourceType.Dash);
 
         // Get the current VRConfiguration of the SourceItem
         VrConfig vrConfiguration = vrSourceItem.getVrConfig();
