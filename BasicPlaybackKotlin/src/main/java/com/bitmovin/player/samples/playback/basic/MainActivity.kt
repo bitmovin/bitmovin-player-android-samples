@@ -8,7 +8,12 @@ import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.playback.basic.databinding.ActivityMainBinding
 
-private const val Sintel = "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"
+// Art of Motion with X-ASSET-LIST. (scheduled at 3 seconds - 2 ads inside the asset list)
+private const val ArtOfMotion_Interstitial_MidRollAssetList = "https://bitmovin-player-eu-west1-ci-input.s3.amazonaws.com/general/hls/interstitials/aom_asset_list_mid/main.m3u8"
+// Art of Motion with a pre and mid interstitial (mid at 5 seconds)
+private const val ArtOfMotion_Interstitial_PreAndMidRoll = "https://bitmovin-player-eu-west1-ci-input.s3.amazonaws.com/general/hls/interstitials/aom_pre_mid/main.m3u8"
+
+private const val source = ArtOfMotion_Interstitial_PreAndMidRoll
 
 class MainActivity : AppCompatActivity() {
 
@@ -57,6 +62,6 @@ class MainActivity : AppCompatActivity() {
             binding.playerView.player = it
         }
 
-        player.load(SourceConfig.fromUrl(Sintel))
+        player.load(SourceConfig.fromUrl(source))
     }
 }
