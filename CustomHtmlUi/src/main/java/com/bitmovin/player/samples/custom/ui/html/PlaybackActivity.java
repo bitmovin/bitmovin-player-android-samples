@@ -23,6 +23,7 @@ import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.PlayerViewConfig;
 import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.SurfaceType;
 import com.bitmovin.player.api.ui.UiConfig;
 import com.bitmovin.player.ui.CustomMessageHandler;
 
@@ -50,7 +51,8 @@ public class PlaybackActivity extends AppCompatActivity {
                 ),
                 false,
                 ScalingMode.Fit,
-                false
+                false,
+                SurfaceType.SurfaceView
         );
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
