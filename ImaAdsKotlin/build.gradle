@@ -33,8 +33,6 @@ dependencies {
 
     // Only needed if ads are used
     implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion"
-    // Only needed if ads are used
-    implementation "com.google.android.gms:play-services-ads-identifier:$playServicesAdsIdentifierVersion"
 }
 
 java {

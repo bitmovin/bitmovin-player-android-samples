@@ -17,6 +17,7 @@ import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.PlayerViewConfig;
 import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.SurfaceType;
 import com.bitmovin.player.api.ui.UiConfig;
 import com.bitmovin.player.samples.tv.playback.basic.R;
 
@@ -56,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
                 ),
                 false,
                 ScalingMode.Fit,
-                false
+                false,
+                SurfaceType.SurfaceView
         );
 
         playerView = new PlayerView(this, player, viewConfig);

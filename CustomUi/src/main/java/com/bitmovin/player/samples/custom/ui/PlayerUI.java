@@ -29,6 +29,7 @@ import com.bitmovin.player.api.event.SourceEvent;
 import com.bitmovin.player.api.ui.FullscreenHandler;
 import com.bitmovin.player.api.ui.PlayerViewConfig;
 import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.SurfaceType;
 import com.bitmovin.player.api.ui.UiConfig;
 
 import java.util.Timer;
@@ -67,7 +68,8 @@ public class PlayerUI extends RelativeLayout {
                 UiConfig.Disabled.INSTANCE,
                 false,
                 ScalingMode.Fit,
-                false
+                false,
+                SurfaceType.SurfaceView
         );
         playerView = new PlayerView(context, player, viewConfig);
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));

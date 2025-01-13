@@ -15,6 +15,7 @@ import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 import com.bitmovin.player.api.ui.PlayerViewConfig;
 import com.bitmovin.player.api.ui.ScalingMode;
+import com.bitmovin.player.api.ui.SurfaceType;
 import com.bitmovin.player.api.ui.UiConfig;
 
 public class MainActivity extends AppCompatActivity {
@@ -39,7 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 UiConfig.Disabled.INSTANCE,
                 false,
                 ScalingMode.Fit,
-                false
+                false,
+                SurfaceType.SurfaceView
         );
         playerView = new PlayerView(this,
                 player,
