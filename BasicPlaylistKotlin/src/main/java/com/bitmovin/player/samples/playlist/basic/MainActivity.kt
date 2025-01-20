@@ -20,9 +20,9 @@ import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.playlist.basic.databinding.ActivityMainBinding
 
-private const val SintelHls = "https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
-private const val ArtOfMotionProgressive = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4"
-private const val SintelDash = "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"
+private const val SintelHls = "https://cdn.bitmovin.com/content/assets/sintel/hls/playlist.m3u8"
+private const val ArtOfMotionProgressive = "https://cdn.bitmovin.com/content/assets/MI201109210084/MI201109210084_mpeg-4_hd_high_1080p25_10mbits.mp4"
+private const val SintelDash = "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"
 private const val KronehitLiveHls = "https://bitcdn-kronehit.bitmovin.com/v2/hls/playlist.m3u8"
 
 class MainActivity : AppCompatActivity() {

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         playerView.setPlayer(player);
 
         // create a source with a sourceMetadata for custom analytics tracking
-        SourceConfig sourceConfig = SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd");
+        SourceConfig sourceConfig = SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd");
         CustomData customData = new CustomData.Builder().setCustomData1("CustomData1").setExperimentName("Experiment1").build();
         SourceMetadata sourceMetadata = new SourceMetadata.Builder().setCustomData(customData).build();
         Source source = new SourceBuilder(sourceConfig)

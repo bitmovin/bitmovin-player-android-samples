@@ -47,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializePlayer() {
         // Create a new source config
-        val sourceConfig = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd")
+        val sourceConfig = SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd")
 
         // Attach DRM handling to the source config
         sourceConfig.drmConfig = WidevineConfig("https://cwip-shaka-proxy.appspot.com/no_auth")

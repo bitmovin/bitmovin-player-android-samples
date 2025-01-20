@@ -61,7 +61,7 @@ class PlaybackActivity : AppCompatActivity() {
         playerView.setCustomMessageHandler(customMessageHandler)
 
         //load the SourceConfig into the player
-        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        player.load(SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"))
 
         // Add PlayerView to the layout as first child
         binding.playerRootLayout.addView(playerView, 0)

@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         playerView = new PlayerView(this, player);
 
-        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        player.load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
 
         LinearLayout rootView = findViewById(R.id.root);
         playerView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));

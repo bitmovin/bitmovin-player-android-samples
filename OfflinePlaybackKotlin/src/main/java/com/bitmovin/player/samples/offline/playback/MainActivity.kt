@@ -288,11 +288,11 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         // Initialize a SourceConfig
         val artOfMotion = SourceConfig(
-            "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
+            "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
             SourceType.Dash
         )
         artOfMotion.thumbnailTrack =
-            ThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt")
+            ThumbnailTrack("https://cdn.bitmovin.com/content/assets/MI201109210084/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt")
         artOfMotion.title = "Art of Motion"
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"
@@ -309,7 +309,7 @@ class MainActivity : AppCompatActivity(), OfflineContentManagerListener, ListIte
 
         // Initialize a SourceConfig with a DRM configuration
         val artOfMotionDrm = SourceConfig(
-            "https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd",
+            "https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd",
             SourceType.Dash
         )
         artOfMotionDrm.drmConfig = WidevineConfig("https://cwip-shaka-proxy.appspot.com/no_auth")

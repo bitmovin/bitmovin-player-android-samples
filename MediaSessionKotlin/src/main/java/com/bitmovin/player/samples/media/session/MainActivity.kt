@@ -45,9 +45,9 @@ class MainActivity : AppCompatActivity() {
     private fun initializePlayer() {
         // Load a new source
         val sourceConfig = SourceConfig(
-            "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
+            "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
             SourceType.Dash,
-            posterSource = "https://bitmovin-a.akamaihd.net/content/poster/hd/RedBull.jpg"
+            posterSource = "https://cdn.bitmovin.com/content/assets/poster/hd/RedBull.jpg"
         )
 
         player?.load(sourceConfig)

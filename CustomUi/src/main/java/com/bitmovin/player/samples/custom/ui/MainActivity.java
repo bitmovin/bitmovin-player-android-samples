@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         playerUi = new PlayerUI(this, player);
         fullscreenHandler = new CustomFullscreenHandler(this, playerUi);
 
-        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        player.load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
 
         // Set the FullscreenHandler of the PlayerUI
         playerUi.setFullscreenHandler(fullscreenHandler);

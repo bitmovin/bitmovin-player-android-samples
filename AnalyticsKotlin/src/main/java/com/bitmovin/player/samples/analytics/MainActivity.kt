@@ -12,7 +12,7 @@ import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.analytics.databinding.ActivityMainBinding
 
-private const val Sintel = "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"
+private const val Sintel = "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"
 
 class MainActivity : AppCompatActivity() {
 

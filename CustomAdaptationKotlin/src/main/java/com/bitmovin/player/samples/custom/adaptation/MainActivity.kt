@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         )
         playerView = PlayerView(this, player)
 
-        player.load(SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
+        player.load(SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash))
 
         playerView.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
         playerView.keepScreenOn = true

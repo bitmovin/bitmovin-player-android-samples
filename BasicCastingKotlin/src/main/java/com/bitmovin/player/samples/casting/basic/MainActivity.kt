@@ -53,8 +53,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getExampleListItems(): List<ListItem> = listOf(
-            ListItem("Sintel", "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"),
-            ListItem("Art of Motion", "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
+            ListItem("Sintel", "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"),
+            ListItem("Art of Motion", "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd")
     )
 
     private data class ListItem(val title: String, val url: String)

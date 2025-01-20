@@ -16,7 +16,7 @@ import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.ads.progressive.databinding.ActivityMainBinding
 
-private const val AD_SOURCE_1 = "https://bitmovin-a.akamaihd.net/content/testing/ads/testad2s.mp4"
+private const val AD_SOURCE_1 = "https://cdn.bitmovin.com/content/assets/testing/ads/testad2s.mp4"
 private const val AD_SOURCE_2 = "file:///android_asset/testad2s.mp4"
 
 class MainActivity : AppCompatActivity() {
@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
             keepScreenOn = true
         }
         // Load the SourceItem
-        playerView.player?.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
+        playerView.player?.load(SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash))
 
         // Add PlayerView to the layout
         binding.root.addView(playerView, 0)

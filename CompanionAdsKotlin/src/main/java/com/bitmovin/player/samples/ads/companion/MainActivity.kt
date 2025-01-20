@@ -50,7 +50,7 @@ class MainActivity : AppCompatActivity() {
 
         player.load(
             SourceConfig(
-                "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd",
+                "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd",
                 SourceType.Dash
             )
         )

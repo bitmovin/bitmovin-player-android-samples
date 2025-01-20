@@ -9,7 +9,7 @@ import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.logging.databinding.ActivityMainBinding
 
-private const val ART_OF_MOTION = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
+private const val ART_OF_MOTION = "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
 
 class MainActivity : AppCompatActivity() {
     private lateinit var player: Player

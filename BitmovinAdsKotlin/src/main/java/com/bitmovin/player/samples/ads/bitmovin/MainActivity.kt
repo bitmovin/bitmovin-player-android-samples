@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
         playerView.keepScreenOn = true
-        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"))
+        player.load(SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"))
 
         // Add PlayerView to the layout
         binding.root.addView(playerView, 0)

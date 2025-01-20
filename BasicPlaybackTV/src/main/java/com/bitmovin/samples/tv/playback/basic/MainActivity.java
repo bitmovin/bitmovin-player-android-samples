@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         layout.addView(playerView, 0);
 
         // Create a new SourceItem. In this case we are loading a DASH source.
-        String sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
+        String sourceURL = "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd";
         SourceConfig sourceConfig = new SourceConfig(sourceURL, SourceType.Dash);
 
         player.load(sourceConfig);

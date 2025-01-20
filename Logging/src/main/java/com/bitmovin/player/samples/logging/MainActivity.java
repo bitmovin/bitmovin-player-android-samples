@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
         Source source = new SourceBuilder(
-                SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd")
+                SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd")
         ).build();
 
         viewLogger.attach(playerView);

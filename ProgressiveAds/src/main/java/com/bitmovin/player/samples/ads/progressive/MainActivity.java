@@ -18,7 +18,7 @@ import com.bitmovin.player.api.source.SourceConfig;
 import com.bitmovin.player.api.source.SourceType;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String AD_SOURCE_1 = "https://bitmovin-a.akamaihd.net/content/testing/ads/testad2s.mp4";
+    private static final String AD_SOURCE_1 = "https://cdn.bitmovin.com/content/assets/testing/ads/testad2s.mp4";
     private static final String AD_SOURCE_2 = "file:///android_asset/testad2s.mp4";
 
     private PlayerView playerView;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         playerView.setKeepScreenOn(true);
 
         // Load the SourceItem
-        playerView.getPlayer().load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        playerView.getPlayer().load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
 
         LinearLayout rootView = findViewById(R.id.activity_main);
 

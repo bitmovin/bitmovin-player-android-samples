@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         bitmovinPlayerView.setPlayer(bitmovinPlayer);
 
 
-        bitmovinPlayer.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        bitmovinPlayer.load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
     }
 
     @Override

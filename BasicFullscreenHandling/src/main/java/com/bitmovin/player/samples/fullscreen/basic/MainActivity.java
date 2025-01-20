@@ -64,6 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
     protected void initializePlayer() {
         // Load a new source
-        player.load(SourceConfig.fromUrl("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd"));
+        player.load(SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"));
     }
 }

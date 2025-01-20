@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 keepScreenOn = true
             }
-        player.load(SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash))
+        player.load(SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash))
 
         // Creating a SubtitleView and assign the current player instance.
         subtitleView = SubtitleView(this)

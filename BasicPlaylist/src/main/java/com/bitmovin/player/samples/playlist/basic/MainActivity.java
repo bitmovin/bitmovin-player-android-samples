@@ -36,9 +36,9 @@ public class MainActivity extends AppCompatActivity {
         this.playerView = this.findViewById(R.id.playerView);
         this.player = this.playerView.getPlayer();
 
-        SourceConfig sourceConfig1 = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8");
+        SourceConfig sourceConfig1 = SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/MI201109210084/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8");
         sourceConfig1.setTitle("Art of Motions");
-        SourceConfig sourceConfig2 = SourceConfig.fromUrl("https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8");
+        SourceConfig sourceConfig2 = SourceConfig.fromUrl("https://cdn.bitmovin.com/content/assets/sintel/hls/playlist.m3u8");
         sourceConfig2.setTitle("Sintel");
 
         List<Source> sources = Arrays.asList(

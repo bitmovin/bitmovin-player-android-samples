@@ -82,7 +82,7 @@ public class PlaybackActivity extends AppCompatActivity {
         playerView.setCustomMessageHandler(customMessageHandler);
 
         //load the SourceConfig into the player
-        player.load(new SourceConfig("https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        player.load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
 
         LinearLayout playerRootLayout = (LinearLayout) findViewById(R.id.player_view);
 

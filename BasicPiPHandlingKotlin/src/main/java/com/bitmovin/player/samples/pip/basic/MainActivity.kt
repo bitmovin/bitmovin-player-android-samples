@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         // load source using a source item
         bitmovinPlayer.load(
             SourceConfig(
-                url = "https://bitdash-a.akamaihd.net/content/sintel/sintel.mpd",
+                url = "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd",
                 type = SourceType.Dash
             )
         )

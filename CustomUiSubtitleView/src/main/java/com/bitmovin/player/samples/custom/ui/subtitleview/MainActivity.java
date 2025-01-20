@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         );
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         playerView.setKeepScreenOn(true);
-        player.load(new SourceConfig("https://bitmovin-a.akamaihd.net/content/sintel/sintel.mpd", SourceType.Dash));
+        player.load(new SourceConfig("https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd", SourceType.Dash));
 
         // Creating a SubtitleView and assign the current player instance.
         subtitleView = new SubtitleView(this);

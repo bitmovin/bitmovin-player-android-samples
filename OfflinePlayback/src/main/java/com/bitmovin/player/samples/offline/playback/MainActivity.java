@@ -299,8 +299,8 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         List<ListItem> listItems = new ArrayList<>();
 
         // Initialize a SourceConfig
-        SourceConfig artOfMotion = new SourceConfig("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash);
-        artOfMotion.setThumbnailTrack(new ThumbnailTrack("https://bitmovin-a.akamaihd.net/content/MI201109210084_1/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt"));
+        SourceConfig artOfMotion = new SourceConfig("https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd", SourceType.Dash);
+        artOfMotion.setThumbnailTrack(new ThumbnailTrack("https://cdn.bitmovin.com/content/assets/MI201109210084/thumbnails/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.vtt"));
         artOfMotion.setTitle("Art of Motion");
 
         // Initialize an OfflineContentManager in the rootFolder with the id "artOfMotion"
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity implements OfflineContentMan
         listItems.add(artOfMotionListItem);
 
         // Initialize a SourceConfig with a DRM configuration
-        SourceConfig artOfMotionDrm = new SourceConfig("https://bitmovin-a.akamaihd.net/content/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash);
+        SourceConfig artOfMotionDrm = new SourceConfig("https://cdn.bitmovin.com/content/assets/art-of-motion_drm/mpds/11331.mpd", SourceType.Dash);
         artOfMotionDrm.setDrmConfig(new WidevineConfig("https://cwip-shaka-proxy.appspot.com/no_auth"));
         artOfMotionDrm.setTitle("Art of Motion with DRM");
 

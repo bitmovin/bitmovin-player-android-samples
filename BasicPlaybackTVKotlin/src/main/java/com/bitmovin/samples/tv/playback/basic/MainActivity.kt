@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         binding.playerRootLayout.addView(playerView, 0)
 
         // Create a new SourceConfig. In this case we are loading a DASH source.
-        val sourceURL = "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
+        val sourceURL = "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd"
 
         player.load(SourceConfig(sourceURL, SourceType.Dash))
     }

@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         playerView.keepScreenOn = true
         player.load(
             SourceConfig(
-                "https://bitmovin-a.akamaihd.net/content/MI201109210084_1/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
+                "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
                 SourceType.Dash,
             ),
         )
