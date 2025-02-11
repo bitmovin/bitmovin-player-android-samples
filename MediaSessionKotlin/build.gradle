@@ -40,6 +40,7 @@ android {
 
 dependencies {
     implementation supportDependencies.appCompat
+    implementation supportDependencies.androidx_activity_ktx
     implementation bitmovinPlayerDependencies.bitmovinPlayer
     implementation "com.bitmovin.player:player-media-session:${bitmovinPlayerVersion}"
     implementation 'androidx.activity:activity:1.9.3'

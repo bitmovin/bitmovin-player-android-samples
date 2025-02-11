@@ -28,6 +28,7 @@ android {
 
 dependencies {
     implementation supportDependencies.appCompat
+    implementation supportDependencies.androidx_activity_ktx
     implementation bitmovinPlayerDependencies.bitmovinPlayer
 
     // Only needed if ads are used

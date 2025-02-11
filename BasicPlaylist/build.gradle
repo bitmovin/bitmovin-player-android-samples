@@ -24,6 +24,7 @@ android {
 
 dependencies {
     implementation supportDependencies.appCompat
+    implementation supportDependencies.androidx_activity
     implementation bitmovinPlayerDependencies.bitmovinPlayer
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

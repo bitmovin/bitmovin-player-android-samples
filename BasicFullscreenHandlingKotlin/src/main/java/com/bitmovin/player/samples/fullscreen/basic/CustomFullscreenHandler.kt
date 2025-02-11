@@ -1,25 +1,38 @@
 package com.bitmovin.player.samples.fullscreen.basic
 
 import android.app.Activity
-import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.view.KeyCharacterMap
-import androidx.appcompat.widget.Toolbar
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ActionBar
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.ui.FullscreenHandler
 
-
 class CustomFullscreenHandler(
     activity: Activity,
+    root:View,
     private val playerView: PlayerView,
-    private val toolbar: Toolbar?
+    private val actionbar: ActionBar?
 ) : FullscreenHandler {
     override var isFullscreen = false
     private var decorView: View? = activity.window.decorView
     private val playerOrientationListener = PlayerOrientationListener(activity).apply { enable() }
+
+    init {
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
+            if (isFullscreen) {
+                view.updatePadding(0, 0, 0, 0)
+            } else {
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updatePadding(insets.left, insets.top, insets.right, insets.bottom)
+            }
+            WindowInsetsCompat.CONSUMED
+        }
+    }
 
     private fun handleFullscreen(fullscreen: Boolean) {
         isFullscreen = fullscreen
@@ -48,7 +61,11 @@ class CustomFullscreenHandler(
 
     private fun updateLayout() {
         val parentView = playerView.parent
-        toolbar?.visibility = if (isFullscreen) View.GONE else View.VISIBLE
+        if (isFullscreen) {
+            actionbar?.hide()
+        } else {
+            actionbar?.show()
+        }
 
         if (parentView !is ViewGroup) return
 

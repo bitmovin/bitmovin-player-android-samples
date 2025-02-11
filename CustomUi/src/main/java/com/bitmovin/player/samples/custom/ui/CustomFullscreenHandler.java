@@ -8,19 +8,19 @@
 
 package com.bitmovin.player.samples.custom.ui;
 
-
-import android.app.Activity;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.bitmovin.player.api.ui.FullscreenHandler;
-import com.bitmovin.player.ui.FullscreenUtil;
 
 public class CustomFullscreenHandler implements FullscreenHandler {
-    private final Activity activity;
+    private final AppCompatActivity activity;
     private final View decorView;
     private final PlayerUI playerUI;
 
@@ -28,16 +28,24 @@ public class CustomFullscreenHandler implements FullscreenHandler {
 
     private boolean isFullscreen;
 
-
-    public CustomFullscreenHandler(Activity activity, PlayerUI playerUI) {
+    public CustomFullscreenHandler(AppCompatActivity activity, View rootView, PlayerUI playerUI) {
         this.activity = activity;
         this.playerUI = playerUI;
         this.decorView = activity.getWindow().getDecorView();
         this.playerOrientationListener = new PlayerOrientationListener(activity);
 
+        ViewCompat.setOnApplyWindowInsetsListener(rootView, (view, insets) -> {
+            if (isFullscreen) {
+                view.setPadding(0, 0, 0, 0);
+            } else {
+                Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            }
+            return WindowInsetsCompat.CONSUMED;
+        });
+
         this.playerOrientationListener.enable();
     }
-
 
     private void handleFullscreen(boolean fullscreen) {
         this.isFullscreen = fullscreen;

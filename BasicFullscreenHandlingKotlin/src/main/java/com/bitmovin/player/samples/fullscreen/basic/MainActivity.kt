@@ -1,7 +1,9 @@
 package com.bitmovin.player.samples.fullscreen.basic
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.samples.fullscreen.basic.databinding.ActivityMainBinding
@@ -11,16 +13,19 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        setSupportActionBar(binding.toolbar)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
+        }
 
         player = binding.playerView.player
 
         // Instantiate a custom FullscreenHandler
-        val customFullscreenHandler = CustomFullscreenHandler(this, binding.playerView, binding.toolbar)
+        val customFullscreenHandler = CustomFullscreenHandler(this, binding.root, binding.playerView, supportActionBar)
         // Set the FullscreenHandler to the PlayerView
         binding.playerView.setFullscreenHandler(customFullscreenHandler)
 

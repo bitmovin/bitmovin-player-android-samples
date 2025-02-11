@@ -13,34 +13,51 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.bitmovin.player.PlayerView;
 import com.bitmovin.player.api.ui.FullscreenHandler;
-import com.bitmovin.player.ui.FullscreenUtil;
 
 public class CustomFullscreenHandler implements FullscreenHandler {
     private Activity activity;
     private View decorView;
     private PlayerView playerView;
-    private Toolbar toolbar;
+    private ActionBar actionBar;
 
     private PlayerOrientationListener playerOrientationListener;
 
     private boolean isFullscreen;
 
-
-    public CustomFullscreenHandler(Activity activity, PlayerView playerView, Toolbar toolbar) {
+    public CustomFullscreenHandler(Activity activity,
+                                   PlayerView playerView,
+                                   @Nullable
+                                   ActionBar actionbar) {
         this.activity = activity;
         this.playerView = playerView;
-        this.toolbar = toolbar;
+        this.actionBar = actionbar;
         decorView = activity.getWindow().getDecorView();
         playerOrientationListener = new PlayerOrientationListener(activity);
 
         playerOrientationListener.enable();
+
+        ViewCompat.setOnApplyWindowInsetsListener(activity.findViewById(R.id.root), (view, insets) -> {
+            if (isFullscreen) {
+                view.setPadding(0, 0, 0, 0);
+            } else {
+                Insets bars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+            }
+            return WindowInsetsCompat.CONSUMED;
+        });
     }
 
     private void handleFullscreen(boolean fullscreen) {
@@ -114,11 +131,11 @@ public class CustomFullscreenHandler implements FullscreenHandler {
         @Override
         @SuppressLint("RestrictedApi")
         public void run() {
-            if (CustomFullscreenHandler.this.toolbar != null) {
+            if (actionBar != null) {
                 if (this.fullscreen) {
-                    CustomFullscreenHandler.this.toolbar.setVisibility(View.GONE);
+                    actionBar.hide();
                 } else {
-                    CustomFullscreenHandler.this.toolbar.setVisibility(View.VISIBLE);
+                    actionBar.show();
                 }
             }
 

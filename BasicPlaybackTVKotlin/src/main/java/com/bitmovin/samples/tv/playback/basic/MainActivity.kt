@@ -3,6 +3,7 @@ package com.bitmovin.samples.tv.playback.basic
 import android.os.Bundle
 import android.view.KeyEvent
 import android.widget.LinearLayout
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.PlayerView
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         // Switch from splash screen to main theme when we are done loading
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)

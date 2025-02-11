@@ -1,20 +1,33 @@
 package com.bitmovin.player.samples.custom.ui
 
-import android.app.Activity
-import android.os.Build
-import android.view.KeyCharacterMap
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.bitmovin.player.api.ui.FullscreenHandler
 
-class CustomFullscreenHandler(private val activity: Activity, private val playerUI: PlayerUI) : FullscreenHandler {
+class CustomFullscreenHandler(
+    private val activity: AppCompatActivity,
+    root: View,
+    private val playerUI: PlayerUI
+) : FullscreenHandler {
     private val decorView: View = activity.window.decorView
     override var isFullscreen: Boolean = false
     private val playerOrientationListener = PlayerOrientationListener(activity)
 
     init {
         playerOrientationListener.enable()
+        ViewCompat.setOnApplyWindowInsetsListener(root) { view, windowInsets ->
+            if (isFullscreen) {
+                view.updatePadding(0, 0, 0, 0)
+            } else {
+                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+                view.updatePadding(insets.left, insets.top, insets.right, insets.bottom)
+            }
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     private fun handleFullscreen(fullscreen: Boolean) {

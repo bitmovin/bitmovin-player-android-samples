@@ -1,19 +1,19 @@
 package com.bitmovin.player.samples.media.session
 
-import android.Manifest
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.view.ViewGroup
 import android.widget.RelativeLayout
-import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
 import com.bitmovin.player.api.source.SourceConfig
@@ -28,9 +28,20 @@ class MainActivity : AppCompatActivity() {
     private lateinit var uiBinding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         uiBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(uiBinding.root)
+        ViewCompat.setOnApplyWindowInsetsListener(uiBinding.root) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.updatePadding(insets.left, insets.top, insets.right, insets.bottom)
+            WindowInsetsCompat.CONSUMED
+        }
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = true
+            isAppearanceLightNavigationBars = true
+        }
+
         // Create a PlayerView without a Player and add it to the View hierarchy
         playerView = PlayerView(this, null as Player?).apply {
             layoutParams = RelativeLayout.LayoutParams(
