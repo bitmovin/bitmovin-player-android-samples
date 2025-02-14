@@ -69,15 +69,15 @@ public class MainActivity extends AppCompatActivity {
         AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll);
 
         // Create a new PlayerConfiguration
-        PlayerConfig playerConfig = new PlayerConfig();
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
 
         // Add the AdvertisingConfig to the PlayerConfig. Ads in the AdvertisingConfig will be scheduled automatically.
-        playerConfig.setAdvertisingConfig(advertisingConfig);
+        playerConfigBuilder.setAdvertisingConfig(advertisingConfig);
 
         // Create new BitmovinPlayerView with our PlayerConfiguration and AnalyticsConfiguration
         String key = "{ANALYTICS_LICENSE_KEY}";
         Player player = new PlayerBuilder(this)
-                .setPlayerConfig(playerConfig)
+                .setPlayerConfig(playerConfigBuilder.build())
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
         playerView = new PlayerView(this, player);

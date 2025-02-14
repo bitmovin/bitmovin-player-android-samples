@@ -54,14 +54,9 @@ public class MainActivity extends AppCompatActivity {
         Player player = new PlayerBuilder(this)
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
-        PlayerViewConfig viewConfig = new PlayerViewConfig(
-                // Disable default Player UI
-                UiConfig.Disabled.INSTANCE,
-                false,
-                ScalingMode.Fit,
-                false,
-                SurfaceType.SurfaceView
-        );
+        PlayerViewConfig viewConfig = new PlayerViewConfig.Builder()
+            .setUiConfig(UiConfig.Disabled.INSTANCE)
+            .build();
         playerView = new PlayerView(this,
                 player,
                 viewConfig

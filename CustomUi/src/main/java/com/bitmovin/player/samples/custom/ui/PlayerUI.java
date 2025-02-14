@@ -64,13 +64,9 @@ public class PlayerUI extends RelativeLayout {
         this.player = player;
 
          // Create a PlayerViewConfig with a disabled UI
-        PlayerViewConfig viewConfig = new PlayerViewConfig(
-                UiConfig.Disabled.INSTANCE,
-                false,
-                ScalingMode.Fit,
-                false,
-                SurfaceType.SurfaceView
-        );
+        PlayerViewConfig viewConfig = new PlayerViewConfig.Builder()
+            .setUiConfig(UiConfig.Disabled.INSTANCE)
+            .build();
         playerView = new PlayerView(context, player, viewConfig);
         playerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         playerView.setKeepScreenOn(true);

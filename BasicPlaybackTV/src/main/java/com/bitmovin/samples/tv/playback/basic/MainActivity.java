@@ -49,22 +49,16 @@ public class MainActivity extends AppCompatActivity {
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
 
-        PlayerViewConfig viewConfig = new PlayerViewConfig(
-                new UiConfig.WebUi(
-                        "file:///android_asset/bitmovinplayer-ui.css",
-                        null,
-                        "file:///android_asset/bitmovinplayer-ui.js",
-                        true,
-                        false,
-                        null,
-                        UiConfig.WebUi.Variant.TvUi.INSTANCE,
-                        true
-                ),
-                false,
-                ScalingMode.Fit,
-                false,
-                SurfaceType.SurfaceView
-        );
+        PlayerViewConfig viewConfig = new PlayerViewConfig.Builder()
+            .setUiConfig(
+                new UiConfig.WebUi.Builder()
+                    .setCssLocation("file:///android_asset/bitmovinplayer-ui.css")
+                    .setJsLocation("file:///android_asset/bitmovinplayer-ui.js")
+                    .setVariant(UiConfig.WebUi.Variant.TvUi.INSTANCE)
+                    .setFocusUiOnInitialization(true)
+                    .build()
+                )
+            .build();
 
         playerView = new PlayerView(this, player, viewConfig);
 
@@ -85,14 +79,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private PlayerConfig createPlayerConfig() {
-        // Creating a new PlayerConfig
-        PlayerConfig playerConfig = new PlayerConfig();
+        // Build a new PlayerConfig
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
 
-        PlaybackConfig playbackConfig = new PlaybackConfig();
-        playbackConfig.setAutoplayEnabled(true);
-        playerConfig.setPlaybackConfig(playbackConfig);
+        PlaybackConfig.Builder playbackConfig = new PlaybackConfig.Builder();
+        playbackConfig.setIsAutoplayEnabled(true);
+        playerConfigBuilder.setPlaybackConfig(playbackConfig.build());
 
-        return playerConfig;
+        return playerConfigBuilder.build();
     }
 
     @Override

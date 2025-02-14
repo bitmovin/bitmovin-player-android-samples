@@ -59,15 +59,15 @@ public class MainActivity extends AppCompatActivity {
         AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll);
 
         // Creating a new PlayerConfig
-        PlayerConfig playerConfig = new PlayerConfig();
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
         // Assign the AdvertisingConfig to the PlayerConfig
         // All ads in the AdvertisingConfig will be scheduled automatically
-        playerConfig.setAdvertisingConfig(advertisingConfig);
+        playerConfigBuilder.setAdvertisingConfig(advertisingConfig);
 
         // Create new PlayerView with our PlayerConfig
         String key = "{ANALYTICS_LICENSE_KEY}";
         Player player = new PlayerBuilder(this)
-                .setPlayerConfig(playerConfig)
+                .setPlayerConfig(playerConfigBuilder.build())
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
         playerView = new PlayerView(this, player);

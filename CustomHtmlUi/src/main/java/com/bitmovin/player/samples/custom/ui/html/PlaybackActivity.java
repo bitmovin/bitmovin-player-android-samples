@@ -57,22 +57,14 @@ public class PlaybackActivity extends AppCompatActivity {
         /*
          * Go to https://github.com/bitmovin/bitmovin-player-ui to get started with creating a custom player UI.
          */
-        PlayerViewConfig viewConfig = new PlayerViewConfig(
-                new UiConfig.WebUi(
-                        "file:///android_asset/custom-bitmovinplayer-ui.min.css",
-                        null,
-                        "file:///android_asset/custom-bitmovinplayer-ui.min.js",
-                        true,
-                        false,
-                        null,
-                        UiConfig.WebUi.Variant.SmallScreenUi.INSTANCE,
-                        false
-                ),
-                false,
-                ScalingMode.Fit,
-                false,
-                SurfaceType.SurfaceView
-        );
+        PlayerViewConfig viewConfig = new PlayerViewConfig.Builder()
+            .setUiConfig(
+                new UiConfig.WebUi.Builder()
+                    .setCssLocation("file:///android_asset/custom-bitmovinplayer-ui.min.css")
+                    .setJsLocation("file:///android_asset/custom-bitmovinplayer-ui.min.js")
+                    .build()
+            )
+            .build();
 
         // Create a custom javascriptInterface object which takes over the Bitmovin Web UI -> native calls
         Object javascriptInterface = new Object() {

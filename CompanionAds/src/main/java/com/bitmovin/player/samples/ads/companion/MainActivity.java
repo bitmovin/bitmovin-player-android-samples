@@ -63,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
         AdvertisingConfig advertisingConfig = new AdvertisingConfig(companionAdContainerList, adItem);
 
         // Setup the player
-        PlayerConfig playerConfig = new PlayerConfig();
-        playerConfig.setAdvertisingConfig(advertisingConfig);
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
+        playerConfigBuilder.setAdvertisingConfig(advertisingConfig);
 
         String key = "{ANALYTICS_LICENSE_KEY}";
         Player bitmovinPlayer = new PlayerBuilder(this)
-                .setPlayerConfig(playerConfig)
+                .setPlayerConfig(playerConfigBuilder.build())
                 .configureAnalytics(new AnalyticsConfig(key))
                 .build();
         bitmovinPlayerView.setPlayer(bitmovinPlayer);

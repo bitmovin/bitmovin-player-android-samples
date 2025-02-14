@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         0.5f
                 )
         );
-        LiveConfig playerLiveConfig = new LiveConfig();
+        LiveConfig.Builder playerLiveConfig = new LiveConfig.Builder();
         playerLiveConfig.addSynchronizationEntry(
                 "time.akamai.com",
                 LiveSynchronizationMethod.Ntp
@@ -97,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
         sourceConfig.setLiveConfig(sourceLiveConfig);
 
         String analyticsKey = "{ANALYTICS_LICENSE_KEY}";
-        PlayerConfig playerConfig = new PlayerConfig();
-        PlaybackConfig playbackConfig = new PlaybackConfig();
-        playbackConfig.setAutoplayEnabled(true);
-        playerConfig.setPlaybackConfig(playbackConfig);
-        playerConfig.setLiveConfig(playerLiveConfig);
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
+        PlaybackConfig.Builder playbackConfigBuilder = new PlaybackConfig.Builder();
+        playbackConfigBuilder.setIsAutoplayEnabled(true);
+        playerConfigBuilder.setPlaybackConfig(playbackConfigBuilder.build());
+        playerConfigBuilder.setLiveConfig(playerLiveConfig.build());
 
         player = new PlayerBuilder(this)
-                .setPlayerConfig(playerConfig)
+                .setPlayerConfig(playerConfigBuilder.build())
                 .configureAnalytics(new AnalyticsConfig(analyticsKey))
                 .build();
 

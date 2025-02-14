@@ -96,16 +96,18 @@ public class MainActivity extends AppCompatActivity {
 
     private PlayerConfig createPlayerConfig() {
         // Setup adaptation config
-        AdaptationConfig adaptationConfig = new AdaptationConfig();
-        adaptationConfig.setRebufferingAllowed(true);
-        adaptationConfig.setMaxSelectableVideoBitrate(800_000);
-        adaptationConfig.setStartupBitrate(1_200_000);
-        adaptationConfig.setVideoAdaptation(videoAdaptationListener);
+        AdaptationConfig.Builder adaptationConfigBuilder = new AdaptationConfig.Builder()
+            .setRebufferingAllowed(true)
+            .setMaxSelectableVideoBitrate(800_000)
+            .setInitialBandwidthEstimateOverride(1_200_000L)
+            .setVideoAdaptation(videoAdaptationListener);
+
 
         // Assign adaptation to player config
-        PlayerConfig playerConfig = new PlayerConfig();
-        playerConfig.setAdaptationConfig(adaptationConfig);
-        return playerConfig;
+        PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
+        AdaptationConfig adaptationConfig = adaptationConfigBuilder.build();
+        playerConfigBuilder.setAdaptationConfig(adaptationConfig);
+        return playerConfigBuilder.build();
     }
 
     private final VideoAdaptation videoAdaptationListener = new VideoAdaptation() {
