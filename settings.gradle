@@ -42,4 +42,5 @@ include ':Analytics',
         ':OfflinePlaybackKotlin',
         ':ProgressiveAds',
         ':ProgressiveAdsKotlin',
-        ':MediaSessionKotlin'
+        ':MediaSessionKotlin',
+        ':MultiView'
