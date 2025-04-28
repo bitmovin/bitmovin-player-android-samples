@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.bitmovin.player.api.ui.PlayerViewConfig
+import com.bitmovin.player.api.ui.PlayerViewConfig.PlayerVideoQualityConstraint.RelaxedViewport
 import com.bitmovin.player.api.ui.ScalingMode
 import com.bitmovin.player.api.ui.SurfaceType
 import com.bitmovin.player.samples.multiView.ui.components.PlayerView
@@ -88,6 +89,7 @@ fun MultiViewPlayerGrid(
                         playerViewConfig = PlayerViewConfig(
                             scalingMode = ScalingMode.Zoom,
                             surfaceType = SurfaceType.TextureView,
+                            playerMaxVideoQualityConstraint = RelaxedViewport,
                         ),
                         isUiVisible = playerHolder.shouldShowUi,
                     )
