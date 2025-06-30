@@ -164,7 +164,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
     ```
      <activity
-             android:name="com.bitmovin.player.cast.ExpandedControllerActivity"
+             android:name="com.bitmovin.player.casting.ExpandedControllerActivity"
              android:launchMode="singleTask"
              android:screenOrientation="portrait"
              ... >
@@ -172,7 +172,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
      <meta-data
              android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-             android:value="com.bitmovin.player.cast.BitmovinCastOptionsProvider"
+             android:value="com.bitmovin.player.casting.BitmovinCastOptionsProvider"
              />
      ```
 
