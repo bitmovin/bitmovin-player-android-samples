@@ -8,18 +8,19 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import androidx.lifecycle.lifecycleScope
 import com.bitmovin.analytics.api.AnalyticsConfig
 import com.bitmovin.player.api.Player
-import com.bitmovin.player.api.PlayerConfig
-import com.bitmovin.player.api.TweaksConfig
 import com.bitmovin.player.api.analytics.AnalyticsPlayerConfig
+import com.bitmovin.player.api.source.NetworkEngine
 import com.bitmovin.player.api.source.SourceConfig
+import com.bitmovin.player.api.source.SourceNetworkConfig
+import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.playback.cronet.databinding.ActivityMainBinding
 import com.google.android.gms.net.CronetProviderInstaller
-import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.future.asCompletableFuture
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.chromium.net.CronetEngine
-import java.util.concurrent.Future
 
 private const val Sintel = "https://cdn.bitmovin.com/content/assets/sintel/sintel.mpd"
 
@@ -28,12 +29,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     /**
-     * For best performance, Cronet should be loaded only once and use throughout your app.
+     * For best performance, the networkEngine (eg: Cronet) should be loaded only once and
+     * use throughout your app.
      * In particular the same engine instance should be used by all players
      * to share and reuse TCP connections.
-     * See [TweaksConfig.cronetEngine].
+     * See [SourceNetworkConfig.engine].
      */
-    private lateinit var cronetEngine: Future<CronetEngine?>
+    private lateinit var networkEngine: NetworkEngine
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -50,8 +52,12 @@ class MainActivity : AppCompatActivity() {
             isAppearanceLightNavigationBars = true
         }
 
-        cronetEngine = loadCronet()
-        initializePlayer()
+        lifecycleScope.launch {
+            // The network engine should be loaded as early as possible in the lifecycle of your app
+            networkEngine = loadNetworkEngine()
+
+            initializePlayer()
+        }
     }
 
     private fun initializePlayer() {
@@ -59,26 +65,30 @@ class MainActivity : AppCompatActivity() {
         player = Player(
             context = this,
             analyticsConfig = AnalyticsPlayerConfig.Enabled(AnalyticsConfig(analyticsKey)),
-            playerConfig = PlayerConfig(tweaksConfig = TweaksConfig(cronetEngine = cronetEngine))
         ).also {
             binding.playerView.player = it
         }
 
-        player.load(SourceConfig.fromUrl(Sintel))
+        val sourceConfig = SourceConfig(
+            url = Sintel,
+            type = SourceType.Dash,
+            networkConfig = SourceNetworkConfig(
+                engine = networkEngine
+            )
+        )
+        player.load(sourceConfig)
     }
 
-    private fun loadCronet(): Future<CronetEngine?> {
+    private suspend fun loadNetworkEngine(): NetworkEngine {
         // See https://developer.android.com/codelabs/cronet#5
-        val result = CompletableDeferred<CronetEngine?>()
-        CronetProviderInstaller.installProvider(this).addOnCompleteListener {
-            if (it.isSuccessful) {
-                result.complete(CronetEngine.Builder(this).build())
-            } else {
-                Log.w("BitmovinPlayer", "Cronet provider installation failed, fallback to HTTP/1")
-                result.complete(null)
-            }
+        try {
+            CronetProviderInstaller.installProvider(this).await()
+            val cronetEngine = CronetEngine.Builder(this).build()
+            return NetworkEngine.Cronet(cronetEngine)
+        } catch (e: Exception) {
+            Log.w("BitmovinPlayer", "Cronet engine creation failed, fallback to HTTP/1", e)
         }
-        return result.asCompletableFuture()
+        return NetworkEngine.HttpURLConnection
     }
 
     override fun onStart() {
