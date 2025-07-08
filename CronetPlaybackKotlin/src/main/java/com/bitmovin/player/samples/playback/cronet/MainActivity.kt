@@ -18,6 +18,8 @@ import com.bitmovin.player.api.source.SourceNetworkConfig
 import com.bitmovin.player.api.source.SourceType
 import com.bitmovin.player.samples.playback.cronet.databinding.ActivityMainBinding
 import com.google.android.gms.net.CronetProviderInstaller
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import org.chromium.net.CronetEngine
