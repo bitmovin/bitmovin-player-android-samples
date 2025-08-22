@@ -2,7 +2,7 @@ ext {
     // Versions
     imaSdkVersion = '3.35.1'
     playServicesCastVersion = '21.4.0'
-    bitmovinPlayerVersion = '3.121.0'
+    bitmovinPlayerVersion = '3.123.0'
     appcompat_version = "1.7.0"
     activity_version = "1.9.3"
     fragment_version = "1.8.5"
