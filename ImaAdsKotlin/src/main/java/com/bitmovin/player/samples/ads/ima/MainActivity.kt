@@ -25,6 +25,7 @@ private const val AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=
 private const val AD_SOURCE_2 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator="
 private const val AD_SOURCE_3 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator="
 private const val AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirectlinear&correlator="
+private const val VMAP_AD_SOURCE = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpostonly&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&correlator="
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
@@ -50,6 +51,7 @@ class MainActivity : AppCompatActivity() {
         val secondAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_2)
         val thirdAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_3)
         val fourthAdSource = AdSource(AdSourceType.Ima, AD_SOURCE_4)
+        val vmapAdSource = AdSource(AdSourceType.Ima, VMAP_AD_SOURCE)
 
         // Set up a pre-roll ad
         val preRoll = AdItem("pre", thirdAdSource)
@@ -61,8 +63,15 @@ class MainActivity : AppCompatActivity() {
         // Set up a post-roll ad
         val postRoll = AdItem("post", fourthAdSource)
 
+        // Set up a VMAP, where the VMAP layer is handled by Bitmovin advertising
+        val vmap = AdItem(
+            position = "pre",
+            sources = arrayOf(vmapAdSource),
+            bitmovinAdTagLoading = true,
+        )
+
         // Add the AdItems to the AdvertisingConfig
-        val advertisingConfig = AdvertisingConfig(preRoll, midRoll, postRoll)
+        val advertisingConfig = AdvertisingConfig(preRoll, midRoll, postRoll, vmap)
 
         // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
         val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)

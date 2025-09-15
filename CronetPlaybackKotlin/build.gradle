@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
 
 android {
-    compileSdk rootProject.compileSdk
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.playback.cronet"
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
     }
@@ -28,11 +30,11 @@ android {
 }
 
 dependencies {
-    implementation supportDependencies.appCompat
-    implementation supportDependencies.androidx_activity_ktx
-    implementation bitmovinPlayerDependencies.bitmovinPlayer
-    implementation "com.google.android.gms:play-services-cronet:18.1.0"
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1'
+    implementation libs.appcompat
+    implementation libs.androidx.activity.ktx
+    implementation libs.bitmovin.player
+    implementation libs.play.services.cronet
+    implementation libs.kotlinx.coroutines.play.services
 }
 
 java {

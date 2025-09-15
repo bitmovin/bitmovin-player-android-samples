@@ -23,13 +23,15 @@ import com.bitmovin.player.api.advertising.AdSourceType;
 import com.bitmovin.player.api.advertising.AdvertisingConfig;
 import com.bitmovin.player.api.source.SourceConfig;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
     private static final String AD_SOURCE_1 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirecterror&nofb=1&correlator=";
     private static final String AD_SOURCE_2 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dlinear&correlator=";
     private static final String AD_SOURCE_3 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dskippablelinear&correlator=";
     private static final String AD_SOURCE_4 = "https://pubads.g.doubleclick.net/gampad/ads?sz=640x480&iu=/124319096/external/single_ad_samples&ciu_szs=300x250&impl=s&gdfp_req=1&env=vp&output=vast&unviewed_position_start=1&cust_params=deployment%3Ddevsite%26sample_ct%3Dredirectlinear&correlator=";
-
+    private static final String VMAP_AD_SOURCE = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpostonly&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&correlator=";
     private PlayerView playerView;
 
     @Override
@@ -54,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         AdSource secondAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_2);
         AdSource thirdAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_3);
         AdSource fourthAdSource = new AdSource(AdSourceType.Ima, AD_SOURCE_4);
+        AdSource vmapAdSource = new AdSource(AdSourceType.Ima, VMAP_AD_SOURCE);
 
         // Set up a pre-roll ad
         AdItem preRoll = new AdItem("pre", thirdAdSource);
@@ -65,8 +68,17 @@ public class MainActivity extends AppCompatActivity {
         // Set up a post-roll ad
         AdItem postRoll = new AdItem("post", fourthAdSource);
 
+        // Set up a VMAP, where the VMAP layer is handled by Bitmovin advertising
+        AdItem vmap = new AdItem(
+                new AdSource[]{vmapAdSource},
+                "pre",
+                0.0,
+                0.0,
+                true
+        );
+
         // Add the AdItems to the AdvertisingConfig
-        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll);
+        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll, vmap);
 
         // Create a new PlayerConfiguration
         PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();

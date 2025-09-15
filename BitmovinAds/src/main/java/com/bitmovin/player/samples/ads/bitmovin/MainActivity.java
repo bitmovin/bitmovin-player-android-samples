@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     // These are Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
     private static final String SINGLE_REDIRECT_LINEAR_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dredirectlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=";
     private static final String SINGLE_SKIPPABLE_INLINE_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator=";
-
+    private static final String POST_ROLL_VMAP = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpostonly&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&correlator=";
     private PlayerView playerView;
 
     @Override
@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         AdSource noResponseAd = new AdSource(AdSourceType.Bitmovin, NO_RESPONSE_AD);
         AdSource redirectLinearAd = new AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_LINEAR_AD);
         AdSource skippableInlineAd = new AdSource(AdSourceType.Bitmovin, SINGLE_SKIPPABLE_INLINE_AD);
+        AdSource postRollVmap = new AdSource(AdSourceType.Bitmovin, POST_ROLL_VMAP);
 
         // Set up a pre-roll ad
         AdItem preRoll = new AdItem("pre", skippableInlineAd);
@@ -65,8 +66,11 @@ public class MainActivity extends AppCompatActivity {
         // Set up a post-roll ad
         AdItem postRoll = new AdItem("post", redirectLinearAd);
 
+        // Set up a VMAP ad
+        AdItem vmapAd = new AdItem("pre", postRollVmap);
+
         // Add the AdItems to the AdvertisingConfig
-        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll);
+        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll, vmapAd);
 
         // Create a new PlayerConfiguration
         PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();

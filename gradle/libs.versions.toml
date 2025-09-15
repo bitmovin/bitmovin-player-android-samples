@@ -1,0 +1,62 @@
+[versions]
+# SDK versions
+minSdk = "21"
+targetSdk = "35"
+compileSdk = "35"
+agp = "8.7.3"
+
+# Bitmovin Player versions
+bitmovinPlayer = "3.126.0"
+bitmovinPlayerJason = "3.126.0+jason"
+# Google Play Services versions
+imaSdk = "3.37.0"
+cast = "21.4.0"
+cronet = "18.1.0"
+# AndroidX versions
+appcompat = "1.7.0"
+activity = "1.9.3"
+fragment = "1.8.5"
+localbroadcastmanager = "1.0.0"
+mediarouter = "1.3.1"
+leanback = "1.0.0"
+constraintlayout = "1.1.3"
+cardview = "1.0.0"
+material = "1.12.0"
+# Kotlin
+kotlin = "2.1.21"
+kotlinxCoroutinesPlayServices = "1.8.1"
+# Other
+gson = "2.8.2"
+desugarJdkLibs = "2.1.5"
+
+[libraries]
+bitmovin-player = { module = "com.bitmovin.player:player", version.ref = "bitmovinPlayer" }
+bitmovin-player-jason = { module = "com.bitmovin.player:player", version.ref = "bitmovinPlayerJason" }
+player-media-session = { module = "com.bitmovin.player:player-media-session", version.ref = "bitmovinPlayer" }
+ima = { module = "com.google.ads.interactivemedia.v3:interactivemedia", version.ref = "imaSdk" }
+# Casting
+play-services-cast = { module = "com.google.android.gms:play-services-cast-framework", version.ref = "cast" }
+mediarouter = { module = "androidx.mediarouter:mediarouter", version.ref = "mediarouter" }
+# Offline
+localbroadcastmanager = { module = "androidx.localbroadcastmanager:localbroadcastmanager", version.ref = "localbroadcastmanager" }
+# Cronet
+play-services-cronet = { module = "com.google.android.gms:play-services-cronet", version.ref = "cronet" }
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "kotlinxCoroutinesPlayServices" }
+# App
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activity" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
+constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
+material = { module = "com.google.android.material:material", version.ref = "material" }
+# TV
+leanback = { module = "androidx.leanback:leanback", version.ref = "leanback" }
+# Other libraries
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+core-library-desugaring = {module="com.android.tools:desugar_jdk_libs", version.ref="desugarJdkLibs"}
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

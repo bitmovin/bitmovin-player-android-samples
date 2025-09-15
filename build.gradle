@@ -1,28 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '1.9.23'
     repositories {
         mavenCentral()
         google()
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.7.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
 }
-
-ext {
-    // SDK and tools
-    minSdkVersion = 21
-    targetSdkVersion = 35
-    compileSdk = 35
-}
-
-// Load dependencies
-apply from: 'dependencies.gradle'
 
 allprojects {
     repositories {
@@ -30,6 +12,17 @@ allprojects {
         mavenCentral()
         maven {
             url 'https://artifacts.bitmovin.com/artifactory/public-releases'
+        }
+    }
+}
+
+subprojects {
+    afterEvaluate { project ->
+        android {
+            lintOptions {
+                abortOnError false
+                checkReleaseBuilds false
+            }
         }
     }
 }

@@ -58,7 +58,7 @@ Every example is available in `Java` and `Kotlin` :+1:
    In each sample app you have to add your Bitmovin Player license key inside the `application` tag in
    the manifest file as shown below. `{PLAYER_LICENSE_KEY}` has to be replaced by your own license key.
 
-    ```
+    ```xml
    <meta-data
        android:name="BITMOVIN_PLAYER_LICENSE_KEY"
        android:value="{PLAYER_LICENSE_KEY}" />
@@ -96,12 +96,12 @@ Every example is available in `Java` and `Kotlin` :+1:
 Starting with version `2.16.0` our SDK is using Java 8, so your application must enable Java 8 support.
 This can be done by adding following code to your applications build gradle:
 
-    ```
+```groovy
     compileOptions {
-            sourceCompatibility JavaVersion.VERSION_1_8
-            targetCompatibility JavaVersion.VERSION_1_8
-        }
-    ```
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+```
 
 ### Using The Bitmovin Player Android SDK
 When you want to develop an own Android application using the Bitmovin Player Android SDK follow these steps:
@@ -113,7 +113,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     There you also have to add the package name of the Android application which is using the SDK as an allow-listed domain.
     The package name is defined in the manifest file of your Android application.
 
-    ```
+    ```xml
     <meta-data
             android:name="BITMOVIN_PLAYER_LICENSE_KEY"
             android:value="{PLAYER_LICENSE_KEY}" />
@@ -121,14 +121,14 @@ When you want to develop an own Android application using the Bitmovin Player An
 
 2.  Make sure to add the `INTERNET` permission, which is required by the SDK, to the manifest file of your application
 
-    ```
+    ```xml
     <uses-permission android:name="android.permission.INTERNET" />
     ```
 
 3.  Add a link to our release repository to your applications `build.gradle` file.
     In addition to that, the google maven repository must be added.
 
-    ```
+    ```groovy
     allprojects {
         repositories {
             google()
@@ -144,8 +144,8 @@ When you want to develop an own Android application using the Bitmovin Player An
 4.  Add the Bitmovin Player Android SDK as a dependency to your project.
     It is recommended to reference a specific version as you can see below:
 
-    ```
-    implementation 'com.bitmovin.player:player:3.123.0'
+    ```groovy
+    implementation 'com.bitmovin.player:player:3.126.0'
     ```
 
 #### Additional SDK dependencies
@@ -153,7 +153,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 1. **Chromecast Support** -
     If you want to use the Chromecast feature, add the following dependencies to your project:
 
-    ```
+    ```groovy
     implementation 'com.google.android.gms:play-services-cast-framework:21.4.0'
     implementation 'androidx.mediarouter:mediarouter:1.3.1'
     implementation 'androidx.appcompat:appcompat:1.6.1'
@@ -162,7 +162,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     Furthermore, the `BitmovinCastOptionsProvider` and the `ExpandedControllerActivity` must be declared in the
     `<application>` tag of the `AndroidManifest.xml`. For more details see the  `BasicCasting` sample application.
 
-    ```
+    ```xml
      <activity
              android:name="com.bitmovin.player.casting.ExpandedControllerActivity"
              android:launchMode="singleTask"
@@ -177,16 +177,27 @@ When you want to develop an own Android application using the Bitmovin Player An
      ```
 
 2. **Advertising with IMA SDK** -
-    If advertising support should be enabled, also add the following dependencies to your project:
+    If advertising support should be enabled, also add the following compile options and dependencies to your project:
 
-    ```
-    implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.33.0'
-    implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+    ```groovy
+    android {
+        compileOptions {
+            setCoreLibraryDesugaringEnabled(true)
+        }
+   }
+
+    dependencies {
+        coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
+
+        implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.37.0'
+        implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
+     ...
+    }
      ```
 
     And update the manifest file with an Ad Manager <meta-data> tag:
 
-    ```
+    ```xml
     <meta-data
             android:name="com.google.android.gms.ads.AD_MANAGER_APP"
             android:value="true"/>
@@ -194,7 +205,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 
     Alternatively, you can use an AdMob App ID `<meta-data>` tag, as shown below:
 
-     ```
+     ```xml
      <meta-data
              android:name="com.google.android.gms.ads.APPLICATION_ID"
              android:value="{ADMOB_LICENSE_KEY}"/>
@@ -203,7 +214,7 @@ When you want to develop an own Android application using the Bitmovin Player An
 3. **Offline Playback Support** - 
     If the Bitmovin Android SDK is used to download content for offline playback, the following dependency has to be added:
 
-    ```
+    ```groovy
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     ```
 
@@ -211,7 +222,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     If targeting Android SDK version 33+ the permission for posting notifications has to be added as well.
     When targeting Android SDK 34+, the `FOREGROUND_SERVICE_DATA_SYNC` permission is also required:
 
-    ```
+    ```xml
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC"/>
@@ -223,7 +234,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     This means that if the `PlayerNotificationManager` is used, like in the **Background Playback** sample,
     the post notification permission has to be added when targeting SDK version 33+:
 
-    ```
+    ```xml
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
     ```
 

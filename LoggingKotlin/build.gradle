@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
 
 android {
-    compileSdk rootProject.compileSdk
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     namespace "com.bitmovin.player.samples.logging"
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.logging"
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
     }
@@ -29,10 +31,10 @@ android {
 }
 
 dependencies {
-    implementation supportDependencies.appCompat
-    implementation supportDependencies.androidx_activity_ktx
-    implementation bitmovinPlayerDependencies.bitmovinPlayer
-    implementation "com.google.android.material:material:1.7.0"
+    implementation libs.appcompat
+    implementation libs.androidx.activity.ktx
+    implementation libs.bitmovin.player
+    implementation libs.material
 }
 
 java {

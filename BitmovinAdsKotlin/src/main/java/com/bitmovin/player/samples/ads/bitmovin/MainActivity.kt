@@ -25,6 +25,7 @@ private const val NO_RESPONSE_AD = "https://this-url-doesnt-exist/ad.xml"
 // These are Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
 private const val SINGLE_REDIRECT_LINEAR_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_ad_samples&sz=640x480&cust_params=sample_ct%3Dredirectlinear&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator="
 private const val SINGLE_SKIPPABLE_INLINE_AD = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/single_preroll_skippable&sz=640x480&ciu_szs=300x250%2C728x90&gdfp_req=1&output=vast&unviewed_position_start=1&env=vp&impl=s&correlator="
+private const val POST_ROLL_VMAP = "https://pubads.g.doubleclick.net/gampad/ads?iu=/21775744923/external/vmap_ad_samples&sz=640x480&cust_params=sample_ar%3Dpostonly&ciu_szs=300x250&gdfp_req=1&ad_rule=1&output=vmap&unviewed_position_start=1&env=vp&correlator="
 
 class MainActivity : AppCompatActivity() {
     private lateinit var playerView: PlayerView
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
         val noResponseAd = AdSource(AdSourceType.Bitmovin, NO_RESPONSE_AD)
         val redirectLinearAd = AdSource(AdSourceType.Bitmovin, SINGLE_REDIRECT_LINEAR_AD)
         val skippableInlineAd = AdSource(AdSourceType.Bitmovin, SINGLE_SKIPPABLE_INLINE_AD)
+        val postRollVmap = AdSource(AdSourceType.Bitmovin, POST_ROLL_VMAP)
 
         // Set up a pre-roll ad
         val preRoll = AdItem("pre", skippableInlineAd)
@@ -62,8 +64,11 @@ class MainActivity : AppCompatActivity() {
         // Set up a post-roll ad
         val postRoll = AdItem("post", redirectLinearAd)
 
+        // Set up a VMAP ad
+        val vmapAd = AdItem("pre", postRollVmap)
+
         // Add the AdItems to the AdvertisingConfig
-        val advertisingConfig = AdvertisingConfig(preRoll, midRoll, postRoll)
+        val advertisingConfig = AdvertisingConfig(preRoll, midRoll, postRoll, vmapAd)
 
         // Create a new PlayerConfig containing the advertising config. Ads in the AdvertisingConfig will be scheduled automatically.
         val playerConfig = PlayerConfig(advertisingConfig = advertisingConfig)

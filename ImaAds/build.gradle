@@ -1,12 +1,18 @@
-apply plugin: 'com.android.application'
+plugins {
+    alias(libs.plugins.android.application)
+}
 
 android {
-    compileSdk rootProject.compileSdk
+    compileSdk libs.versions.compileSdk.get().toInteger()
+
+    compileOptions {
+        setCoreLibraryDesugaringEnabled(true)
+    }
 
     defaultConfig {
         applicationId "com.bitmovin.player.samples.ads.ima"
-        minSdkVersion rootProject.minSdkVersion
-        targetSdkVersion rootProject.targetSdkVersion
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
         versionCode 1
         versionName "1.0"
     }
@@ -23,12 +29,14 @@ android {
 }
 
 dependencies {
-    implementation supportDependencies.appCompat
-    implementation supportDependencies.androidx_activity
-    implementation bitmovinPlayerDependencies.bitmovinPlayer
+    implementation libs.appcompat
+    implementation libs.androidx.activity
+    // The IMA SDK is only compatible with the Bitmovin Player `+jason` flavor
+    implementation libs.bitmovin.player.jason
 
-    // Only needed if ads are used
-    implementation "com.google.ads.interactivemedia.v3:interactivemedia:$imaSdkVersion"
+    // Only needed if IMA ads are used
+    coreLibraryDesugaring libs.core.library.desugaring
+    implementation libs.ima
 }
 
 java {
