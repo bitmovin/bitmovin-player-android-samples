@@ -145,7 +145,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```groovy
-    implementation 'com.bitmovin.player:player:3.127.0'
+    implementation 'com.bitmovin.player:player:3.131.0'
     ```
 
 #### Additional SDK dependencies

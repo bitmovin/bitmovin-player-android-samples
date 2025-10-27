@@ -21,9 +21,10 @@ import com.bitmovin.player.api.advertising.AdItem;
 import com.bitmovin.player.api.advertising.AdSource;
 import com.bitmovin.player.api.advertising.AdSourceType;
 import com.bitmovin.player.api.advertising.AdvertisingConfig;
+import com.bitmovin.player.api.advertising.ima.ImaConfig;
 import com.bitmovin.player.api.source.SourceConfig;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     // These are IMA Sample Tags from https://developers.google.com/interactive-media-ads/docs/sdks/android/tags
@@ -78,7 +79,19 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // Add the AdItems to the AdvertisingConfig
-        AdvertisingConfig advertisingConfig = new AdvertisingConfig(preRoll, midRoll, postRoll, vmap);
+        AdvertisingConfig advertisingConfig = new AdvertisingConfig.Builder()
+                .setSchedule(new ArrayList<>() {{
+                    add(vmap);
+                    add(preRoll);
+                    add(midRoll);
+                    add(postRoll);
+                }})
+                .setIma(
+                        new ImaConfig.Builder()
+                                .setBeforeInitialization(ImaSdkSettingsConfigurer::apply)
+                                .build()
+                )
+                .build();
 
         // Create a new PlayerConfiguration
         PlayerConfig.Builder playerConfigBuilder = new PlayerConfig.Builder();
