@@ -189,7 +189,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     dependencies {
         coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.5"
 
-        implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.37.0'
+        implementation 'com.google.ads.interactivemedia.v3:interactivemedia:3.38.0'
         implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
      ...
     }

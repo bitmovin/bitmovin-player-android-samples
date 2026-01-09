@@ -1,15 +1,15 @@
 [versions]
 # SDK versions
-minSdk = "21"
+minSdk = "23"
 targetSdk = "35"
 compileSdk = "35"
 agp = "8.7.3"
 
 # Bitmovin Player versions
-bitmovinPlayer = "3.133.0"
-bitmovinPlayerJason = "3.133.0+jason"
+bitmovinPlayer = "3.138.0"
+bitmovinPlayerJason = "3.138.0+jason"
 # Google Play Services versions
-imaSdk = "3.37.0"
+imaSdk = "3.38.0"
 cast = "21.4.0"
 cronet = "18.1.0"
 # AndroidX versions
