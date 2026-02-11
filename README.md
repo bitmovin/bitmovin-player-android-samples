@@ -36,6 +36,7 @@ Every example is available in `Java` and `Kotlin` :+1:
 + **BackgroundPlayback** Shows how background playback can be implemented for the Bitmovin Player.
 + **BasicVrPlayback** Shows how the Bitmovin Player can be setup and configured for playback of VR content.
 + **BasicPiPHandling** Shows how the `BitmovinPlayerView` can be configured to allow the Picture in Picture mode.
++ **AdvancedPiPHandling** Shows how Picture in Picture mode can be set up to enable an in-app mini player as well as the out of app picture in picture mode. It also shows how to create and use a `CustomPictureInPictureHandler`.
 + **MediaSession** Shows how the media session integration can be used to connect to Android's system media controls and do background playback.
 + **BasicLowLatencyPlayback** Shows how the Bitmovin Player can be setup to playback streams in low latency mode.
 + **CustomAdaptation** Shows how the Bitmovin Player can be setup to implement custom adaptation behavior.
@@ -82,6 +83,7 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.fullscreen.basic
     com.bitmovin.player.samples.custom.ui.html
     com.bitmovin.player.samples.offline.playback
+    com.bitmovin.player.samples.pip.advanced
     com.bitmovin.player.samples.pip.basic
     com.bitmovin.player.samples.media.session
     com.bitmovin.player.samples.tv.playback.basic

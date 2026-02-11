@@ -6,7 +6,8 @@ pluginManagement {
     }
 }
 
-include ':Analytics',
+include ':AdvancedPiPHandlingKotlin',
+        ':Analytics',
         ':AnalyticsKotlin',
         ':BasicCasting',
         ':BasicCastingKotlin',

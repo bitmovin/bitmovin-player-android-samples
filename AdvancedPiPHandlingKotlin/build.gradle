@@ -1,0 +1,42 @@
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+}
+
+android {
+    compileSdk libs.versions.compileSdk.get().toInteger()
+
+    defaultConfig {
+        applicationId "com.bitmovin.player.samples.pip.advanced"
+        minSdkVersion libs.versions.minSdk.get().toInteger()
+        targetSdkVersion libs.versions.targetSdk.get().toInteger()
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        debug {
+            multiDexEnabled true
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding = true
+    }
+
+    namespace 'com.bitmovin.player.samples.pip.advanced'
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.androidx.activity.ktx
+    implementation libs.bitmovin.player
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}

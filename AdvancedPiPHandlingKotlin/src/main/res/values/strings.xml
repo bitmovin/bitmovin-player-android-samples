@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Bitmovin Sample AdvancedPiPHandling</string>
+    <string name="pip_action_play">Play</string>
+    <string name="pip_action_pause">Pause</string>
+</resources>
