@@ -3,11 +3,11 @@
 minSdk = "23"
 targetSdk = "35"
 compileSdk = "35"
-agp = "8.7.3"
+agp = "8.10.1"
 
 # Bitmovin Player versions
-bitmovinPlayer = "3.145.0"
-bitmovinPlayerJason = "3.145.0+jason"
+bitmovinPlayer = "3.147.0"
+bitmovinPlayerJason = "3.147.0+jason"
 # Google Play Services versions
 imaSdk = "3.38.0"
 cast = "21.4.0"
@@ -23,7 +23,7 @@ constraintlayout = "1.1.3"
 cardview = "1.0.0"
 material = "1.12.0"
 # Kotlin
-kotlin = "2.1.21"
+kotlin = "2.2.21"
 kotlinxCoroutinesPlayServices = "1.8.1"
 # Other
 gson = "2.8.2"
