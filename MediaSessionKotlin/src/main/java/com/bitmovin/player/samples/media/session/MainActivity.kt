@@ -16,8 +16,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
 import com.bitmovin.player.PlayerView
 import com.bitmovin.player.api.Player
+import com.bitmovin.player.api.source.Source
 import com.bitmovin.player.api.source.SourceConfig
 import com.bitmovin.player.api.source.SourceType
+import com.bitmovin.player.api.media.session.MediaMetadata
+import com.bitmovin.player.api.media.session.MediaSessionSourceConfig
 import com.bitmovin.player.samples.media.session.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -58,10 +61,21 @@ class MainActivity : AppCompatActivity() {
         val sourceConfig = SourceConfig(
             "https://cdn.bitmovin.com/content/assets/MI201109210084/mpds/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.mpd",
             SourceType.Dash,
+            title = "Art of Motion",
             posterSource = "https://cdn.bitmovin.com/content/assets/poster/hd/RedBull.jpg"
         )
+        val mediaMetadata = MediaMetadata(
+            subtitle = "Those Who Don't Jump Will Never Fly",
+            releaseYear = 2013,
+            genre = "Documentary",
+            mediaType = MediaMetadata.MediaType.Movie,
+        )
+        val source = Source(
+            sourceConfig,
+            mediaSessionConfig = MediaSessionSourceConfig.Enabled(mediaMetadata)
+        )
 
-        player?.load(sourceConfig)
+        player?.load(source)
     }
 
 
@@ -114,7 +128,7 @@ class MainActivity : AppCompatActivity() {
             // We've bound to the Service, cast the IBinder and get the Player instance
             val binder = service as MediaSessionPlaybackService.ServiceBinder
             serviceBinder = binder
-            val player = binder.player ?: throw IllegalStateException("Player is null")
+            val player = binder.player
             playerView.player = player
             if (player.source == null) {
                initializePlayer()
