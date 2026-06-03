@@ -51,8 +51,9 @@ Every example is available in `Java` and `Kotlin` :+1:
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
 +   **CustomUiSubtitleView** Shows how the Bitmovin Player can be used with the native BitmovinSubtitleView.
 +   **CustomHtmlUi** Shows how the Bitmovin Player can be setup and configured to use a custom HTML UI.
-                     In addition this sample includes how to communication between the javascript UI and the native code.
+                     In addition this sample includes how to communicate between the JavaScript UI and the native code.
 +   **BasicFullscreenHandling** Shows how a simple FullscreenHandler can be implemented and configured on the Bitmovin Player
++   **BasicComposeUi** Shows how the Bitmovin Player can be embedded in Jetpack Compose using the Kotlin Compose UI wrapper.
 
 ## Sample Apps Setup Instructions
 1) **Add your Bitmovin Player License Key** -
@@ -79,6 +80,7 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.vr.basic
     com.bitmovin.player.samples.custom.ui
+    com.bitmovin.player.samples.compose.ui.basic
     com.bitmovin.player.samples.custom.ui.subtitleview
     com.bitmovin.player.samples.fullscreen.basic
     com.bitmovin.player.samples.custom.ui.html
@@ -242,6 +244,13 @@ When you want to develop an own Android application using the Bitmovin Player An
 
     Additionally the permission also has to be requested at runtime.
     This is explained in the [official Android docs](https://developer.android.com/training/permissions/requesting).
+
+5. **Compose UI wrapper** -
+   To host the Bitmovin Player UI from Jetpack Compose, add the Compose UI wrapper dependency:
+
+   ```groovy
+   implementation 'com.bitmovin.player:player-ui-web-compose:3.154.0'
+   ```
 
 ## Proguard Configuration
 
