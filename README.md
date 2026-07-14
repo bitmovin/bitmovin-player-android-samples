@@ -91,6 +91,7 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.tv.playback.basic
     com.bitmovin.player.samples.playback.lowlatency
     com.bitmovin.player.samples.custom.adaptation
+    com.bitmovin.player.samples.defaultsubtitleselection
     com.bitmovin.player.samples.logging
     ```
 
