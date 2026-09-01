@@ -2,12 +2,12 @@
 # SDK versions
 minSdk = "23"
 targetSdk = "35"
-compileSdk = "36"
+compileSdk = "37"
 agp = "8.10.1"
 
 # Bitmovin Player versions
-bitmovinPlayer = "3.163.1"
-bitmovinPlayerJason = "3.163.1+jason"
+bitmovinPlayer = "3.164.0"
+bitmovinPlayerJason = "3.164.0+jason"
 # Google Play Services versions
 imaSdk = "3.38.0"
 cast = "21.4.0"
