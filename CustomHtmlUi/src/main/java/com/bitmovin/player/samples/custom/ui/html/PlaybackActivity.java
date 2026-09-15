@@ -60,8 +60,8 @@ public class PlaybackActivity extends AppCompatActivity {
         PlayerViewConfig viewConfig = new PlayerViewConfig.Builder()
             .setUiConfig(
                 new UiConfig.WebUi.Builder()
-                    .setCssLocation("file:///android_asset/custom-bitmovinplayer-ui.min.css")
-                    .setJsLocation("file:///android_asset/custom-bitmovinplayer-ui.min.js")
+                    .setCssLocation("file:///android_asset/custom-bitmovinplayer-ui.css")
+                    .setJsLocation("file:///android_asset/custom-bitmovinplayer-ui.js")
                     .build()
             )
             .build();

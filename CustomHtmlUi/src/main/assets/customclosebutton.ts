@@ -1,6 +1,6 @@
-import { ToggleButton, ToggleButtonConfig } from './togglebutton';
+import { ToggleButton, ToggleButtonConfig } from './ToggleButton';
 import { PlayerAPI } from 'bitmovin-player';
-import { UIInstanceManager } from '../uimanager';
+import { UIInstanceManager } from '../../UIManager';
 
 declare const window: any;
 
@@ -19,7 +19,7 @@ export class CustomCloseButton extends ToggleButton<ToggleButtonConfig> {
     super(config);
 
     const defaultConfig: ToggleButtonConfig = {
-      cssClass: 'ui-customclosetogglebutton',
+      cssClass: 'ui-custom-close-toggle-button',
       text: 'close',
     };
 
@@ -30,6 +30,7 @@ export class CustomCloseButton extends ToggleButton<ToggleButtonConfig> {
     super.configure(player, uimanager);
 
     if (window.bitmovin.customMessageHandler) {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       window.bitmovin.customMessageHandler.on('toggleCloseButton', (data?: string) => {
         if (this.isEnabled()) {
           this.disable();
@@ -39,8 +40,10 @@ export class CustomCloseButton extends ToggleButton<ToggleButtonConfig> {
       });
 
       this.onClick.subscribe(() => {
-        let result = window.bitmovin.customMessageHandler.sendSynchronous('closePlayer');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        const result = window.bitmovin.customMessageHandler.sendSynchronous('closePlayer');
         console.log('Return value from native:', result);
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         window.bitmovin.customMessageHandler.sendAsynchronous('closePlayerAsync');
       });
     }

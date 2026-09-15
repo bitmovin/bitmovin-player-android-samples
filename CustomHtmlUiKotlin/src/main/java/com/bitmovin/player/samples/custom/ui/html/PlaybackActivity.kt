@@ -43,8 +43,8 @@ class PlaybackActivity : AppCompatActivity() {
         val viewConfig = PlayerViewConfig(
             uiConfig = UiConfig.WebUi(
                 // Set URLs for the JavaScript and the CSS
-                jsLocation = "file:///android_asset/custom-bitmovinplayer-ui.min.js",
-                cssLocation = "file:///android_asset/custom-bitmovinplayer-ui.min.css"
+                jsLocation = "file:///android_asset/custom-bitmovinplayer-ui.js",
+                cssLocation = "file:///android_asset/custom-bitmovinplayer-ui.css"
             )
         )
 
