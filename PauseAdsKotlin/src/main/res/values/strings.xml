@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Bitmovin Sample PauseAdsKotlin</string>
+    <string name="pause_ad_hint">Start playback, then pause it to see the pause ad.</string>
+</resources>

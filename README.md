@@ -46,6 +46,7 @@ Every example is available in `Java` and `Kotlin` :+1:
 +   **BitmovinAds** Shows how the Bitmovin Player can be setup and configured for playback of ads using Bitmovin Advertising Module.
 +   **BitmovinCustomAdsUi** Shows how the Bitmovin Player can be setup and configured to use a custom UI for ads.
 +   **CompanionAds** Show how the Bitmovin Player can be setup and configured to show companion ads using IMA SDK.
++   **PauseAds** Shows how the Bitmovin Player can be setup and configured to show pause ads using Bitmovin Advertising Module.
 
 ### UI & Subtitles
 +   **CustomUi** Shows how the Bitmovin Player can be setup and configured to be controlled by a custom native UI.
@@ -77,6 +78,7 @@ Every example is available in `Java` and `Kotlin` :+1:
     com.bitmovin.player.samples.ads.ima
     com.bitmovin.player.samples.ads.bitmovin
     com.bitmovin.player.samples.ads.companion
+    com.bitmovin.player.samples.ads.pause
     com.bitmovin.player.samples.casting.basic
     com.bitmovin.player.samples.vr.basic
     com.bitmovin.player.samples.custom.ui
