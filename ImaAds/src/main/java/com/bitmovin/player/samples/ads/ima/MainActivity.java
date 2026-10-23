@@ -18,6 +18,7 @@ import com.bitmovin.player.api.Player;
 import com.bitmovin.player.api.PlayerBuilder;
 import com.bitmovin.player.api.PlayerConfig;
 import com.bitmovin.player.api.advertising.AdItem;
+import com.bitmovin.player.api.advertising.AdItemDiscardPolicy;
 import com.bitmovin.player.api.advertising.AdSource;
 import com.bitmovin.player.api.advertising.AdSourceType;
 import com.bitmovin.player.api.advertising.AdvertisingConfig;
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 "pre",
                 0.0,
                 0.0,
-                true
+                true,
+                AdItemDiscardPolicy.DiscardAfterAttempt.INSTANCE
         );
 
         // Add the AdItems to the AdvertisingConfig
