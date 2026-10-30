@@ -152,7 +152,7 @@ When you want to develop an own Android application using the Bitmovin Player An
     It is recommended to reference a specific version as you can see below:
 
     ```groovy
-    implementation 'com.bitmovin.player:player:3.172.0'
+    implementation 'com.bitmovin.player:player:3.173.0'
     ```
 
 #### Additional SDK dependencies
@@ -252,7 +252,7 @@ When you want to develop an own Android application using the Bitmovin Player An
    To host the Bitmovin Player UI from Jetpack Compose, add the Compose UI wrapper dependency:
 
    ```groovy
-   implementation 'com.bitmovin.player:player-ui-web-compose:3.172.0'
+   implementation 'com.bitmovin.player:player-ui-web-compose:3.173.0'
    ```
 
 ## Proguard Configuration
